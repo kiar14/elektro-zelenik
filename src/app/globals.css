@@ -1,26 +1,403 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Design tokens
+   Every colour, radius, shadow and type step used anywhere on the site is
+   defined once here and consumed through Tailwind utilities.
+   ========================================================================== */
+
+@theme {
+  /* --- Neutral foundation ------------------------------------------------ */
+  --color-ink: #14181a;
+  --color-ink-muted: #5c6366;
+  --color-ground: #fbfaf8;
+  --color-surface: #f2f0ec;
+  --color-surface-sunk: #e8e5df;
+  --color-border: #ddd8d0;
+  --color-border-strong: #c4bdb2;
+
+  /* --- Brand -------------------------------------------------------------
+     Sampled from the genuine 2023 Zelenik d.o.o. identity files
+     (public/brand/zelenik-logo-horizontal.png and zelenik-symbol.png).
+     Every green pixel in both files is exactly rgb(12, 169, 45).
+
+     --color-brand         the identity green. 3.1:1 on --color-ground, so it is
+                           valid for graphics and rules but NEVER for text.
+     --color-brand-strong  the same hue darkened to 4.8:1 against white — the
+                           only brand value allowed for text and for filled
+                           controls carrying white labels.
+     --color-brand-tint    the identity green washed into --color-ground.
+     ---------------------------------------------------------------------- */
+  --color-brand: #0ca92d;
+  --color-brand-strong: #0a8524;
+  --color-brand-tint: #e9f4ea;
+
+  /* --- Text over photography --------------------------------------------- */
+  --color-on-photo: #ffffff;
+  --color-on-photo-muted: #ccd4d9;
+
+  /* --- Typography -------------------------------------------------------- */
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-display:
+    var(--font-ibm-plex-sans), var(--font-inter), ui-sans-serif, system-ui,
+    sans-serif;
+
+  /* Base is 17px, comfortable for an older mobile audience. Every step below
+     is a token: sizes are lifted here, never patched per component. */
+  --text-xs: 0.875rem; /* 14 */
+  --text-xs--line-height: 1.45;
+  --text-sm: 1rem; /* 16 */
+  --text-sm--line-height: 1.5;
+  --text-base: 1.0625rem; /* 17 */
+  --text-base--line-height: 1.62;
+  --text-lg: 1.1875rem; /* 19 */
+  --text-lg--line-height: 1.55;
+  --text-xl: 1.4375rem; /* 23 */
+  --text-xl--line-height: 1.35;
+  --text-2xl: 1.75rem; /* 28 */
+  --text-2xl--line-height: 1.25;
+
+  /* Fluid steps.
+     display  38 -> 54  hero h1 only. Capped by the architecture line in the
+                        photograph: the copy column cannot exceed ~520px
+                        without running into the building.
+     heading  30 -> 46  section h2
+     metric   40 -> 56  trust strip numbers
+     lead     18 -> 20  section supporting copy */
+  --text-display: clamp(2.375rem, 1.2rem + 3vw, 3.375rem);
+  --text-display--line-height: 1.06;
+  --text-display--letter-spacing: -0.026em;
+  --text-heading: clamp(1.875rem, 1.15rem + 2.2vw, 2.875rem);
+  --text-heading--line-height: 1.14;
+  --text-heading--letter-spacing: -0.021em;
+  --text-metric: clamp(2.5rem, 1.5rem + 3vw, 3.5rem);
+  --text-metric--line-height: 1;
+  --text-metric--letter-spacing: -0.032em;
+  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+  --text-eyebrow: 0.8125rem; /* 13 */
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.13em;
+
+  /* --- Radii — restrained. 12px is the ceiling for ordinary UI. ---------- */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* --- Elevation ---------------------------------------------------------
+     Elevation comes from borders, tonal surfaces and whitespace. This is the
+     only shadow in the system; it is used for the scrolled header and the
+     open services menu, and nowhere else.
+     ---------------------------------------------------------------------- */
+  --shadow-raised:
+    0 1px 1px rgb(20 24 26 / 0.04), 0 14px 30px -18px rgb(20 24 26 / 0.3);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --container-content: 1200px;
+  --container-wide: 1440px;
+
+  /* --- Motion ------------------------------------------------------------
+     MOTION_INTENSITY 3/10. Two curves, no more.
+     ---------------------------------------------------------------------- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Ease-out: the light comes up promptly and settles long, the way a fitting
+     reaches output. */
+  --ease-illuminate: cubic-bezier(0.25, 0.6, 0.25, 1);
+
+  --animate-hero-illuminate: hero-illuminate 1700ms var(--ease-illuminate)
+    forwards;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ==========================================================================
+   Keyframes
+   ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* The lit frame ramps in like a dimmer being turned up. Because the two
+   photographs differ only by added light, a weighted blend of them *is* the
+   light rising — nothing is drawn, tinted or glowed on top. Opacity alone. */
+@keyframes hero-illuminate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Lenis drives scrolling, so the native smooth behaviour must stay off — the
+     two together produce a visible fight. Without Lenis (reduced motion, or no
+     script) the browser's own instant scrolling is the correct fallback. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: clip;
+  }
+
+  body {
+    background-color: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-wrap: balance;
+    /* Long Slovenian compounds must never be broken mid-word. */
+    hyphens: none;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-strong);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Over photography the brand ring disappears — invert it. The hero copy sits
+     on the photograph at every width. */
+  [data-surface="photo"] :focus-visible {
+    outline-color: var(--color-on-photo);
+  }
+
+  ::selection {
+    background-color: var(--color-brand-tint);
+    color: var(--color-ink);
+  }
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+@layer components {
+  /* --- Actions ----------------------------------------------------------
+     Hover values are derived from the brand tokens with color-mix, so a change
+     to --color-brand-strong carries through every state. Utilities always win
+     over these rules, which is how the hero inverts its secondary action over
+     photography. */
+  .btn-solid {
+    background-color: var(--color-brand-strong);
+    color: #fff;
+  }
+
+  .btn-solid:hover {
+    background-color: color-mix(
+      in oklab,
+      var(--color-brand-strong) 84%,
+      var(--color-ink)
+    );
+  }
+
+  .btn-outline {
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-ink);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-ink-muted);
+    background-color: var(--color-surface);
+  }
+
+  /* Both hero frames are positioned by this single rule, so the unlit and lit
+     photographs can never drift apart: same box, same fit, same origin. Any
+     change here applies to both at once. */
+  .hero-frame {
+    object-fit: cover;
+    /* Portrait viewports fill by height, so the only crop available is
+       horizontal. 76% lands the window on the two-storey block, whose roofline
+       sits at 21% of the frame rather than the low wing's 32% — that is what
+       keeps the building, not the sky, as the subject on a phone. From lg the
+       box is wide enough to carry the whole composition uncropped. */
+    object-position: 76% 50%;
+  }
+
+  @media (min-width: 40rem) {
+    .hero-frame {
+      object-position: 58% 50%;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hero-frame {
+      object-position: 50% 50%;
+    }
+  }
+
+  [data-hero-layer="on"] {
+    opacity: 0;
+  }
+
+  [data-hero-layer="on"][data-hero-phase="running"] {
+    animation: var(--animate-hero-illuminate);
+    will-change: opacity;
+  }
+
+  /* Terminal state. The sequence never replays. */
+  [data-hero-layer="on"][data-hero-phase="done"] {
+    opacity: 1;
+  }
+
+  /* Narrow viewports: the copy is anchored to the foot of the frame, where the
+     driveway is already dark, so the wash mostly deepens what is dark and has
+     cleared well before the lit roofline. */
+  .hero-scrim {
+    background: linear-gradient(
+      to top,
+      rgb(5 10 16 / 0.66) 0%,
+      rgb(5 10 16 / 0.56) 28%,
+      rgb(5 10 16 / 0.34) 52%,
+      rgb(5 10 16 / 0.12) 72%,
+      rgb(5 10 16 / 0) 86%
+    );
+  }
+
+  /* Wide viewports: a local wash on the left negative space only. Measured
+     against the supplied files — the architecture starts at 42.3% of the frame
+     and this has reached zero by 41%, so the building is never darkened. */
+  @media (min-width: 64rem) {
+    .hero-scrim {
+      background: linear-gradient(
+        93deg,
+        rgb(5 10 16 / 0.68) 0%,
+        rgb(5 10 16 / 0.6) 15%,
+        rgb(5 10 16 / 0.44) 26%,
+        rgb(5 10 16 / 0.2) 35%,
+        rgb(5 10 16 / 0) 41%
+      );
+    }
+  }
+
+  /* --- Below-the-fold motion --------------------------------------------
+     Initial states are CSS, not GSAP, so server-rendered markup is already in
+     its hidden state on first paint and cannot flash. GSAP animates out of
+     them; `<noscript>` and reduced motion override them. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+
+  [data-process-line] {
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
+  /* One rule owns the copy width at every width, so no utility can widen it
+     past the architecture. */
+  .hero-copy {
+    /* Explicit width because this is a flex item that is also a size container:
+       inline-size containment stops its content from contributing a width, so
+       without this it would collapse. max-width still does the clamping. */
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  /* Keeps the copy inside the negative space, allowing for the wide container's
+     own left offset once the viewport exceeds 1440px.
+
+     Below ~1160px the frame fills by height and therefore crops horizontally,
+     which pulls the architecture further left than 42.3% of the viewport — so
+     the copy is held back to 38vw through that band. Above it the frame fills
+     by width, the architecture sits exactly on 42.3%, and 40vw can be used. */
+  @media (min-width: 64rem) {
+    .hero-copy {
+      max-width: min(
+        30rem,
+        calc(38vw - max(3rem, (100vw - 90rem) / 2 + 3rem))
+      );
+    }
+  }
+
+  @media (min-width: 72.5rem) {
+    .hero-copy {
+      max-width: min(
+        30rem,
+        calc(40vw - max(3rem, (100vw - 90rem) / 2 + 3rem))
+      );
+    }
+  }
+
+  .mobile-nav::backdrop {
+    background-color: rgb(20 24 26 / 0.55);
+  }
+
+  .site-header {
+    border-bottom: 1px solid transparent;
+    transition:
+      border-color 200ms var(--ease-standard),
+      box-shadow 200ms var(--ease-standard);
+  }
+
+  .site-header[data-scrolled] {
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-raised);
+  }
+}
+
+/* ==========================================================================
+   Reduced motion
+   The lit state is painted from the very first frame — no sequence, no flash,
+   and nothing is withheld from the visitor.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-process-line] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  [data-hero-layer="on"] {
+    opacity: 1 !important;
+    animation: none !important;
+    will-change: auto !important;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

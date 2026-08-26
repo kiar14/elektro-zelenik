@@ -1,0 +1,57 @@
+import { Phone } from "lucide-react";
+
+import { Container } from "@/components/layout/Container";
+import { ActionLink } from "@/components/ui/ActionLink";
+import { headerCta, headerPhone } from "@/content/navigation";
+
+/**
+ * The closing conversion block. Separated from the references by a rule and
+ * whitespace rather than by a coloured banner. No response-time promise,
+ * that is not something the client has confirmed.
+ */
+export function FinalCta() {
+  return (
+    <section aria-labelledby="zakljucni-cta-naslov" className="bg-ground">
+      <Container className="pb-24 lg:pb-32">
+        <div className="border-t-2 border-ink pt-12 lg:pt-16">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-16">
+            <div>
+              <h2
+                id="zakljucni-cta-naslov"
+                className="max-w-[20ch] text-heading text-ink"
+              >
+                Povejte nam, kaj načrtujete
+              </h2>
+              <p className="mt-5 max-w-prose text-lead text-ink-muted">
+                Pridemo na ogled, pregledamo objekt in pripravimo ponudbo za
+                dogovorjeni obseg del.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:justify-end">
+              <ActionLink
+                href={headerCta.href}
+                variant="solid"
+                size="lg"
+                className="w-full sm:w-auto sm:whitespace-nowrap"
+              >
+                Brezplačen ogled in ponudba
+              </ActionLink>
+
+              <ActionLink
+                href={headerPhone.href}
+                variant="outline"
+                size="lg"
+                aria-label={headerPhone.accessibleLabel}
+                className="w-full sm:w-auto sm:whitespace-nowrap"
+              >
+                <Phone aria-hidden className="size-[18px] text-brand-strong" />
+                {headerPhone.label}
+              </ActionLink>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
