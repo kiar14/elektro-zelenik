@@ -35,7 +35,7 @@ export function SiteHeader() {
     <HeaderShell>
       <Container width="wide">
         <div className="relative flex h-16 items-center gap-4 xl:h-[68px] xl:gap-0">
-          <BrandLogo />
+          <BrandLogo className="mobile-header-logo" />
 
           <nav
             aria-label="Glavna navigacija"
@@ -68,6 +68,7 @@ export function SiteHeader() {
             <a
               href={headerPhone.href}
               aria-label={headerPhone.accessibleLabel}
+              data-mobile-header-control
               className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-control px-3 text-sm font-semibold text-ink transition-colors duration-150 ease-standard hover:bg-surface max-xl:border max-xl:border-border-strong xl:px-2 max-[419px]:size-11 max-[419px]:justify-center max-[419px]:px-0 2xl:px-3"
             >
               <Phone aria-hidden className="size-[18px] text-brand-strong" />

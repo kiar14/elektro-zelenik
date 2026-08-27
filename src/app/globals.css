@@ -385,6 +385,15 @@
     min-height: clamp(38rem, 86svh, 44rem);
   }
 
+  /* Phones use the hero as the complete opening viewport. The stable viewport
+     unit tracks Safari's smallest visible area without resizing the composition
+     as its browser chrome retracts; the floor keeps short screens comfortable. */
+  @media (max-width: 39.999rem) {
+    .home-hero-height {
+      min-height: max(38rem, 100svh);
+    }
+  }
+
   @media (min-width: 64rem) {
     .home-hero-height {
       min-height: calc(100svh - 10.4375rem);
@@ -558,6 +567,7 @@
   }
 
   .site-header {
+    background-color: var(--color-ground);
     border-bottom: 1px solid transparent;
     transition:
       border-color 200ms var(--ease-standard),
@@ -567,6 +577,38 @@
   .site-header[data-scrolled] {
     border-bottom-color: var(--color-border);
     box-shadow: var(--shadow-raised);
+  }
+
+  /* The phone homepage opens as one uninterrupted photograph. Keeping the
+     sticky header's 4rem box and cancelling only its flow contribution puts
+     the hero behind it without changing the header geometry in either state. */
+  @media (max-width: 39.999rem) {
+    .site-header[data-homepage] {
+      /* 4rem content box + the existing 1px divider. */
+      margin-bottom: -4.0625rem;
+      transition:
+        background-color 160ms var(--ease-standard),
+        border-color 160ms var(--ease-standard),
+        box-shadow 160ms var(--ease-standard);
+    }
+
+    .site-header[data-homepage]:not([data-scrolled]) {
+      background-color: transparent;
+      border-bottom-color: transparent;
+      box-shadow: none;
+    }
+
+    .site-header[data-homepage]:not([data-scrolled])
+      [data-mobile-header-control] {
+      background-color: rgb(255 255 255 / 0.88);
+      box-shadow: 0 1px 6px rgb(5 10 16 / 0.14);
+    }
+
+    .site-header[data-homepage]:not([data-scrolled])
+      .mobile-header-logo
+      img {
+      filter: drop-shadow(0 1px 2px rgb(255 255 255 / 0.75));
+    }
   }
 }
 

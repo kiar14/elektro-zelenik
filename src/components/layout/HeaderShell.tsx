@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Sticky shell for the header.
@@ -17,6 +18,7 @@ import type { ReactNode } from "react";
 export function HeaderShell({ children }: { children: ReactNode }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -36,8 +38,9 @@ export function HeaderShell({ children }: { children: ReactNode }) {
       {/* `sticky` is a positioned value, so this element is also the containing
           block for the full-width services panel that drops below it. */}
       <header
+        data-homepage={pathname === "/" ? "" : undefined}
         data-scrolled={scrolled ? "" : undefined}
-        className="site-header sticky top-0 z-50 bg-ground"
+        className="site-header sticky top-0 z-50"
       >
         {children}
       </header>
