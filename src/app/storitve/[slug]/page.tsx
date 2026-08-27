@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { ContentSections } from "@/components/sections/ContentSections";
+import {
+  bodyEndTone,
+  ContentSections,
+} from "@/components/sections/ContentSections";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { PageHero } from "@/components/sections/PageHero";
@@ -48,6 +51,15 @@ export default async function ServicePage({
 
   const related = relatedServices(service);
 
+  /**
+   * The body alternates its own surfaces, so what follows has to take whichever
+   * tone the body did not end on. Without this a four-section page would run a
+   * tonal band straight into the process band and read as one long block.
+   */
+  const endsOnSurface = bodyEndTone(service.sections) === "surface";
+  const processSurface = endsOnSurface ? "ground" : "surface";
+  const faqSurface = endsOnSurface ? "surface" : "ground";
+
   return (
     <>
       <PageHero
@@ -70,18 +82,18 @@ export default async function ServicePage({
           eyebrow={service.process.eyebrow}
           title={service.process.title}
           steps={service.process.steps}
-          surface="surface"
+          surface={processSurface}
+          className={processSurface === "ground" ? "border-t border-border" : undefined}
         />
       ) : null}
 
       {service.faq ? (
-        // The process band above is already on the tonal surface, so the
-        // questions drop back to the page background rather than stacking two
-        // identical bands on top of one another.
+        // Takes whichever tone the process band did not, so the two never
+        // stack as one undifferentiated band.
         <FaqSection
           items={service.faq}
           title={`Pogosta vprašanja, ${service.title.toLowerCase()}`}
-          surface={service.process ? "ground" : "surface"}
+          surface={service.process ? faqSurface : processSurface}
         />
       ) : null}
 

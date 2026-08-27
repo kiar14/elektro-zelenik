@@ -13,7 +13,7 @@ import { cn } from "@/lib/cn";
  */
 
 const CONTROL =
-  "mt-2.5 block w-full rounded-sm border border-border-strong bg-ground px-3.5 text-base text-ink " +
+  "mt-2.5 block w-full rounded-control border border-border-strong bg-ground px-3.5 text-base text-ink " +
   "transition-colors duration-150 ease-standard placeholder:text-ink-muted hover:border-ink-muted aria-invalid:border-ink";
 
 export const LABEL = "block text-base font-medium text-ink";

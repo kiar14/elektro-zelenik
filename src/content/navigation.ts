@@ -7,16 +7,18 @@ import { allServicesLink, services, type Service } from "@/content/services";
  * There is exactly one services architecture, and it lives in
  * `content/services.ts`. The header dropdown, the mobile accordion, the footer
  * column and `/storitve` all read the same seven records from there, so the
- * three surfaces cannot drift apart.
+ * four surfaces cannot drift apart.
  *
- * Sončne elektrarne is a top-level destination rather than an eighth service:
- * it is a distinct offering with its own page and stays directly visible in the
- * main navigation.
+ * Four destinations, plus the phone and the enquiry action on the right. Sončne
+ * elektrarne used to sit between Storitve and Reference; it is gone, along with
+ * its route, because the company does not present photovoltaics as one of its
+ * public services. The row was re-measured around what remains rather than
+ * being left with a hole where the fifth item used to be.
  *
  * Subvencije is deliberately absent. The page still exists and is reachable
- * contextually from Sončne elektrarne and from the footer, but it is a piece of
- * reference information rather than a thing the company sells, so it does not
- * occupy a slot in the primary navigation.
+ * from the footer, but it is a piece of reference information rather than a
+ * thing the company sells, so it does not occupy a slot in the primary
+ * navigation.
  */
 
 export interface NavItem {
@@ -28,7 +30,6 @@ export interface NavItem {
 
 export const primaryNav: readonly NavItem[] = [
   { label: "Storitve", href: "/storitve", menu: services },
-  { label: "Sončne elektrarne", href: "/soncne-elektrarne" },
   { label: "Reference", href: "/reference" },
   { label: "O podjetju", href: "/o-podjetju" },
   { label: "Kontakt", href: "/kontakt" },

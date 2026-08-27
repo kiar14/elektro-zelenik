@@ -18,11 +18,10 @@ import { allServicesLink, headerPhone, services } from "@/content/navigation";
  * URLs have been supplied, a dead or disabled link would be worse than none.
  *
  * Subvencije appears once, in the bottom row rather than in a navigation
- * column. The page is reference information a visitor may want after reading
- * about solar, not something the company sells, and its placement says so.
+ * column. The page is reference information rather than something the company
+ * sells, and its placement says so.
  */
 const COMPANY_LINKS = [
-  { label: "Sončne elektrarne", href: "/soncne-elektrarne" },
   { label: "Reference", href: "/reference" },
   { label: "O podjetju", href: "/o-podjetju" },
   { label: "Kontakt", href: "/kontakt" },

@@ -8,9 +8,8 @@ import { cn } from "@/lib/cn";
  *
  * This is the approved homepage "Kako poteka sodelovanje" component, lifted out
  * unchanged and given content props. The homepage renders through it, and so
- * does every service page, the solar page and the enquiry page, which is what
- * guarantees there is exactly one process aesthetic rather than nine similar
- * ones.
+ * does every service page and the enquiry page, which is what guarantees there
+ * is exactly one process aesthetic rather than nine similar ones.
  *
  * Wide: even columns, one horizontal rule running behind the markers,
  * everything centred under them. Narrow: the same sequence turned on its side

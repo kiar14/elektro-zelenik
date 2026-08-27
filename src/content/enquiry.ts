@@ -7,16 +7,16 @@ import { services } from "@/content/services";
  * carries its selection to `/povprasevanje` as a search param, so the two must
  * agree on the strings, and the seven services must agree with
  * `content/services.ts`. Deriving them here is what guarantees all three.
+ *
+ * The seven services, plus "Drugo" for everything else. There is no eighth
+ * option: an enquiry form must not offer something the company does not
+ * publicly present as a service.
  */
-
-/** The seven services, plus the two things that are not services but are
- *  genuinely enquired about. */
 export const enquiryOptions = [
   ...services.map((service) => ({
     value: service.slug,
     label: service.title,
   })),
-  { value: "soncna-elektrarna", label: "Sončna elektrarna" },
   { value: "drugo", label: "Drugo" },
 ] as const;
 
@@ -42,7 +42,6 @@ export const conditionalQuestion: Partial<Record<EnquiryValue, string>> = {
   elektroinstalacije: "Gre za novogradnjo ali obstoječi objekt?",
   servisiranje: "Za katero napravo gre?",
   "toplotne-crpalke": "Kako je objekt ogrevan zdaj?",
-  "soncna-elektrarna": "Kakšna je streha in kako je usmerjena?",
   "racunalniske-mreze": "Za kakšen objekt gre?",
   "alarmni-sistemi": "Za kakšen objekt gre?",
   "video-nadzor": "Za kakšen objekt gre?",

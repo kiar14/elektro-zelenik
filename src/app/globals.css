@@ -77,6 +77,14 @@
   --text-metric--letter-spacing: -0.032em;
   --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
   --text-lead--line-height: 1.55;
+
+  /* subheading  26 -> 36  the heading of a block inside a page section.
+     One clear step below --text-heading and well clear of --text-xl, so an
+     inner page reads as h1 > section h2 > block h2 rather than as one page
+     title followed by a run of similar-looking type. */
+  --text-subheading: clamp(1.625rem, 1.2rem + 1.35vw, 2.25rem);
+  --text-subheading--line-height: 1.18;
+  --text-subheading--letter-spacing: -0.02em;
   --text-eyebrow: 0.8125rem; /* 13 */
   --text-eyebrow--line-height: 1.2;
   --text-eyebrow--letter-spacing: 0.13em;
@@ -86,6 +94,13 @@
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+
+  /* Every real control on the site: buttons, submits, inputs, selects, the
+     chips in the quick enquiry and the icon buttons in the header. Softer than
+     the 4px the site started on and a long way short of a pill, which is the
+     shape a service business wants. Declared once so the corner of every
+     control moves together. */
+  --radius-control: 8px;
 
   /* --- Elevation ---------------------------------------------------------
      Elevation comes from borders, tonal surfaces and whitespace. This is the

@@ -209,7 +209,7 @@ export function EnquiryForm({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70 sm:justify-self-start"
+        className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70 sm:justify-self-start"
       >
         Pošlji povpraševanje
         <ArrowRight aria-hidden className="size-[18px]" />
@@ -264,7 +264,7 @@ function PendingDelivery({
         </p>
       </div>
 
-      <dl className="grid gap-2 rounded-sm border border-border bg-surface px-4 py-4 text-base">
+      <dl className="grid gap-2 rounded-md border border-border bg-surface px-4 py-4 text-base">
         {lines.map((line) => (
           <dd key={line} className="whitespace-pre-line text-ink-muted">
             {line}
@@ -275,14 +275,14 @@ function PendingDelivery({
       <div className="flex flex-col gap-3 sm:flex-row">
         <a
           href={mailto}
-          className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+          className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
         >
           <Mail aria-hidden className="size-[18px]" />
           Pošlji po e-pošti
         </a>
         <a
           href={company.phone.href}
-          className="btn-outline inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+          className="btn-outline inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
         >
           <Phone aria-hidden className="size-[18px] text-brand-strong" />
           {company.phone.display}

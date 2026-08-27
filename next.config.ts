@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
+    // Modern formats first. Every photographic source in /public is already a
+    // WebP master; Next.js re-encodes to AVIF where the browser accepts it and
+    // falls back to WebP where it does not.
+    formats: ["image/avif", "image/webp"],
+
     // 82 is the hero pair; 75 is the Next.js default used by everything else.
     // Both frames of the hero must be requested at the same value.
     qualities: [75, 82],

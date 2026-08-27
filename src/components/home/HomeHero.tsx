@@ -10,7 +10,9 @@ import { headerPhone } from "@/content/navigation";
 
 /**
  * Two frames of one photograph: the same house, camera, framing and landscape,
- * differing only in whether the building is lit. Both are 1672x941 and are
+ * differing only in whether the building is lit. Both are 1672x941 WebP masters
+ * encoded at the same quality, because a difference in encoding between them
+ * would show up as noise inside the blend. Both are
  * positioned by the same `.hero-frame` rule, so their geometry is identical by
  * construction rather than by matching class lists.
  *
@@ -20,8 +22,8 @@ import { headerPhone } from "@/content/navigation";
  * both sized against that number.
  */
 const HERO_FRAMES = {
-  unlit: "/images/hero/hero-house-off.png",
-  lit: "/images/hero/hero-house-on.png",
+  unlit: "/images/hero/hero-house-off.webp",
+  lit: "/images/hero/hero-house-on.webp",
   alt: "Sodobna enodružinska hiša ob mraku z osvetljeno fasado in okni.",
   sizes: "100vw",
   /** One value for both frames; a mismatch here would show in the blend. */
@@ -77,8 +79,8 @@ export function HomeHero() {
           </h1>
 
           <p data-hero-item className="mt-6 text-lead text-on-photo-muted">
-            Elektroinštalacije in sončne elektrarne, od načrtovanja do
-            priklopa.
+            Elektroinštalacije, servis in tehnične rešitve, od načrtovanja do
+            izvedbe.
           </p>
 
           {/* Container query, not a breakpoint: the copy column is sized
@@ -94,7 +96,7 @@ export function HomeHero() {
               size="lg"
               className="w-full @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
             >
-              Brezplačen ogled in ponudba
+              Pošlji povpraševanje
             </ActionLink>
 
             <ActionLink

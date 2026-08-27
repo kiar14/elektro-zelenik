@@ -11,6 +11,11 @@ import { cn } from "@/lib/cn";
  * hover. This is the only card used for benefits, proof and explanatory
  * features anywhere on the site; a page that needs that kind of card renders
  * this one rather than growing a variant of its own.
+ *
+ * The disc is 52px at narrow widths and 56px from `sm`, carrying a 24 to 26px
+ * mark at a lighter stroke. That is deliberately the largest icon treatment on
+ * the site: the mark has to register before the card title is read, which it
+ * did not do at the 48px disc and 25px mark this started from.
  */
 export interface BenefitCard {
   icon: LucideIcon;
@@ -40,9 +45,9 @@ export function BenefitGrid({
         >
           <span
             aria-hidden
-            className="flex size-12 items-center justify-center rounded-full bg-brand-tint transition-transform duration-300 ease-smooth group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:size-13"
+            className="flex size-13 items-center justify-center rounded-full bg-brand-tint transition-transform duration-300 ease-smooth group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:size-14"
           >
-            <card.icon className="size-[25px] text-brand-strong" strokeWidth={1.7} />
+            <card.icon className="size-6 text-brand-strong sm:size-[26px]" strokeWidth={1.6} />
           </span>
 
           <h3 className="mt-4 text-xl font-semibold tracking-[-0.015em] text-ink sm:mt-5">

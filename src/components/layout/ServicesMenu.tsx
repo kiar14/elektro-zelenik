@@ -177,7 +177,7 @@ export function ServicesMenu({
               <NavLink
                 href={service.href}
                 onClick={() => setOpen(false)}
-                className="group flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm text-ink-muted transition-colors duration-150 ease-standard hover:bg-surface hover:text-ink data-active:bg-brand-tint"
+                className="group flex min-h-11 items-center gap-3 rounded-control px-3 text-sm text-ink-muted transition-colors duration-150 ease-standard hover:bg-surface hover:text-ink data-active:bg-brand-tint"
                 activeClassName="font-semibold text-ink"
               >
                 <service.icon
@@ -195,7 +195,7 @@ export function ServicesMenu({
           <NavLink
             href={allServicesLink.href}
             onClick={() => setOpen(false)}
-            className="group flex min-h-11 items-center justify-between gap-3 rounded-sm px-3 text-sm font-semibold text-brand-strong transition-colors duration-150 ease-standard hover:bg-surface"
+            className="group flex min-h-11 items-center justify-between gap-3 rounded-control px-3 text-sm font-semibold text-brand-strong transition-colors duration-150 ease-standard hover:bg-surface"
             activeClassName="bg-brand-tint"
           >
             {allServicesLink.label}

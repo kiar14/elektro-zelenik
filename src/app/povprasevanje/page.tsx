@@ -64,8 +64,8 @@ export default async function Page({
                 Vaše povpraševanje
               </h2>
               <p className="mt-3 max-w-prose text-base text-ink-muted">
-                Označeno je le tisto, kar zares potrebujemo. Vse ostalo je
-                neobvezno.
+                Neobvezna polja so označena. Ostalo potrebujemo, da vam lahko
+                odgovorimo.
               </p>
 
               <div className="mt-8">

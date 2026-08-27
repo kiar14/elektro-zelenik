@@ -16,11 +16,17 @@ npm run lint       # eslint
 
 ## Build status
 
-Homepage and global footer are built. Inner pages remain marked placeholders
-(`src/components/layout/PageStub.tsx`) so no navigation link 404s.
+Every public page is built: homepage, `/storitve` plus the seven service pages,
+`/reference`, `/o-podjetju`, `/kontakt`, `/povprasevanje`, `/subvencije` and
+`/politika-zasebnosti`.
 
 Homepage order: hero → trust strip → storitve → quick enquiry → zakaj Zelenik →
 postopek → reference → final CTA → footer.
+
+Photovoltaics is not part of the public service architecture. There is no
+`/soncne-elektrarne` route, no solar entry in the navigation, the footer, the
+enquiry vocabulary or any body copy, and no solar imagery in `public/`. The
+public service set is exactly the seven in `src/content/services.ts`.
 
 ## Motion
 
@@ -41,19 +47,20 @@ reveals are visible immediately.
 `src/content/company.ts` is the single source of truth for names, address,
 phone, email and registration details. Nothing may be hardcoded in a component.
 
-`src/content/navigation.ts` carries the navigation and the service list. Every
-service has a `status`:
+`src/content/services.ts` is the single source of truth for the seven services.
+The header dropdown, the mobile accordion, the footer column, `/storitve`, the
+seven detail routes, every related-services block and both enquiry forms read
+from it, so the seven cannot drift apart across those surfaces. Each section of
+a service page names its own `layout`, which is what gives the seven pages seven
+different rhythms rather than one shape repeated.
 
-| status | meaning |
-|---|---|
-| `confirmed` | present in the company's own current material |
-| `partner` | delivered together with business partners |
-| `needs-client-verification` | registered or advertised elsewhere, not yet confirmed as actively offered |
+`src/content/references.ts` holds the reference projects. **One real-world
+property is one project.** A building with several photographs owns them all and
+shows them as one gallery; it is never split into several reference cards.
 
-**Only `confirmed` services are rendered anywhere in the interface.** The others
-stay in the data with a `source` note recording what still has to be checked.
 `unverifiedCompanyData` in `company.ts` records facts that are contradictory
-(opening hours) and must not be displayed until the client confirms them.
+(opening hours) or unconfirmed and must not be displayed until the client
+confirms them. `TODO_CLIENT` marks the same thing in a component.
 
 ## Brand assets
 
@@ -68,12 +75,29 @@ exactly `rgb(12, 169, 45)`. It is defined once, in `src/app/globals.css`, as
 `--color-brand` / `--color-brand-strong` / `--color-brand-tint`. No brand colour
 is hardcoded anywhere else.
 
-## Hero photography
+## Images
 
-`public/images/hero/hero-house-off.png` and `hero-house-on.png` are the supplied
-photographs, used unmodified. Both are 1672x941 — they must stay identical in
-size, because they are treated as two frames of one scene and are laid into the
-same box by a single CSS rule (`.hero-frame`).
+Every photographic asset in `public/` is a WebP master. Next.js serves AVIF
+where the browser accepts it and WebP where it does not
+(`images.formats` in `next.config.ts`). Sources are sized at roughly twice their
+largest rendered CSS width, so nothing multi-megabyte is ever shipped: the whole
+of `public/` is about 2.8 MB and the homepage above-the-fold image payload is
+about 120 KB.
+
+The brand PNGs in `public/brand/` are the genuine identity files and are left
+alone. Vector and logo assets are never converted.
+
+To re-encode after new photographs are supplied, resize to the target width and
+encode WebP at quality 82 to 88, comparing output before replacing a reference.
+
+### Hero photography
+
+`public/images/hero/hero-house-off.webp` and `hero-house-on.webp` are the
+supplied photographs. Both are 1672x941 and are encoded at the same quality —
+they must stay identical in size and encoding, because they are treated as two
+frames of one scene, are laid into the same box by a single CSS rule
+(`.hero-frame`), and any difference between them would show up inside the
+blend.
 
 Measured from those files: the architecture begins at x = 708 of 1672, i.e.
 **42.3% across the frame**. Everything left of that is sky, hills and lawn — the

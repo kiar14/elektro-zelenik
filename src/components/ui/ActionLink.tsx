@@ -7,7 +7,7 @@ export type ActionVariant = "solid" | "outline";
 export type ActionSize = "md" | "lg";
 
 const BASE =
-  "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-sm " +
+  "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-control " +
   "font-sans font-semibold tracking-[-0.005em] " +
   "transition-[background-color,border-color,color,transform] duration-200 ease-smooth " +
   "hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0";

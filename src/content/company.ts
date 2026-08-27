@@ -60,6 +60,11 @@ export const company = {
     municipality: "Destrnik",
     administrativeUnit: "Ptuj",
     region: "Podravje",
+    /**
+     * The adjectival form, for use inside a sentence. Splicing the noun in
+     * ("v širši Podravje regiji") is not Slovenian; this is what the copy uses.
+     */
+    regionAdjective: "podravski",
   },
 } as const;
 

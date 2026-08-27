@@ -11,11 +11,11 @@ import { ibmPlexSans, inter } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: {
-    default: `${company.tradingName}, elektroinštalacije in sončne elektrarne`,
+    default: `${company.tradingName}, elektroinštalacije in tehnične rešitve`,
     template: `%s, ${company.tradingName}`,
   },
   description:
-    "Elektroinštalacije v novogradnjah in obstoječih objektih ter montaža sončnih elektrarn. Destrnik pri Ptuju, od leta 2000.",
+    "Elektroinštalacije v novogradnjah in obstoječih objektih, servis, tehnični sistemi in toplotne črpalke. Destrnik pri Ptuju, od leta 2000.",
   applicationName: company.tradingName,
   authors: [{ name: company.legalName }],
 };

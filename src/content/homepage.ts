@@ -9,7 +9,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 import { company } from "@/content/company";
-import type { EnquiryValue } from "@/content/enquiry";
 import { homeReferences } from "@/content/references";
 import { services } from "@/content/services";
 
@@ -108,28 +107,6 @@ export const homeServices: readonly HomeService[] = services.map((service) => ({
 }));
 
 /* -------------------------------------------------------------------------
- * Quick enquiry
- *
- * The five shortest paths, using the site-wide enquiry values from
- * content/enquiry.ts. The selection is carried to /povprasevanje as a search
- * param, so the strings have to be the same ones that page understands.
- *
- * Sončna elektrarna appears here even though it is not one of the seven service
- * cards: the About page names photovoltaics as a principal activity, so it is
- * a confirmed thing to enquire about.
- * ---------------------------------------------------------------------- */
-
-export const enquiryCategories = [
-  { value: "elektroinstalacije", label: "Elektroinštalacije" },
-  { value: "servisiranje", label: "Servis" },
-  { value: "toplotne-crpalke", label: "Toplotna črpalka" },
-  { value: "soncna-elektrarna", label: "Sončna elektrarna" },
-  { value: "drugo", label: "Drugo" },
-] as const satisfies ReadonlyArray<{ value: EnquiryValue; label: string }>;
-
-export type EnquiryCategory = (typeof enquiryCategories)[number]["value"];
-
-/* -------------------------------------------------------------------------
  * Zakaj Zelenik
  * ---------------------------------------------------------------------- */
 
@@ -151,7 +128,7 @@ export const whyCards: ReadonlyArray<{
   {
     icon: BadgeCheck,
     title: "Kakovostna izvedba",
-    body: "Dela izvedemo skrbno in po dogovorjenem obsegu, z namenom, da je končna rešitev urejena in zanesljiva.",
+    body: "Dela izvedemo skrbno in v dogovorjenem obsegu, tako da je končna rešitev urejena in zanesljiva.",
   },
   {
     icon: CalendarCheck,
@@ -161,7 +138,7 @@ export const whyCards: ReadonlyArray<{
   {
     icon: Timer,
     title: "Hitra in učinkovita izvedba",
-    body: "Delo organiziramo tako, da je izvedba čim bolj učinkovita in da so nepotrebne prekinitve za naročnika čim manjše.",
+    body: "Delo organiziramo tako, da izvedba teče brez nepotrebnih zastojev in da je motenj za naročnika čim manj.",
   },
   {
     icon: Workflow,
@@ -189,19 +166,20 @@ export const processSteps: ReadonlyArray<{ title: string; body: string }> = [
     body: "Dela izvedemo natančno, v dogovorjenem obsegu in v usklajenem terminu.",
   },
   {
-    title: "Predaja in nadaljnji kontakt",
-    body: "Po zaključku preverimo izvedbo, objekt predamo in ostanemo dosegljivi za dodatna vprašanja.",
+    title: "Zaključek del in nadaljnji kontakt",
+    body: "Po zaključku del preverimo izvedbo in ostanemo dosegljivi za dodatna vprašanja.",
   },
 ];
 
 /* -------------------------------------------------------------------------
  * Reference
  *
- * Exactly three, deliberately one of each kind: commercial, residential,
- * agricultural. Taken from content/references.ts, which holds the company's
- * own photographs and the notes on what is still unverified about them.
+ * The first three projects from content/references.ts, shown as one card each.
+ * A project with several photographs contributes its cover here and its full
+ * gallery on /reference; the homepage never splits one building across more
+ * than one card.
  * ---------------------------------------------------------------------- */
 
-export type { ReferenceItem } from "@/content/references";
+export type { ReferenceProject } from "@/content/references";
 
 export const references = homeReferences;

@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { PageHero } from "@/components/sections/PageHero";
-import { ReferenceGrid } from "@/components/sections/ReferenceGrid";
+import { ProjectGallery } from "@/components/sections/ProjectGallery";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { references } from "@/content/references";
 
-const TITLE = "Reference";
+const TITLE = "Izvedeni projekti";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -18,36 +18,44 @@ export const metadata: Metadata = {
 /**
  * Reference projects.
  *
- * Only the company's own photographs, and only captions that describe what is
- * in the frame. No generated service imagery, no town, year, capacity or client
- * name, because none of that is documented, and nothing about the scope of the
- * work is read off a photograph. Where a building is not identified, the title
- * stays at the conservative category name.
+ * One property is one project. Where a building has several photographs they
+ * are shown together in that project's own gallery, so a single job is never
+ * counted as three references.
  *
- * Quality over quantity: six projects, no padding.
+ * Only the company's own photographs, and only captions that describe what is
+ * in the frame. No town, year, capacity, client name, equipment or brand,
+ * because none of that is documented. The one exception is the dental centre,
+ * whose scope the client has confirmed.
  */
 export default function Page() {
   return (
     <>
       <PageHero
-        eyebrow={TITLE}
-        title="Izbor izvedenih projektov"
-        lead="Objekti, na katerih smo izvajali elektroinštalacijska dela, razsvetljavo in povezane tehnične sisteme. Fotografije so naše."
-        crumbs={[{ label: TITLE }]}
+        eyebrow="Reference"
+        title={TITLE}
+        lead="Izbor projektov na različnih vrstah objektov."
+        crumbs={[{ label: "Reference" }]}
       />
 
       <section aria-labelledby="projekti-naslov" className="bg-ground">
-        <Container className="py-20 lg:py-24">
+        <Container width="wide" className="pt-20 lg:pt-24">
           <SectionHeading
             id="projekti-naslov"
             eyebrow="Projekti"
-            title="Stanovanjski, poslovni in kmetijski objekti"
-            lead="Obseg del se od objekta do objekta razlikuje. Kaj natančno je bilo izvedeno na posameznem projektu, vam povemo v pogovoru."
+            title="Različni objekti, različne rešitve"
+            lead="Vsak projekt zahteva svoj pristop in premišljeno izvedbo."
           />
-
-          <ReferenceGrid items={references} lead className="mt-14 lg:mt-20" />
         </Container>
       </section>
+
+      {references.map((project, index) => (
+        <ProjectGallery
+          key={project.slug}
+          project={project}
+          index={index}
+          flushTop={index === 0}
+        />
+      ))}
 
       <CtaSection
         title="Načrtujete podoben projekt?"

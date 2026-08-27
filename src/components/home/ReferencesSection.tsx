@@ -5,9 +5,10 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { references } from "@/content/homepage";
 
 /**
- * Exactly three projects, one of each kind: commercial, residential,
- * agricultural. The point of the section is range, so no building appears
- * twice and no illustrative marketing imagery appears at all.
+ * Three projects, one card each, taken from the top of the Reference page. A
+ * project with several photographs shows only its cover here: no building is
+ * ever split across more than one card, and no illustrative marketing imagery
+ * appears at all.
  *
  * The commercial photograph carries its photographer's watermark. It is left
  * intact deliberately, see the note in content/references.ts.
@@ -21,7 +22,7 @@ export function ReferencesSection() {
             id="reference-naslov"
             eyebrow="Reference"
             title="Izvedeni projekti"
-            lead="Izbor projektov s področja elektroinštalacij, razsvetljave, tehničnih sistemov in sorodnih elektro rešitev."
+            lead="Projekti s področja elektroinštalacij, razsvetljave, tehničnih sistemov in sorodnih elektro rešitev."
           />
           <ActionLink
             href="/reference"

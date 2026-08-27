@@ -1,26 +1,29 @@
 import Image from "next/image";
 
 import { RevealGroup } from "@/components/motion/RevealGroup";
-import type { ReferenceItem } from "@/content/references";
+import type { ReferenceProject } from "@/content/references";
 import { cn } from "@/lib/cn";
 
 /**
- * The REFERENCE ITEM family, lifted unchanged out of the approved homepage.
+ * The REFERENCE CARD family, lifted unchanged out of the approved homepage.
  *
  * A photograph in a small radius with no border, a very small scale on hover,
  * and a caption beneath it: brand-green category, then the title. No overlay,
  * no scrim, no text over the image, and no description invented to fill space.
  *
- * `lead` renders the first item across the full width, which is the homepage
- * arrangement. `/reference` uses the same treatment for a longer list.
+ * A project with several photographs contributes only its cover here. The full
+ * gallery lives on `/reference`, and no building is ever split across more than
+ * one card.
+ *
+ * `lead` renders the first project across the full width, which is the homepage
+ * arrangement.
  */
 export function ReferenceGrid({
   items,
   lead = false,
   className,
 }: {
-  items: readonly ReferenceItem[];
-  /** Give the first photograph the full width, as on the homepage. */
+  items: readonly ReferenceProject[];
   lead?: boolean;
   className?: string;
 }) {
@@ -45,7 +48,7 @@ export function ReferenceGrid({
 
       {rest.map((item) => (
         <ReferenceCard
-          key={item.src}
+          key={item.slug}
           item={item}
           data-reveal
           aspect="aspect-[4/3] lg:aspect-[3/2]"
@@ -64,7 +67,7 @@ export function ReferenceCard({
   lead,
   ...rest
 }: {
-  item: ReferenceItem;
+  item: ReferenceProject;
   aspect: string;
   sizes: string;
   className?: string;
@@ -76,8 +79,8 @@ export function ReferenceCard({
         className={`group relative overflow-hidden rounded-lg bg-surface-sunk ${aspect}`}
       >
         <Image
-          src={item.src}
-          alt={item.alt}
+          src={item.cover.src}
+          alt={item.cover.alt}
           fill
           sizes={sizes}
           className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
@@ -95,9 +98,9 @@ export function ReferenceCard({
         >
           {item.title}
         </span>
-        {item.note ? (
+        {item.description ? (
           <span className="mt-1.5 block text-base text-ink-muted">
-            {item.note}
+            {item.description}
           </span>
         ) : null}
       </figcaption>

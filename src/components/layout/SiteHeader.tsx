@@ -12,13 +12,19 @@ import { headerCta, headerPhone, primaryNav } from "@/content/navigation";
 /**
  * The global header.
  *
- * Five destinations rather than six. Removing Subvencije was not a deletion:
- * the row was re-measured around what remains, so the navigation gained a step
- * of size and a step of gutter rather than leaving a hole where the sixth item
- * used to be. At 1280 the five items, the phone and the call to action now fill
- * the row to roughly the same optical density as six smaller ones did.
+ * Four destinations. Removing Sončne elektrarne was not a deletion: the row was
+ * re-measured around what remains rather than left with a hole where the fifth
+ * item used to be.
  *
- * The full navigation appears from `xl`. Below that the row cannot hold five
+ * The navigation is now anchored beside the wordmark instead of being pushed to
+ * the right of the row. With five items a right-anchored nav left a workable
+ * gap after the logo; with four it left roughly 240px of dead space at 1280,
+ * and the nav read as an island floating in the middle of the header. Anchored
+ * left, the only slack in the row sits between the navigation and the actions,
+ * which is where a header is supposed to carry it. The gutters between items
+ * were opened a step at the same time, because there is now room for them.
+ *
+ * The full navigation appears from `xl`. Below that the row cannot hold four
  * Slovenian labels plus both actions without either shrinking the type past
  * comfort or wrapping, so narrower viewports get the sheet in MobileNav, which
  * is designed for them rather than being the desktop menu stacked up.
@@ -32,9 +38,9 @@ export function SiteHeader() {
 
           <nav
             aria-label="Glavna navigacija"
-            className="ml-auto hidden xl:block"
+            className="hidden xl:ml-10 xl:block 2xl:ml-14"
           >
-            <ul className="flex items-center gap-5 2xl:gap-8">
+            <ul className="flex items-center gap-6 2xl:gap-9">
               {primaryNav.map((item) =>
                 item.menu ? (
                   <ServicesMenu
@@ -57,11 +63,11 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <div className="ml-auto flex items-center gap-2 xl:ml-0 xl:gap-3 xl:border-l xl:border-border xl:pl-6 2xl:gap-4 2xl:pl-8">
+          <div className="ml-auto flex items-center gap-2 xl:gap-3 xl:border-l xl:border-border xl:pl-6 2xl:gap-4 2xl:pl-8">
             <a
               href={headerPhone.href}
               aria-label={headerPhone.accessibleLabel}
-              className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-sm px-3 text-sm font-semibold text-ink transition-colors duration-150 ease-standard hover:bg-surface max-xl:border max-xl:border-border-strong xl:px-2 max-[419px]:size-11 max-[419px]:justify-center max-[419px]:px-0 2xl:px-3"
+              className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-control px-3 text-sm font-semibold text-ink transition-colors duration-150 ease-standard hover:bg-surface max-xl:border max-xl:border-border-strong xl:px-2 max-[419px]:size-11 max-[419px]:justify-center max-[419px]:px-0 2xl:px-3"
             >
               <Phone aria-hidden className="size-[18px] text-brand-strong" />
               <span className="max-[419px]:sr-only">{headerPhone.label}</span>

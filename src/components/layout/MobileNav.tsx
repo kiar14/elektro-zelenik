@@ -111,7 +111,7 @@ export function MobileNav() {
         aria-controls={dialogId}
         aria-label="Odpri meni"
         onClick={() => setOpen(true)}
-        className="inline-flex size-11 items-center justify-center rounded-sm border border-border-strong text-ink transition-colors duration-150 ease-standard hover:bg-surface xl:hidden"
+        className="inline-flex size-11 items-center justify-center rounded-control border border-border-strong text-ink transition-colors duration-150 ease-standard hover:bg-surface xl:hidden"
       >
         <Menu aria-hidden className="size-5" />
       </button>
@@ -129,7 +129,7 @@ export function MobileNav() {
               type="button"
               aria-label="Zapri meni"
               onClick={() => setOpen(false)}
-              className="inline-flex size-11 items-center justify-center rounded-sm border border-border-strong text-ink transition-colors duration-150 ease-standard hover:bg-surface"
+              className="inline-flex size-11 items-center justify-center rounded-control border border-border-strong text-ink transition-colors duration-150 ease-standard hover:bg-surface"
             >
               <X aria-hidden className="size-5" />
             </button>

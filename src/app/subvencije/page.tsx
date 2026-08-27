@@ -20,15 +20,15 @@ const TITLE = "Subvencije";
 export const metadata: Metadata = {
   title: TITLE,
   description:
-    "Kje preveriti aktualne spodbude za sončno elektrarno in toplotno črpalko ter kaj pri tem prevzamemo mi.",
+    "Kje preveriti aktualne spodbude za toplotno črpalko in kaj pri tem prevzamemo mi.",
 };
 
 /**
  * Subsidies.
  *
- * Removed from the main navigation and reached contextually, from the solar
- * page and from the footer. This is reference information, not something the
- * company sells, and its placement says so.
+ * Removed from the main navigation and reached from the footer. This is
+ * reference information, not something the company sells, and its placement
+ * says so.
  *
  * The page is deliberately an architecture rather than a set of figures. Every
  * value lives in `content/subsidies.ts` behind a `TODO_RESEARCH` sentinel, and
@@ -52,7 +52,7 @@ export default function Page() {
     <>
       <PageHero
         eyebrow={TITLE}
-        title="Spodbude za sončno elektrarno in toplotno črpalko"
+        title="Spodbude za toplotno črpalko"
         lead="Pogoji in zneski se spreminjajo, zato jih navajamo samo takrat, ko so preverjeni pri uradnem viru."
         crumbs={[{ label: TITLE }]}
         actions={false}
@@ -64,7 +64,7 @@ export default function Page() {
             id="programi-naslov"
             eyebrow="Pregled"
             title="Aktualne spodbude"
-            lead="Spodnja pregleda se izpolnita, ko so vrednosti preverjene pri pristojni instituciji. Do takrat polja namenoma ostajajo prazna."
+            lead="Spodnji pregled se izpolni, ko so vrednosti preverjene pri pristojni instituciji. Do takrat polja namenoma ostajajo prazna."
           />
 
           {lastUpdated ? (
@@ -72,7 +72,7 @@ export default function Page() {
               Zadnjič preverjeno: {lastUpdated}
             </p>
           ) : (
-            <p className="mt-6 flex items-start gap-3 rounded-sm border border-border bg-surface px-4 py-3 text-sm text-ink-muted">
+            <p className="mt-6 flex items-start gap-3 rounded-md border border-border bg-surface px-4 py-3 text-sm text-ink-muted">
               <Info
                 aria-hidden
                 className="mt-0.5 size-[18px] shrink-0 text-brand-strong"
@@ -83,7 +83,7 @@ export default function Page() {
             </p>
           )}
 
-          <RevealGroup className="mt-12 grid gap-6 lg:mt-14 lg:grid-cols-2">
+          <RevealGroup className="mt-12 grid max-w-[44rem] gap-6 lg:mt-14">
             {programmes.map((programme) => (
               <article
                 key={programme.id}
@@ -168,8 +168,8 @@ export default function Page() {
       </section>
 
       <CtaSection
-        title="Načrtujete naložbo v sončno elektrarno?"
-        body="Za izvedbo se obrnite na nas. Dogovorimo se za ogled in opredelimo, kaj je za vaš objekt smiselno."
+        title="Načrtujete zamenjavo ogrevanja?"
+        body="Za dobavo, montažo in priklop se obrnite na nas. Dogovorimo se za ogled in opredelimo, kaj je za vaš objekt smiselno."
       />
     </>
   );

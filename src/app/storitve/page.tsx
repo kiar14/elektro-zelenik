@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 
 import { Container } from "@/components/layout/Container";
-import { ContentSections } from "@/components/sections/ContentSections";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { PageHero } from "@/components/sections/PageHero";
+import { ServiceClusters } from "@/components/sections/ServiceClusters";
 import { ServiceGrid, toServiceCards } from "@/components/sections/ServiceGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { company } from "@/content/company";
 import { services } from "@/content/services";
 
 const TITLE = "Storitve";
@@ -21,9 +20,14 @@ export const metadata: Metadata = {
  * The services overview.
  *
  * Exactly the seven services, in the same order and through the same card
- * component as the homepage, including its 3 + 3 + 1 arrangement. Sončne
- * elektrarne is not here: it is a separate top-level offering with its own
- * route, not an eighth card.
+ * component as the homepage, including its 3 + 3 + 1 arrangement.
+ *
+ * Two sections, not three. "Kje delamo" has been removed: the service area is
+ * a contact fact, it is already on Kontakt and O podjetju, and repeating it at
+ * the foot of the service hub added a third band of prose to a page whose job
+ * is to route people into the seven. What remains after the grid is the one
+ * argument that belongs here, and it is now told through the seven themselves
+ * rather than through another paragraph.
  */
 export default function Page() {
   return (
@@ -52,23 +56,7 @@ export default function Page() {
         </Container>
       </section>
 
-      <ContentSections
-        className="border-t border-border bg-surface"
-        sections={[
-          {
-            title: "Več storitev pri enem izvajalcu",
-            body: "Elektroinštalacije, servis, varnostni sistemi, računalniške mreže in toplotne črpalke se na objektu pogosto srečajo. Ko jih prevzame en izvajalec, se dela ne podvajajo in ni treba usklajevati več ekip med seboj.",
-            body2:
-              "V praksi to najbolj šteje pri pripravi. Marsikaj, kar je med gradnjo majhna postavka, po zaključku ni več izvedljivo brez ponovnega posega, zato je smiselno o vsem povedati že na začetku.",
-          },
-          {
-            title: "Kje delamo",
-            body: `Sedež podjetja je v kraju ${company.address.city}, delujemo pa na območju upravne enote ${company.serviceArea.administrativeUnit} in v širši ${company.serviceArea.region} regiji.`,
-            body2:
-              "Če niste prepričani, ali vaša lokacija sodi zraven, nas pokličite in vam povemo takoj.",
-          },
-        ]}
-      />
+      <ServiceClusters />
 
       <CtaSection
         title="Niste prepričani, katera storitev je prava?"

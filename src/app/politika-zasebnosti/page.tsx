@@ -44,7 +44,7 @@ function isTodo(paragraph: string | React.ReactNode): paragraph is string {
 
 function TodoNote({ text }: { text: string }) {
   return (
-    <p className="mt-4 flex max-w-prose items-start gap-3 rounded-sm border border-dashed border-border-strong bg-surface px-4 py-3 text-sm text-ink-muted">
+    <p className="mt-4 flex max-w-prose items-start gap-3 rounded-md border border-dashed border-border-strong bg-surface px-4 py-3 text-sm text-ink-muted">
       <AlertTriangle
         aria-hidden
         className="mt-0.5 size-[18px] shrink-0 text-ink-muted"

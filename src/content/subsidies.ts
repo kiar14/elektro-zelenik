@@ -1,6 +1,10 @@
 /**
  * Subsidies.
  *
+ * Scoped to the one thing the company actually installs and the visitor may
+ * therefore be funded for: a heat pump. The photovoltaic programme that used to
+ * sit alongside it has been removed with the rest of the solar material.
+ *
  * Every figure on this subject changes: call amounts, eligibility, deadlines
  * and even which body runs the scheme. Nothing here is guessed. The page is
  * built as an architecture that can hold real values once they are checked
@@ -52,18 +56,6 @@ export interface SubsidyProgramme {
 
 export const programmes: readonly SubsidyProgramme[] = [
   {
-    id: "soncna-elektrarna",
-    title: "Sončna elektrarna",
-    summary:
-      "Spodbude za naložbe v samooskrbo z električno energijo iz sončne energije za stanovanjske objekte.",
-    authority: TODO_RESEARCH,
-    callReference: TODO_RESEARCH,
-    amount: TODO_RESEARCH,
-    eligibility: TODO_RESEARCH,
-    deadline: TODO_RESEARCH,
-    sourceUrl: TODO_RESEARCH,
-  },
-  {
     id: "toplotna-crpalka",
     title: "Toplotna črpalka",
     summary:
@@ -78,11 +70,11 @@ export const programmes: readonly SubsidyProgramme[] = [
 ];
 
 /**
- * Where the values above have to be read from. These are the bodies that
- * actually publish the calls; nothing on this page may cite anything else.
+ * Where the values above have to be read from. This is the body that actually
+ * publishes the call; nothing on this page may cite anything else.
  *
- * TODO_RESEARCH: confirm that both bodies are still the correct authorities and
- * record the exact call pages before any figure is published.
+ * TODO_RESEARCH: confirm this is still the correct authority and record the
+ * exact call page before any figure is published.
  */
 export const officialSources: readonly {
   label: string;
@@ -91,10 +83,6 @@ export const officialSources: readonly {
   {
     label: "Eko sklad, Slovenski okoljski javni sklad",
     note: "Javni pozivi za nepovratne finančne spodbude občanom.",
-  },
-  {
-    label: "Borzen, Center za podpore",
-    note: "Podpore proizvodnji električne energije iz obnovljivih virov.",
   },
 ];
 

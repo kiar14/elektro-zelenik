@@ -7,8 +7,8 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Field } from "@/components/forms/Fields";
-import { enquiryCategories } from "@/content/homepage";
+import { Field, Select, TextArea } from "@/components/forms/Fields";
+import { enquiryOptions, type EnquiryValue } from "@/content/enquiry";
 
 /**
  * The homepage quick enquiry.
@@ -17,10 +17,17 @@ import { enquiryCategories } from "@/content/homepage";
  * The form validates, then carries what the visitor typed to `/povprasevanje`
  * as search params, so it starts the enquiry flow rather than faking the end
  * of one.
+ *
+ * The service used to be a row of chips over a shortened list of five. Now that
+ * the list is the full eight, chips would wrap to three rows and turn the
+ * shortest form on the site into its tallest block, so the field is the same
+ * native select the enquiry page uses: one tap on a phone, one keystroke on a
+ * keyboard, and one row of height. The four fields sit on two rows, which is
+ * what keeps this finishable in a few seconds.
  */
-const CATEGORY_VALUES = enquiryCategories.map((category) => category.value) as [
-  (typeof enquiryCategories)[number]["value"],
-  ...(typeof enquiryCategories)[number]["value"][],
+const VALUES = enquiryOptions.map((option) => option.value) as [
+  EnquiryValue,
+  ...EnquiryValue[],
 ];
 
 const schema = z.object({
@@ -30,7 +37,7 @@ const schema = z.object({
     .trim()
     .min(6, "Vpišite telefonsko številko.")
     .regex(/^[0-9+()\s/-]+$/, "Uporabite le številke in znake + ( ) / -."),
-  storitev: z.enum(CATEGORY_VALUES, "Izberite vrsto storitve."),
+  storitev: z.enum(VALUES, "Izberite vrsto storitve."),
   sporocilo: z
     .string()
     .trim()
@@ -69,8 +76,8 @@ export function QuickEnquiryForm() {
   });
 
   return (
-    <form noValidate onSubmit={onSubmit} className="grid gap-7">
-      <div className="grid gap-6 sm:grid-cols-2">
+    <form noValidate onSubmit={onSubmit} className="grid gap-5">
+      <div className="grid gap-5 sm:grid-cols-2">
         <Field
           id={`${fieldId}-ime`}
           label="Ime"
@@ -89,75 +96,45 @@ export function QuickEnquiryForm() {
         />
       </div>
 
-      <fieldset>
-        <legend className="text-base font-medium text-ink">
-          Vrsta storitve
-        </legend>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          {enquiryCategories.map((category) => (
-            <label key={category.value} className="cursor-pointer">
-              <input
-                type="radio"
-                value={category.value}
-                className="peer sr-only"
-                {...register("storitev")}
-              />
-              <span className="inline-flex min-h-11 items-center rounded-sm border border-border-strong bg-ground px-4 text-base text-ink-muted transition-colors duration-150 ease-standard peer-checked:border-brand-strong peer-checked:bg-brand-tint peer-checked:font-semibold peer-checked:text-ink peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-strong hover:border-ink-muted">
-                {category.label}
-              </span>
-            </label>
-          ))}
-        </div>
-
-        {errors.storitev?.message ? (
-          <p role="alert" className="mt-2 text-base text-ink">
-            {errors.storitev.message}
-          </p>
-        ) : null}
-      </fieldset>
-
-      <div>
-        <label
-          htmlFor={`${fieldId}-sporocilo`}
-          className="block text-base font-medium text-ink"
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Select
+          id={`${fieldId}-storitev`}
+          label="Vrsta storitve"
+          error={errors.storitev?.message}
+          {...register("storitev")}
         >
-          Sporočilo
-        </label>
-        <textarea
+          {enquiryOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
+
+        <TextArea
           id={`${fieldId}-sporocilo`}
-          rows={4}
+          label="Sporočilo"
+          rows={3}
+          optional
           placeholder="Na kratko opišite, kaj potrebujete."
-          aria-invalid={errors.sporocilo ? true : undefined}
-          aria-describedby={
-            errors.sporocilo ? `${fieldId}-sporocilo-napaka` : undefined
-          }
-          className="mt-2.5 block w-full resize-y rounded-sm border border-border-strong bg-ground px-3.5 py-3 text-base text-ink transition-colors duration-150 ease-standard placeholder:text-ink-muted hover:border-ink-muted aria-invalid:border-ink"
+          error={errors.sporocilo?.message}
           {...register("sporocilo")}
         />
-        {errors.sporocilo?.message ? (
-          <p
-            id={`${fieldId}-sporocilo-napaka`}
-            role="alert"
-            className="mt-2 text-base text-ink"
-          >
-            {errors.sporocilo.message}
-          </p>
-        ) : null}
       </div>
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="btn-solid inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70 sm:justify-self-start"
-      >
-        Pošlji povpraševanje
-        <ArrowRight aria-hidden className="size-[18px]" />
-      </button>
+      <div className="mt-1 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-solid inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70"
+        >
+          Pošlji povpraševanje
+          <ArrowRight aria-hidden className="size-[18px]" />
+        </button>
 
-      <p className="text-sm text-ink-muted">
-        Podatke uporabimo samo za odgovor na vaše povpraševanje.
-      </p>
+        <p className="max-w-[28ch] text-sm text-ink-muted">
+          Podatke uporabimo samo za odgovor na vaše povpraševanje.
+        </p>
+      </div>
     </form>
   );
 }

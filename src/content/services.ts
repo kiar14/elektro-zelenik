@@ -26,14 +26,29 @@ import type { LucideIcon } from "lucide-react";
  * No em dashes in any user-facing string.
  */
 
+/**
+ * How a block is laid out. See `components/sections/ContentSections`.
+ *
+ * Chosen per section, by what the section is actually saying, which is what
+ * gives the seven service pages seven different rhythms instead of one shape
+ * repeated down every page.
+ */
+export type SectionLayout =
+  | "feature"
+  | "list"
+  | "editorial"
+  | "split"
+  | "note";
+
 export interface ServiceSection {
   /** Rendered as the section h2. */
   title: string;
   body?: string;
   /** Optional second paragraph, kept separate so the type stays readable. */
   body2?: string;
-  /** Rendered as a checked list beside the copy. */
+  /** Rendered as a checked list. */
   bullets?: readonly string[];
+  layout?: SectionLayout;
 }
 
 export interface FaqItem {
@@ -78,15 +93,16 @@ export const services: readonly Service[] = [
     href: "/storitve/elektroinstalacije",
     title: "Elektroinštalacije",
     h1: "Elektroinštalacije za stanovanjske in poslovne objekte",
-    lead: "Klasične in pametne elektroinštalacije, od razporeditve po prostorih do priklopa in predaje objekta.",
+    lead: "Klasične in pametne elektroinštalacije, od razporeditve po prostorih do priklopa in zaključka del.",
     cardBody:
       "Klasične in pametne elektroinštalacije, skupaj s strokovnim svetovanjem pri načrtovanju.",
     icon: Zap,
-    image: "/images/storitve/elektroinstalacije.jpg",
+    image: "/images/storitve/elektroinstalacije.webp",
     alt: "Elektroinštalater vezuje elektro omarico v stanovanjskem objektu.",
     sections: [
       {
         title: "Kaj zajema storitev",
+        layout: "feature",
         body: "Elektroinštalacije so naša najobsežnejša dejavnost. Prevzamemo izvedbo na objektu in jo uskladimo z ostalimi deli, ki na gradbišču potekajo hkrati.",
         bullets: [
           "Klasične elektroinštalacije",
@@ -99,12 +115,14 @@ export const services: readonly Service[] = [
       },
       {
         title: "Novogradnje in obstoječi objekti",
+        layout: "editorial",
         body: "V novogradnjah inštalacije izvedemo od začetka, kar pomeni, da je razporeditev mogoče postaviti točno tako, kot bo objekt v resnici v uporabi.",
         body2:
           "V obstoječih objektih obseg del najprej uskladimo z razmerami na mestu samem. Kaj je izvedljivo in na kakšen način, se pokaže šele ob ogledu, zato pred tem ne obljubljamo rešitve.",
       },
       {
         title: "Načrtovanje",
+        layout: "split",
         body: "Največ se odloči, preden se stene zaprejo. Pozicije vtičnic in stikal, mesta svetil, priprava za naprave, ki se bodo priklopile pozneje, in prostor v elektro omarici so odločitve, ki jih je pozneje drago spreminjati.",
         body2:
           "Prav zato pri načrtovanju sodelujemo in svetujemo. Cilj je, da se odločitve sprejmejo v pravem trenutku in na podlagi tega, kako boste objekt uporabljali.",
@@ -131,8 +149,8 @@ export const services: readonly Service[] = [
           body: "Namestimo vtičnice, stikala in svetila ter izvedemo priklop.",
         },
         {
-          title: "Pregled in predaja",
-          body: "Izvedbo preverimo, objekt predamo in ostanemo dosegljivi za nadaljnja vprašanja.",
+          title: "Zaključek del in nadaljnji kontakt",
+          body: "Po zaključku del preverimo izvedbo in ostanemo dosegljivi za dodatna vprašanja.",
         },
       ],
     },
@@ -170,11 +188,12 @@ export const services: readonly Service[] = [
     lead: "Priklop električnih naprav, popravila strojev ter namestitev in servis klimatskih naprav.",
     cardBody: "Priklop naprav ter servis strojev in klimatskih naprav.",
     icon: Wrench,
-    image: "/images/storitve/servisiranje.jpg",
+    image: "/images/storitve/servisiranje.webp",
     alt: "Serviser med vzdrževanjem stenske klimatske naprave.",
     sections: [
       {
         title: "Kaj zajema servisiranje",
+        layout: "list",
         body: "Poleg izvedbe elektroinštalacij prevzemamo tudi posamezna servisna dela na napravah in strojih, ki so na objektu že nameščeni.",
         bullets: [
           "Priklop električnih naprav",
@@ -185,6 +204,7 @@ export const services: readonly Service[] = [
       },
       {
         title: "Kdaj se storitev uporablja",
+        layout: "editorial",
         body: "Najpogosteje takrat, ko je naprava kupljena, objekt pa še nima ustreznega priklopa, ali ko naprava, ki je bila do zdaj v redu, začne delovati drugače kot prej.",
         body2:
           "Pogosta je tudi kombinacija: ob elektroinštalacijah se hkrati uredi še namestitev klimatske naprave, da se dela na objektu ne podvajajo.",
@@ -241,11 +261,12 @@ export const services: readonly Service[] = [
     lead: "Izvedba mrežne napeljave v objektu, od razporeditve priključnih mest do omrežne omare.",
     cardBody: "Izvedba omrežij za poslovne in zasebne objekte.",
     icon: Network,
-    image: "/images/storitve/racunalniske-mreze.jpg",
+    image: "/images/storitve/racunalniske-mreze.webp",
     alt: "Tehnik priklaplja mrežne kable v omrežno omaro.",
     sections: [
       {
         title: "Kaj zajema izvedba",
+        layout: "feature",
         body: "Ukvarjamo se s fizično mrežno infrastrukturo v objektu, torej z napeljavo, priključnimi mesti in omrežno omaro. To je del, ki se izvede skupaj z gradnjo ali prenovo in ga pozneje ni enostavno dopolnjevati.",
         bullets: [
           "Razporeditev priključnih mest",
@@ -257,6 +278,7 @@ export const services: readonly Service[] = [
       },
       {
         title: "Kje se uporablja",
+        layout: "editorial",
         body: "Mrežna napeljava je smiselna povsod, kjer se pričakuje več stalnih naprav na eni lokaciji ali kjer brezžična povezava zaradi razporeditve prostorov ni zanesljiva.",
         bullets: [
           "Poslovni objekti",
@@ -266,6 +288,7 @@ export const services: readonly Service[] = [
       },
       {
         title: "Načrtovanje",
+        layout: "split",
         body: "Mrežno napeljavo je najceneje izvesti hkrati z elektroinštalacijami. Takrat se določi, kje bodo priključna mesta, koliko jih bo in kje bo stala omrežna omara.",
         body2:
           "Pri načrtovanju je smiselno računati tudi na to, kar bo prišlo pozneje. Nekaj rezervnih priključnih mest je ob izvedbi majhna postavka, po zaprtju sten pa ne več.",
@@ -288,8 +311,8 @@ export const services: readonly Service[] = [
           body: "Izvedemo mrežno napeljavo, po možnosti hkrati z elektroinštalacijami.",
         },
         {
-          title: "Priklop in predaja",
-          body: "Priključna mesta priklopimo, omaro uredimo in izvedbo predamo.",
+          title: "Priklop in zaključek del",
+          body: "Priključna mesta priklopimo, omrežno omaro uredimo in izvedbo skupaj pregledamo.",
         },
       ],
     },
@@ -306,17 +329,19 @@ export const services: readonly Service[] = [
     cardBody:
       "Montaža alarmnih sistemov, po potrebi v sodelovanju s poslovnimi partnerji.",
     icon: BellRing,
-    image: "/images/storitve/alarmni-sistemi.jpg",
+    image: "/images/storitve/alarmni-sistemi.webp",
     alt: "Monter namešča upravljalno enoto alarmnega sistema ob vhodu.",
     sections: [
       {
         title: "Namen alarmnega sistema",
+        layout: "editorial",
         body: "Alarmni sistem javi, da se je v objektu nekaj zgodilo takrat, ko v njem ni nikogar. Njegova vrednost je odvisna predvsem od tega, kako je razporejen po objektu, in ne od števila nameščenih elementov.",
         body2:
           "Zato se pri montaži najprej pogovorimo o tem, kje so dejanske vstopne točke in kateri prostori so za vas občutljivi.",
       },
       {
         title: "Vrste objektov",
+        layout: "list",
         body: "Razporeditev je pri vsaki vrsti objekta drugačna, ker so drugačne poti, po katerih se v objekt vstopa.",
         bullets: [
           "Stanovanjski objekti",
@@ -326,12 +351,14 @@ export const services: readonly Service[] = [
       },
       {
         title: "Načrtovanje in izvedba",
+        layout: "split",
         body: "Če je objekt v gradnji ali prenovi, je pripravo za alarmni sistem najbolje izvesti hkrati z elektroinštalacijami. Napeljava je takrat še dostopna, kar pozneje ni.",
         body2:
           "V objektih, kjer so dela že zaključena, izvedbo prilagodimo obstoječemu stanju. Kaj je izvedljivo, opredelimo po ogledu.",
       },
       {
         title: "Sodelovanje s poslovnimi partnerji",
+        layout: "note",
         body: "Del alarmnih sistemov izvedemo v sodelovanju s poslovnimi partnerji. To povemo vnaprej, da veste, kdo bo posamezni del prevzel, in da je jasno, na koga se lahko obrnete.",
       },
     ],
@@ -352,8 +379,8 @@ export const services: readonly Service[] = [
           body: "Sistem namestimo, po potrebi skupaj s poslovnim partnerjem.",
         },
         {
-          title: "Predaja in navodila",
-          body: "Delovanje preverimo, uporabo pokažemo in objekt predamo.",
+          title: "Zaključek del in navodila",
+          body: "Delovanje preverimo in vam pokažemo, kako se sistem uporablja.",
         },
       ],
     },
@@ -369,11 +396,12 @@ export const services: readonly Service[] = [
     lead: "Vzpostavitev video-nadzornih sistemov za poslovne, industrijske in zasebne objekte.",
     cardBody: "Načrtovanje, montaža in vzdrževanje video-nadzornih sistemov.",
     icon: Cctv,
-    image: "/images/storitve/video-nadzor.jpg",
+    image: "/images/storitve/video-nadzor.webp",
     alt: "Montaža zunanje nadzorne kamere pod napuščem objekta.",
     sections: [
       {
         title: "Kaj zajema video nadzor",
+        layout: "feature",
         body: "Prevzamemo celoten postopek, od dogovora o tem, kaj je treba pokriti, do delujočega sistema in poznejšega vzdrževanja.",
         bullets: [
           "Načrtovanje postavitve",
@@ -384,12 +412,14 @@ export const services: readonly Service[] = [
       },
       {
         title: "Načrtovanje postavitve",
+        layout: "editorial",
         body: "Postavitev odloči, ali bo sistem uporaben. Pomembno je, kaj naj bi bilo dejansko vidno, s katere strani prihaja svetloba čez dan in kje je napeljavo sploh mogoče speljati.",
         body2:
           "Te odločitve sprejmemo skupaj ob ogledu, ker jih po montaži ni več mogoče popraviti brez ponovnega posega v objekt.",
       },
       {
         title: "Vrste objektov",
+        layout: "list",
         body: "Sistem prilagodimo objektu in temu, kako se ta uporablja.",
         bullets: [
           "Poslovni objekti",
@@ -415,8 +445,8 @@ export const services: readonly Service[] = [
           body: "Izvedemo napeljavo, namestimo opremo in sistem vzpostavimo.",
         },
         {
-          title: "Predaja in vzdrževanje",
-          body: "Uporabo pokažemo, sistem predamo in po dogovoru poskrbimo za vzdrževanje.",
+          title: "Zaključek del in vzdrževanje",
+          body: "Pokažemo, kako se sistem uporablja, po dogovoru pa poskrbimo tudi za vzdrževanje.",
         },
       ],
     },
@@ -432,11 +462,12 @@ export const services: readonly Service[] = [
     lead: "Dobava toplotnih črpalk Panasonic, montaža, električni priklop in zagon.",
     cardBody: "Dobava toplotnih črpalk Panasonic, montaža, priklop in zagon.",
     icon: ThermometerSun,
-    image: "/images/storitve/toplotne-crpalke.jpg",
+    image: "/images/storitve/toplotne-crpalke.webp",
     alt: "Zunanja enota toplotne črpalke ob fasadi stanovanjske hiše.",
     sections: [
       {
         title: "Kaj zagotavljamo",
+        layout: "feature",
         body: "Toplotno črpalko prevzamemo kot celoto, od dobave do zagona, tako da za posamezne faze ni treba iskati različnih izvajalcev.",
         bullets: [
           "Dobava toplotne črpalke",
@@ -447,18 +478,21 @@ export const services: readonly Service[] = [
       },
       {
         title: "Izbira in izvedba",
+        layout: "split",
         body: "Pri izbiri je pomembno, kje bo zunanja enota stala, kako je do nje mogoče speljati napeljavo in kako je objekt ogrevan zdaj.",
         body2:
           "Kaj je za vaš objekt primerno, se opredeli po ogledu. Brez tega bi šlo za ugibanje, zato številk in modelov vnaprej ne navajamo.",
       },
       {
         title: "Električni priklop",
+        layout: "editorial",
         body: "Toplotna črpalka je tudi elektro naprava, kar je razlog, da je ta storitev pri nas povezana z elektroinštalacijami.",
         body2:
           "Če se objekt gradi ali prenavlja, je priprava za toplotno črpalko del elektroinštalacij in se izvede takrat, ko je to najenostavneje.",
       },
       {
         title: "Panasonic",
+        layout: "note",
         body: "Dobavljamo in montiramo toplotne črpalke Panasonic. To je edini proizvajalec, ki ga navajamo, ker je edini, ki ga dejansko dobavljamo.",
       },
     ],
@@ -483,8 +517,8 @@ export const services: readonly Service[] = [
           body: "Izvedemo električni priklop in zagon sistema.",
         },
         {
-          title: "Predaja",
-          body: "Delovanje preverimo, uporabo pokažemo in sistem predamo.",
+          title: "Zaključek del",
+          body: "Delovanje preverimo in vam pokažemo, kako sistem upravljate.",
         },
       ],
     },
@@ -523,11 +557,12 @@ export const services: readonly Service[] = [
     cardBody:
       "Nudimo vam strokovno svetovanje na področju električnih inštalacij.",
     icon: Handshake,
-    image: "/images/storitve/service-svetovanje.png",
+    image: "/images/storitve/svetovanje.webp",
     alt: "Elektro strokovnjak stranki ob načrtih svetuje o električnih inštalacijah.",
     sections: [
       {
         title: "Kdaj je svetovanje koristno",
+        layout: "list",
         body: "Takrat, ko je odločitev še odprta. Ko je napeljava enkrat izvedena in so stene zaprte, se možnosti zožijo, spremembe pa postanejo posegi.",
         bullets: [
           "Pred začetkom gradnje ali prenove",
@@ -539,12 +574,14 @@ export const services: readonly Service[] = [
       },
       {
         title: "Kaj se je smiselno odločiti pred izvedbo",
+        layout: "editorial",
         body: "Nekaj odločitev je pozneje nesorazmerno dragih. Razporeditev vtičnic in stikal, mesta svetil, priprava za naprave, ki bodo prišle pozneje, in prostor v elektro omarici sodijo mednje.",
         body2:
           "Cilj pogovora je, da so te odločitve sprejete zavestno in glede na to, kako boste objekt uporabljali, ne pa po tem, kar je bilo na gradbišču najhitreje.",
       },
       {
         title: "Kako svetovanje preide v izvedbo",
+        layout: "split",
         body: "Svetovanje ni ločena storitev, ki bi se končala s poročilom. Najpogosteje je prvi del pogovora, iz katerega nastane obseg del.",
         body2:
           "Če se za izvedbo odločite pri nas, se dogovorjeno prenese neposredno v delo na objektu. Če se odločite drugače, ostane pri pogovoru in vam to ne zapre nobene poti.",
