@@ -13,11 +13,6 @@ import { allServicesLink, services, type Service } from "@/content/services";
  * sits directly after Reference: both are things a visitor reads before they
  * are ready to enquire, and putting it there keeps the two "about the work"
  * items together and the two "about the company" items after them.
- *
- * Subvencije is deliberately absent. The page still exists and is reachable
- * from the footer, but it is a piece of reference information rather than a
- * thing the company sells, so it does not occupy a slot in the primary
- * navigation.
  */
 
 export interface NavItem {

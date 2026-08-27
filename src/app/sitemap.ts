@@ -12,9 +12,8 @@ import { absoluteUrl } from "@/lib/seo";
  * the pages that exist, and a route that is not in this list is either a
  * removed one or a mistake.
  *
- * `/subvencije` is included: it is a real, publicly linked page reached from
- * the footer. Nothing that has been removed appears, and there is no entry for
- * `/soncne-elektrarne`, which no longer exists.
+ * Nothing that has been removed appears: there is no entry for
+ * `/soncne-elektrarne` or `/subvencije`, neither of which exists any more.
  *
  * `priority` and `changeFrequency` are deliberately absent. Google ignores
  * both, and inventing values for them would only suggest a freshness signal
@@ -28,7 +27,6 @@ const STATIC_ROUTES = [
   "/o-podjetju",
   "/kontakt",
   "/povprasevanje",
-  "/subvencije",
   "/politika-zasebnosti",
 ] as const;
 

@@ -17,9 +17,6 @@ import { allServicesLink, headerPhone, services } from "@/content/navigation";
  * and the Google profile disagree, and social links are absent because no real
  * URLs have been supplied, a dead or disabled link would be worse than none.
  *
- * Subvencije appears once, in the bottom row rather than in a navigation
- * column. The page is reference information rather than something the company
- * sells, and its placement says so.
  */
 const COMPANY_LINKS = [
   { label: "Reference", href: "/reference" },
@@ -118,13 +115,6 @@ export function SiteFooter() {
             <span>Matična št. {company.registration.maticnaStevilka}</span>
             <span aria-hidden>·</span>
             <span>Davčna št. {company.registration.davcnaStevilka}</span>
-            <span aria-hidden>·</span>
-            <Link
-              href="/subvencije"
-              className="inline-flex min-h-11 items-center underline decoration-white/25 underline-offset-4 transition-colors duration-150 ease-standard hover:text-on-photo hover:decoration-current"
-            >
-              Subvencije
-            </Link>
           </p>
         </div>
       </Container>

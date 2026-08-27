@@ -14,17 +14,16 @@ import { headerCta, headerPhone, primaryNav } from "@/content/navigation";
  *
  * Five destinations: Storitve, Reference, FAQ, O podjetju, Kontakt.
  *
- * The row is measured rather than distributed. The navigation is anchored
- * beside the wordmark behind one deliberate gutter, and the phone and the call
- * to action are pushed to the right edge as a single group behind a hairline.
- * All of the slack in the row therefore sits in one place, between the
- * navigation and the actions, which is where a header is supposed to carry it.
+ * The navigation is centred on the container's own centre line, not balanced
+ * between the logo and the actions. Those two are different widths, so letting
+ * flex distribute the row puts the navigation wherever the leftover space
+ * happens to fall, which is what made it sit noticeably left of centre. Taking
+ * it out of flow and pinning it to 50% is the only way the row reads as
+ * centred, because it is the only way it actually is.
  *
- * The earlier version pushed the navigation right with its own `ml-auto`, which
- * put the slack between the logo and the first item instead, and that gap grew
- * every time a destination was removed. At 1280 the five items, the phone and
- * the call to action now fill the row with roughly 200px of slack in the middle
- * rather than 240px of dead space at the left.
+ * The logo and the actions keep the flow to themselves and anchor to their own
+ * edges. The one thing this costs is that the navigation can no longer push
+ * them apart, so the gap either side is checked at `xl`, where it is tightest.
  *
  * The full navigation appears from `xl`. Below that the row cannot hold five
  * Slovenian labels plus both actions without either shrinking the type past
@@ -35,14 +34,14 @@ export function SiteHeader() {
   return (
     <HeaderShell>
       <Container width="wide">
-        <div className="flex h-16 items-center gap-4 xl:h-[68px] xl:gap-0">
+        <div className="relative flex h-16 items-center gap-4 xl:h-[68px] xl:gap-0">
           <BrandLogo />
 
           <nav
             aria-label="Glavna navigacija"
-            className="hidden xl:ml-10 xl:block 2xl:ml-14"
+            className="hidden xl:absolute xl:left-1/2 xl:block xl:-translate-x-1/2"
           >
-            <ul className="flex items-center gap-6 2xl:gap-9">
+            <ul className="flex items-center gap-5 2xl:gap-8">
               {primaryNav.map((item) =>
                 item.menu ? (
                   <ServicesMenu
