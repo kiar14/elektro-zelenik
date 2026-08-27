@@ -37,7 +37,7 @@ export function WhyZelenik() {
             Več o podjetju
             <ArrowRight
               aria-hidden
-              className="size-[18px] transition-transform duration-200 ease-standard group-hover:translate-x-0.5"
+              className="size-[18px] transition-transform duration-200 ease-smooth group-hover:translate-x-0.5"
             />
           </Link>
         </div>
@@ -47,11 +47,11 @@ export function WhyZelenik() {
             <article
               key={card.title}
               data-reveal
-              className="group flex flex-col items-center rounded-lg border border-border bg-surface px-4 py-6 text-center transition-[transform,border-color,background-color,box-shadow] duration-300 ease-illuminate hover:-translate-y-1 hover:border-border-strong hover:bg-ground hover:shadow-raised motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:px-7 sm:py-7 lg:px-8 xl:min-h-[15.5rem] xl:px-9"
+              className="group flex flex-col items-center rounded-lg border border-border bg-surface px-4 py-6 text-center transition-[transform,border-color,background-color,box-shadow] duration-300 ease-smooth hover:-translate-y-1 hover:border-border-strong hover:bg-ground hover:shadow-raised motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:px-7 sm:py-7 lg:px-8 xl:min-h-[15.5rem] xl:px-9"
             >
               <span
                 aria-hidden
-                className="flex size-12 items-center justify-center rounded-full bg-brand-tint transition-transform duration-300 ease-illuminate group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:size-13"
+                className="flex size-12 items-center justify-center rounded-full bg-brand-tint transition-transform duration-300 ease-smooth group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:size-13"
               >
                 <card.icon
                   className="size-[25px] text-brand-strong"

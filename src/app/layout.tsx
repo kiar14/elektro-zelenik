@@ -30,11 +30,13 @@ export default function RootLayout({
   return (
     <html lang="sl" className={`${inter.variable} ${ibmPlexSans.variable}`}>
       <body className="min-h-dvh">
-        {/* Below-the-fold sections start hidden and are revealed by GSAP.
-            Without script that never happens, so force them visible. */}
+        {/* The hero copy and every below-the-fold section start hidden and are
+            revealed by GSAP. Without script that never happens, so force them
+            visible. Any new hidden-by-default state must be added here too, or
+            it becomes invisible content for anyone without JavaScript. */}
         <noscript>
           <style>
-            {"[data-reveal],[data-process-line]{opacity:1!important;transform:none!important}"}
+            {"[data-reveal],[data-trust-column],[data-hero-title],[data-hero-item],[data-hero-rule],[data-process-line]{opacity:1!important;transform:none!important}"}
           </style>
         </noscript>
         <SmoothScroll />

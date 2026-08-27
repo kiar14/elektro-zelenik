@@ -98,7 +98,7 @@ function ReferenceCard({
           alt={item.alt}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-500 ease-standard group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       </div>
 

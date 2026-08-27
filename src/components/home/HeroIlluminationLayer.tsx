@@ -3,8 +3,15 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-/** How long the scene holds unlit once the lit frame is decoded and ready. */
-const SETTLE_PAUSE_MS = 560;
+/**
+ * How long the scene holds unlit once the lit frame is decoded and ready.
+ *
+ * Tuned against the copy entrance in HeroReveal, which starts on mount and runs
+ * for a little over a second. The light begins while the heading is still
+ * arriving and finishes well after it has settled, so the first screen reads as
+ * one slow event rather than as type, then a pause, then a light.
+ */
+const SETTLE_PAUSE_MS = 420;
 
 type Phase = "waiting" | "running" | "done";
 

@@ -24,8 +24,15 @@ export function SmoothScroll() {
     if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({
-      lerp: 0.08,
-      wheelMultiplier: 0.85,
+      /**
+       * Damping is a trade between weight and latency. At 0.08 the wheel felt
+       * detached: roughly a third of a second passed between the gesture and
+       * the page settling, which reads as lag rather than as smoothness. 0.11
+       * keeps the glide but puts the page back under the visitor's hand, and
+       * a 1:1 wheel multiplier means one notch still travels one notch.
+       */
+      lerp: 0.11,
+      wheelMultiplier: 1,
       // Damping a finger drag feels worse than native, so leave touch alone.
       syncTouch: false,
     });
@@ -38,10 +45,32 @@ export function SmoothScroll() {
     gsap.ticker.add(step);
     gsap.ticker.lagSmoothing(0);
 
-    // Layout settles after fonts and images land; triggers need the final one.
-    ScrollTrigger.refresh();
+    /**
+     * A mobile browser hiding its URL bar resizes the viewport, and every such
+     * resize would otherwise refresh every trigger mid-scroll — a stutter at
+     * the exact moment the visitor is moving. Height-only changes are ignored;
+     * a real orientation or width change still refreshes.
+     */
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
+    /**
+     * Trigger positions are measured against the layout at the moment they are
+     * created, and this page is mostly photographs. Refreshing once on mount
+     * measures a document that has not finished growing, which lands every
+     * start position too low. Re-measuring after load — and after the fonts
+     * settle, which changes heading heights — is what makes sections reveal
+     * where they were meant to rather than early or not at all.
+     */
+    const refresh = () => ScrollTrigger.refresh();
+    refresh();
+
+    if (document.readyState === "complete") refresh();
+    else window.addEventListener("load", refresh, { once: true });
+
+    void document.fonts?.ready.then(refresh);
 
     return () => {
+      window.removeEventListener("load", refresh);
       lenis.off("scroll", update);
       gsap.ticker.remove(step);
       gsap.ticker.lagSmoothing(500, 33);

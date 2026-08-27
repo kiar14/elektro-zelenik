@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { HeroIlluminationLayer } from "@/components/home/HeroIlluminationLayer";
 import { Container } from "@/components/layout/Container";
+import { HeroReveal } from "@/components/motion/HeroReveal";
 import { ActionLink } from "@/components/ui/ActionLink";
 import { company } from "@/content/company";
 import { headerPhone } from "@/content/navigation";
@@ -54,17 +55,28 @@ export function HomeHero() {
         width="wide"
         className="home-hero-height relative flex items-end pb-12 sm:pb-16 lg:items-center lg:pt-20 lg:pb-12 xl:pt-32 xl:pb-20"
       >
-        <div data-surface="photo" className="hero-copy @container">
-          <p className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-on-photo-muted">
-            <span aria-hidden className="h-px w-9 shrink-0 bg-brand" />
+        <HeroReveal>
+          <p
+            data-hero-item
+            className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-on-photo-muted"
+          >
+            <span
+              aria-hidden
+              data-hero-rule
+              className="h-px w-9 shrink-0 origin-left bg-brand"
+            />
             {company.address.city} · {company.sinceLabel}
           </p>
 
-          <h1 id="hero-title" className="mt-5 text-display text-on-photo">
+          <h1
+            id="hero-title"
+            data-hero-title
+            className="mt-5 text-display text-on-photo"
+          >
             Elektroinštalacije in energetske rešitve
           </h1>
 
-          <p className="mt-6 text-lead text-on-photo-muted">
+          <p data-hero-item className="mt-6 text-lead text-on-photo-muted">
             Elektroinštalacije in sončne elektrarne, od načrtovanja do
             priklopa.
           </p>
@@ -72,7 +84,10 @@ export function HomeHero() {
           {/* Container query, not a breakpoint: the copy column is sized
               against the architecture line, so how much room the actions have
               depends on the column, not on the viewport. */}
-          <div className="mt-9 flex flex-col gap-3 @min-[28.5rem]:flex-row @min-[28.5rem]:items-center">
+          <div
+            data-hero-item
+            className="mt-9 flex flex-col gap-3 @min-[28.5rem]:flex-row @min-[28.5rem]:items-center"
+          >
             <ActionLink
               href="/povprasevanje"
               variant="solid"
@@ -93,7 +108,7 @@ export function HomeHero() {
               {headerPhone.label}
             </ActionLink>
           </div>
-        </div>
+        </HeroReveal>
       </Container>
     </section>
   );

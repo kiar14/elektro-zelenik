@@ -69,6 +69,7 @@ export function ProcessSection() {
 
                 <span
                   aria-hidden
+                  data-process-marker
                   className="relative z-10 flex shrink-0 items-center justify-center rounded-[14px] bg-brand-strong font-display text-xl font-semibold tabular-nums text-white ring-6 ring-surface"
                   style={{ width: MARKER_SIZE, height: MARKER_SIZE }}
                 >

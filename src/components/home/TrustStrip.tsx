@@ -22,6 +22,7 @@ export function TrustStrip() {
             {trustMetrics.map((metric, index) => (
               <li
                 key={metric.label}
+                data-trust-column
                 className={[
                   "grid min-h-[132px] grid-rows-[auto_2.9em] content-center items-start px-3 py-8 text-center",
                   "lg:min-h-[100px] lg:grid-rows-[auto_2.4em] lg:px-6 lg:py-0 xl:min-h-[112px] xl:py-1",
