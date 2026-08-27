@@ -14,14 +14,16 @@ import {
   scopeNote,
   type SubsidyProgramme,
 } from "@/content/subsidies";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Subvencije";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/subvencije",
   title: TITLE,
   description:
     "Kje preveriti aktualne spodbude za toplotno črpalko in kaj pri tem prevzamemo mi.",
-};
+});
 
 /**
  * Subsidies.

@@ -10,14 +10,16 @@ import { company } from "@/content/company";
 import { toEnquiryValue } from "@/content/enquiry";
 import { processSteps } from "@/content/homepage";
 import { headerPhone } from "@/content/navigation";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Povpraševanje";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/povprasevanje",
   title: TITLE,
   description:
     "Opišite, kaj potrebujete, in pošljite povpraševanje. Uskladimo obseg del in se dogovorimo za ogled.",
-};
+});
 
 /**
  * The enquiry page.

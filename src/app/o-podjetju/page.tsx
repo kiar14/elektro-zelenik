@@ -12,13 +12,15 @@ import { CenteredHeading, SectionHeading } from "@/components/ui/SectionHeading"
 import { company } from "@/content/company";
 import { whyCards } from "@/content/homepage";
 import { homeReferences } from "@/content/references";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "O podjetju";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/o-podjetju",
   title: TITLE,
   description: `${company.tradingName}, ${company.sinceLabel}. Elektroinštalacije, servis in povezani tehnični sistemi na območju upravne enote ${company.serviceArea.administrativeUnit} in v ${company.serviceArea.regionAdjective} regiji.`,
-};
+});
 
 /**
  * O podjetju.

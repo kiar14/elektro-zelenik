@@ -15,6 +15,17 @@ export const company = {
   /** Short form for tight spaces. */
   shortName: "Zelenik",
 
+  /**
+   * The production origin, and the only one that may appear in a canonical URL,
+   * an og:url or an og:image. No trailing slash: every helper in lib/seo.ts
+   * appends the path itself.
+   *
+   * Deployment previews and localhost must never leak into rendered metadata,
+   * which is why this is a constant rather than something read from the
+   * environment.
+   */
+  url: "https://elektro-zelenik.si",
+
   owner: "Jožef Zelenik",
 
   /** Business trading continuously since 2000; current d.o.o. incorporated 2023. */

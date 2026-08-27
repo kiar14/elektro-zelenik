@@ -8,8 +8,23 @@ import { SkipLink } from "@/components/layout/SkipLink";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { company } from "@/content/company";
 import { ibmPlexSans, inter } from "@/lib/fonts";
+import { SITE_URL } from "@/lib/seo";
 
+/**
+ * The site-wide head.
+ *
+ * `metadataBase` is what turns the relative `/og/...` paths every page hands to
+ * `pageSeo` into absolute URLs in the rendered markup, and it is the production
+ * origin rather than anything read from the environment, so a preview
+ * deployment cannot publish its own hostname to a scraper.
+ *
+ * Deliberately no `alternates` and no `openGraph` here. Next.js merges metadata
+ * shallowly and children inherit whatever a layout sets, so a canonical
+ * declared at this level would stamp the homepage URL onto all eighteen routes.
+ * Every page supplies its own through `pageSeo`.
+ */
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${company.tradingName}, elektroinštalacije in tehnične rešitve`,
     template: `%s, ${company.tradingName}`,

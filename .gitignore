@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# build-tool caches (typefaces fetched by scripts/generate-brand-assets.mjs)
+/.cache/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

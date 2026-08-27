@@ -11,6 +11,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { RelatedServices } from "@/components/sections/RelatedServices";
 import { findService, relatedServices, services } from "@/content/services";
+import { pageSeo } from "@/lib/seo";
 
 /**
  * The seven service pages.
@@ -37,7 +38,11 @@ export async function generateMetadata({
   const service = findService(slug);
   if (!service) return { title: "Storitev" };
 
-  return { title: service.title, description: service.lead };
+  return pageSeo({
+    path: service.href,
+    title: service.title,
+    description: service.lead,
+  });
 }
 
 export default async function ServicePage({

@@ -7,14 +7,16 @@ import { ServiceClusters } from "@/components/sections/ServiceClusters";
 import { ServiceGrid, toServiceCards } from "@/components/sections/ServiceGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { services } from "@/content/services";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Storitve";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/storitve",
   title: TITLE,
   description:
     "Elektroinštalacije, servisiranje, računalniške mreže, alarmni sistemi, video nadzor, toplotne črpalke in svetovanje.",
-};
+});
 
 /**
  * The services overview.

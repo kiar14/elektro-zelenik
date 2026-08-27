@@ -10,13 +10,15 @@ import { ActionLink } from "@/components/ui/ActionLink";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { company } from "@/content/company";
 import { headerPhone } from "@/content/navigation";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Kontakt";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/kontakt",
   title: TITLE,
   description: `Pokličite ${company.phone.display} ali pišite na ${company.email.primary}. ${company.address.full}.`,
-};
+});
 
 /**
  * Contact.

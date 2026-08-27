@@ -6,14 +6,16 @@ import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/motion/RevealGroup";
 import { PageHero } from "@/components/sections/PageHero";
 import { company } from "@/content/company";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Politika zasebnosti";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/politika-zasebnosti",
   title: TITLE,
   description:
     "Kateri podatki se zbirajo prek te spletne strani, zakaj in kakšne pravice imate.",
-};
+});
 
 /**
  * Privacy policy.

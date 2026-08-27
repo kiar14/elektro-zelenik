@@ -6,14 +6,16 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProjectGallery } from "@/components/sections/ProjectGallery";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { references } from "@/content/references";
+import { pageSeo } from "@/lib/seo";
 
 const TITLE = "Izvedeni projekti";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
+  path: "/reference",
   title: TITLE,
   description:
     "Izbor objektov, na katerih smo izvajali elektroinštalacijska dela, razsvetljavo in povezane tehnične sisteme.",
-};
+});
 
 /**
  * Reference projects.

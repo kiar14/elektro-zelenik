@@ -62,6 +62,51 @@ shows them as one gallery; it is never split into several reference cards.
 (opening hours) or unconfirmed and must not be displayed until the client
 confirms them. `TODO_CLIENT` marks the same thing in a component.
 
+## SEO and head
+
+`src/content/company.ts` holds `url`, the production origin, and it is the only
+place the domain is written down. `src/lib/seo.ts` derives everything else from
+it: `absoluteUrl()`, the two Open Graph cards, and `pageSeo()`.
+
+Every indexable page calls `pageSeo({ path, title, description })`, which
+returns the title, the description, exactly one `alternates.canonical`, and a
+complete `openGraph` and `twitter` block whose `og:url` is the same URL as the
+canonical. The root layout sets `metadataBase` and the title template and
+nothing else: Next.js merges metadata shallowly and children inherit whatever a
+layout declares, so a canonical set there would stamp the homepage URL onto
+every route.
+
+Because `metadataBase` is a constant rather than something read from
+`VERCEL_URL`, a preview deployment cannot publish its own hostname to a search
+engine or a social scraper.
+
+Next.js normalises the homepage canonical to the bare origin
+(`https://elektro-zelenik.si`, no trailing slash). That is deliberate on their
+side and is not configurable without `trailingSlash: true`, which would add a
+slash to every other route as well.
+
+## Generated brand assets
+
+`node scripts/generate-brand-assets.mjs` regenerates the favicon set and both
+Open Graph cards from assets already in the repository. Run it after changing
+the logo, the symbol or the hero photograph.
+
+| output | what it is |
+|---|---|
+| `src/app/favicon.ico` | 16, 32 and 48 px frames |
+| `src/app/icon.png` | 512 px |
+| `src/app/apple-icon.png` | 180 px |
+| `public/og/og-home.jpg` | 1200x630, the hero frame under the site's own scrim |
+| `public/og/og-default.png` | 1200x630, the branded card every other page uses |
+
+The favicon source is `public/brand/zelenik-symbol.png`, which was verified
+byte-identical to `logo-doo-5.png` on the live site. The live site's own favicon
+is that same file scaled to 512 with no re-crop, so the framing here is the live
+site's framing, unmodified.
+
+The script fetches IBM Plex Sans and Inter into `.cache/fonts` on first run.
+That directory is ignored and the typefaces are never committed.
+
 ## Brand assets
 
 `public/brand/` holds the genuine 2023 Zelenik d.o.o. identity files, retrieved
