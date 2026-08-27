@@ -259,9 +259,10 @@
 
   @media (min-width: 64rem) {
     .hero-frame {
-      /* Preserve the terrace, lower facade and foreground. Any necessary
-         vertical crop now comes only from the sky. */
-      object-position: 50% 100%;
+      /* Keep the roofline comfortably in frame. On wide, shallow viewports
+         any necessary vertical crop is taken more from the foreground than
+         from the top of the house. */
+      object-position: 50% 64%;
     }
   }
 

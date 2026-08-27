@@ -24,8 +24,8 @@ export function ReferencesSection() {
           <SectionHeading
             id="reference-naslov"
             eyebrow="Reference"
-            title="Izvedeni objekti"
-            lead="Izbor poslovnega, stanovanjskega in kmetijskega objekta."
+            title="Izvedeni projekti"
+            lead="Izbor projektov s področja elektroinštalacij, razsvetljave, tehničnih sistemov in sorodnih elektro rešitev."
           />
           <ActionLink
             href="/reference"

@@ -161,7 +161,7 @@ export const primaryNav: readonly NavItem[] = [
 ];
 
 export const headerCta = {
-  label: "Brezplačna ponudba",
+  label: "Pošlji povpraševanje",
   href: "/povprasevanje",
 } as const;
 

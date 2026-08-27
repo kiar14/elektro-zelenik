@@ -26,9 +26,9 @@ export function prefersReducedMotion(): boolean {
  * nothing down here competes with it.
  */
 export const REVEAL = {
-  duration: 0.6,
+  duration: 0.72,
   y: 12,
-  ease: "power2.out",
-  stagger: 0.06,
-  start: "top 85%",
+  ease: "power3.out",
+  stagger: 0.055,
+  start: "top 88%",
 } as const;

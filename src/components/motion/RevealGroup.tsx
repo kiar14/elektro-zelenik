@@ -44,6 +44,7 @@ export function RevealGroup({
       gsap.to(targets, {
         opacity: 1,
         y: 0,
+        clearProps: "transform,translate,rotate,scale",
         duration: REVEAL.duration,
         ease: REVEAL.ease,
         stagger,

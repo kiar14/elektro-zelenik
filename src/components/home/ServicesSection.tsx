@@ -43,22 +43,22 @@ export function ServicesSection() {
             >
               <Link
                 href={service.href}
-                className="group block transition-transform duration-250 ease-standard hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                className="group block transition-transform duration-300 ease-illuminate hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
               >
-                <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-transparent bg-surface-sunk transition-[border-color,box-shadow] duration-250 ease-standard group-hover:border-border-strong group-hover:shadow-raised motion-reduce:transition-none">
+                <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-transparent bg-surface-sunk transition-[border-color,box-shadow] duration-300 ease-illuminate group-hover:border-border-strong group-hover:shadow-raised motion-reduce:transition-none">
                   <Image
                     src={service.image}
                     alt={service.alt}
                     fill
                     sizes="(min-width: 1280px) 32vw, (min-width: 640px) 46vw, 100vw"
-                    className="object-cover transition-transform duration-500 ease-standard group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                    className="object-cover transition-transform duration-600 ease-illuminate group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   />
                 </div>
 
                 <div className="mt-7 flex items-center gap-2.5">
                   <service.icon
                     aria-hidden
-                    className="size-[22px] shrink-0 text-brand-strong"
+                    className="size-[25px] shrink-0 text-brand-strong transition-transform duration-300 ease-illuminate group-hover:scale-[1.05] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     strokeWidth={1.7}
                   />
                   <h3 className="text-xl font-semibold tracking-[-0.018em] text-ink">
@@ -74,7 +74,7 @@ export function ServicesSection() {
                   Več
                   <ArrowRight
                     aria-hidden
-                    className="size-4 transition-transform duration-200 ease-standard group-hover:translate-x-0.5"
+                    className="size-4 transition-transform duration-250 ease-illuminate group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
                   />
                 </span>
               </Link>

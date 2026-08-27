@@ -47,14 +47,14 @@ export function WhyZelenik() {
             <article
               key={card.title}
               data-reveal
-              className="flex flex-col items-center rounded-lg border border-border bg-surface px-4 py-6 text-center sm:px-7 sm:py-7 lg:px-8 xl:min-h-[15.5rem] xl:px-9"
+              className="group flex flex-col items-center rounded-lg border border-border bg-surface px-4 py-6 text-center transition-[transform,border-color,background-color,box-shadow] duration-300 ease-illuminate hover:-translate-y-1 hover:border-border-strong hover:bg-ground hover:shadow-raised motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:px-7 sm:py-7 lg:px-8 xl:min-h-[15.5rem] xl:px-9"
             >
               <span
                 aria-hidden
-                className="flex size-11 items-center justify-center rounded-full bg-brand-tint sm:size-12"
+                className="flex size-12 items-center justify-center rounded-full bg-brand-tint transition-transform duration-300 ease-illuminate group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100 sm:size-13"
               >
                 <card.icon
-                  className="size-[22px] text-brand-strong"
+                  className="size-[25px] text-brand-strong"
                   strokeWidth={1.7}
                 />
               </span>

@@ -9,7 +9,8 @@ export type ActionSize = "md" | "lg";
 const BASE =
   "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-sm " +
   "font-sans font-semibold tracking-[-0.005em] " +
-  "transition-colors duration-150 ease-standard";
+  "transition-[background-color,border-color,color,transform] duration-200 ease-illuminate " +
+  "hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 const SIZES: Record<ActionSize, string> = {
   md: "min-h-[46px] px-4 text-[0.9375rem]",

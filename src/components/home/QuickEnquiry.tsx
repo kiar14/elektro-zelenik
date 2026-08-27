@@ -2,6 +2,7 @@ import { Phone } from "lucide-react";
 
 import { QuickEnquiryForm } from "@/components/home/QuickEnquiryForm";
 import { Container } from "@/components/layout/Container";
+import { RevealGroup } from "@/components/motion/RevealGroup";
 import { headerPhone } from "@/content/navigation";
 
 /**
@@ -17,8 +18,8 @@ export function QuickEnquiry() {
       className="border-y border-border bg-surface-sunk"
     >
       <Container className="py-20 lg:py-24">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1fr)] lg:gap-16">
-          <div>
+        <RevealGroup className="grid gap-10 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,1fr)] lg:gap-16">
+          <div data-reveal>
             <p className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-ink-muted">
               <span aria-hidden className="h-px w-9 shrink-0 bg-brand" />
               Povpraševanje
@@ -51,10 +52,13 @@ export function QuickEnquiry() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-border bg-ground p-6 sm:p-9">
+          <div
+            data-reveal
+            className="rounded-lg border border-border bg-ground p-6 sm:p-9"
+          >
             <QuickEnquiryForm />
           </div>
-        </div>
+        </RevealGroup>
       </Container>
     </section>
   );
