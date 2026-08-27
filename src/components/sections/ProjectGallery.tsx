@@ -12,8 +12,12 @@ import { cn } from "@/lib/cn";
  * each cell its own column span, so a row resolves to a single height and the
  * spans are chosen against the photographs' real proportions: a landscape gets
  * the wide cell, a portrait the narrow one, and nothing is squeezed into a box
- * that does not fit it. That is what lets five frames of one building read as
- * one composed project rather than as five cards in a row.
+ * that does not fit it. That is what lets several frames of one building read
+ * as one composed project rather than as a row of cards.
+ *
+ * There is no text inside a gallery. A line of prose beside a photograph, on a
+ * project whose scope is not documented, can only be filler, so the copy stops
+ * at the category, the title and a subtitle where one is genuinely verified.
  *
  * Below `lg` every cell is full width and every photograph falls back to its
  * own ratio, so the composition stacks rather than shrinking into unreadable
@@ -21,10 +25,11 @@ import { cn } from "@/lib/cn";
  */
 
 /**
- * Tailwind resolves class names statically, so the spans and ratios a project
- * may use are written out rather than interpolated.
+ * Tailwind resolves class names statically, so the spans, offsets and ratios a
+ * project may use are written out rather than interpolated.
  */
 const SPANS: Record<number, string> = {
+  3: "lg:col-span-3",
   4: "lg:col-span-4",
   5: "lg:col-span-5",
   6: "lg:col-span-6",
@@ -33,7 +38,13 @@ const SPANS: Record<number, string> = {
   12: "lg:col-span-12",
 };
 
+const STARTS: Record<number, string> = {
+  4: "lg:col-start-4",
+  5: "lg:col-start-5",
+};
+
 const ROW_ASPECTS: Record<string, string> = {
+  "3/1": "lg:aspect-[3/1]",
   "16/9": "lg:aspect-[16/9]",
   "16/10": "lg:aspect-[16/10]",
   "9/4": "lg:aspect-[9/4]",
@@ -83,10 +94,7 @@ export function ProjectGallery({
               {project.category}
             </p>
 
-            <h2
-              id={headingId}
-              className="mt-4 text-subheading text-ink"
-            >
+            <h2 id={headingId} className="mt-4 text-subheading text-ink">
               {project.title}
             </h2>
 
@@ -120,55 +128,34 @@ function Row({ row, eager }: { row: GalleryRow; eager: boolean }) {
         ROW_ASPECTS[row.aspect],
       )}
     >
-      {row.cells.map((cell, cellIndex) => {
-        const span = SPANS[cell.span] ?? "lg:col-span-6";
-
-        if (cell.kind === "text") {
-          // Aligned to the foot of the row rather than its middle, so the line
-          // sits on the same baseline as the photographs beside it and reads as
-          // their caption instead of floating in the gap.
-          return (
-            <div
-              key={`text-${cellIndex}`}
-              data-reveal
-              className={cn("self-end lg:pr-6 lg:pb-1", span)}
-            >
-              <span aria-hidden className="mb-5 block h-px w-10 bg-brand" />
-              <p className="max-w-prose text-lead text-ink-muted">
-                {cell.body}
-              </p>
-            </div>
-          );
-        }
-
-        return (
-          <figure
-            key={cell.src}
-            data-reveal
-            className={cn(
-              "group relative overflow-hidden rounded-lg bg-surface-sunk lg:h-full lg:aspect-auto",
-              MOBILE_ASPECTS[cell.mobileAspect ?? "4/3"],
-              span,
-            )}
-          >
-            <Image
-              src={cell.src}
-              alt={cell.alt}
-              fill
-              loading={eager ? "eager" : "lazy"}
-              sizes={
-                cell.span >= 12
-                  ? "(min-width: 1280px) 1200px, 100vw"
-                  : cell.span >= 7
-                    ? "(min-width: 1280px) 800px, (min-width: 1024px) 62vw, 100vw"
-                    : "(min-width: 1280px) 400px, (min-width: 1024px) 33vw, 100vw"
-              }
-              style={cell.position ? { objectPosition: cell.position } : undefined}
-              className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-            />
-          </figure>
-        );
-      })}
+      {row.images.map((image) => (
+        <figure
+          key={image.src}
+          data-reveal
+          className={cn(
+            "group relative overflow-hidden rounded-lg bg-surface-sunk lg:aspect-auto lg:h-full",
+            MOBILE_ASPECTS[image.mobileAspect ?? "4/3"],
+            SPANS[image.span] ?? "lg:col-span-6",
+            image.start ? STARTS[image.start] : undefined,
+          )}
+        >
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            loading={eager ? "eager" : "lazy"}
+            sizes={
+              image.span >= 12
+                ? "(min-width: 1280px) 1100px, 100vw"
+                : image.span >= 6
+                  ? "(min-width: 1280px) 740px, (min-width: 1024px) 58vw, 100vw"
+                  : "(min-width: 1280px) 380px, (min-width: 1024px) 30vw, 100vw"
+            }
+            style={image.position ? { objectPosition: image.position } : undefined}
+            className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+        </figure>
+      ))}
     </div>
   );
 }

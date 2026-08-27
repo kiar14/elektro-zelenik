@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Explicit rather than implied. Every route, every canonical and every
+  // sitemap entry is written without a trailing slash, and Next collapses the
+  // homepage to the bare origin, so the strategy is consistent everywhere.
+  trailingSlash: false,
+
   images: {
     // Modern formats first. Every photographic source in /public is already a
     // WebP master; Next.js re-encodes to AVIF where the browser accepts it and

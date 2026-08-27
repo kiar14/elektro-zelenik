@@ -7,7 +7,7 @@ import { RevealGroup } from "@/components/motion/RevealGroup";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { company } from "@/content/company";
-import { toEnquiryValue } from "@/content/enquiry";
+import { toEnquiryValues } from "@/content/enquiry";
 import { processSteps } from "@/content/homepage";
 import { headerPhone } from "@/content/navigation";
 import { pageSeo } from "@/lib/seo";
@@ -16,7 +16,7 @@ const TITLE = "Povpraševanje";
 
 export const metadata: Metadata = pageSeo({
   path: "/povprasevanje",
-  title: TITLE,
+  title: "Pošlji povpraševanje",
   description:
     "Opišite, kaj potrebujete, in pošljite povpraševanje. Uskladimo obseg del in se dogovorimo za ogled.",
 });
@@ -74,7 +74,10 @@ export default async function Page({
                 <EnquiryForm
                   variant="povprasevanje"
                   defaults={{
-                    storitev: toEnquiryValue(params.storitev),
+                    // The homepage quick enquiry carries one service across as
+                    // a search param; anything it does not recognise is
+                    // discarded rather than trusted.
+                    storitve: toEnquiryValues(params.storitev),
                     ime: single(params.ime),
                     telefon: single(params.telefon),
                     sporocilo: single(params.sporocilo),

@@ -32,6 +32,18 @@ export function toEnquiryValue(value: unknown): EnquiryValue | undefined {
 }
 
 /**
+ * The same narrowing for the multi-select form, which accepts either one
+ * `?storitev=` or several. Anything unrecognised is dropped rather than
+ * rendered back, and duplicates collapse.
+ */
+export function toEnquiryValues(
+  value: string | string[] | undefined,
+): EnquiryValue[] {
+  const raw = Array.isArray(value) ? value : value ? [value] : [];
+  return [...new Set(raw.filter((item) => VALUES.has(item)))] as EnquiryValue[];
+}
+
+/**
  * The follow-up question worth asking for a given selection, and only where the
  * answer genuinely changes what we would prepare before an appointment.
  *

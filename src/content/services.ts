@@ -93,7 +93,7 @@ export const services: readonly Service[] = [
     href: "/storitve/elektroinstalacije",
     title: "Elektroinštalacije",
     h1: "Elektroinštalacije za stanovanjske in poslovne objekte",
-    lead: "Klasične in pametne elektroinštalacije, od razporeditve po prostorih do priklopa in zaključka del.",
+    lead: "Izvedba elektroinštalacij za novogradnje, prenove in obstoječe objekte, od načrtovanja razporeditve do priklopa in zaključka del.",
     cardBody:
       "Klasične in pametne elektroinštalacije, skupaj s strokovnim svetovanjem pri načrtovanju.",
     icon: Zap,
@@ -101,9 +101,9 @@ export const services: readonly Service[] = [
     alt: "Elektroinštalater vezuje elektro omarico v stanovanjskem objektu.",
     sections: [
       {
-        title: "Kaj zajema storitev",
+        title: "Kaj zajemajo elektroinštalacije",
         layout: "feature",
-        body: "Elektroinštalacije so naša najobsežnejša dejavnost. Prevzamemo izvedbo na objektu in jo uskladimo z ostalimi deli, ki na gradbišču potekajo hkrati.",
+        body: "Dobro načrtovana elektroinštalacija mora ustrezati načinu uporabe prostora danes in omogočati tudi poznejše spremembe. Pred izvedbo zato uskladimo potrebe objekta, razporeditev priključkov in druge pomembne podrobnosti.",
         bullets: [
           "Klasične elektroinštalacije",
           "Pametne inštalacije",
@@ -114,18 +114,21 @@ export const services: readonly Service[] = [
         ],
       },
       {
+        // Two paragraphs of similar weight, read side by side.
         title: "Novogradnje in obstoječi objekti",
-        layout: "editorial",
-        body: "V novogradnjah inštalacije izvedemo od začetka, kar pomeni, da je razporeditev mogoče postaviti točno tako, kot bo objekt v resnici v uporabi.",
+        layout: "split",
+        body: "Pri novogradnji je največ odločitev smiselno sprejeti še pred zapiranjem sten. Takrat se določijo položaji vtičnic, stikal, razsvetljave, priključkov za naprave in druge instalacije.",
         body2:
-          "V obstoječih objektih obseg del najprej uskladimo z razmerami na mestu samem. Kaj je izvedljivo in na kakšen način, se pokaže šele ob ogledu, zato pred tem ne obljubljamo rešitve.",
+          "Pri obstoječih objektih najprej preverimo trenutno stanje in skupaj določimo, kaj je smiselno ohraniti, zamenjati ali nadgraditi.",
       },
       {
-        title: "Načrtovanje",
-        layout: "split",
-        body: "Največ se odloči, preden se stene zaprejo. Pozicije vtičnic in stikal, mesta svetil, priprava za naprave, ki se bodo priklopile pozneje, in prostor v elektro omarici so odločitve, ki jih je pozneje drago spreminjati.",
+        // A long argument closed by one short line, which is exactly what the
+        // editorial block's pull-out is for.
+        title: "Dobro načrtovanje prihrani poznejše spremembe",
+        layout: "editorial",
+        body: "Pred izvedbo je pomembno razmisliti, kje bodo naprave, delovna mesta, svetila in drugi porabniki. Tako lahko instalacijo pripravimo glede na dejansko uporabo prostorov in zmanjšamo potrebo po poznejših posegih.",
         body2:
-          "Prav zato pri načrtovanju sodelujemo in svetujemo. Cilj je, da se odločitve sprejmejo v pravem trenutku in na podlagi tega, kako boste objekt uporabljali.",
+          "Če niste prepričani, kaj potrebujete, vam pri odločitvah svetujemo pred začetkom del.",
       },
     ],
     process: {
@@ -134,23 +137,23 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Opišete objekt in obseg del, ki jih načrtujete.",
+          body: "Pošljete osnovne informacije o objektu in tem, kaj potrebujete.",
         },
         {
-          title: "Ogled in svetovanje",
-          body: "Objekt pregledamo, uskladimo razporeditev in se dogovorimo o obsegu.",
+          title: "Ogled in dogovor",
+          body: "Po potrebi si objekt ogledamo ter uskladimo obseg in način izvedbe.",
         },
         {
-          title: "Priprava in grobe inštalacije",
-          body: "Izvedemo grobo napeljavo ter pripravo za razsvetljavo, naprave in elektro omarico.",
+          title: "Priprava",
+          body: "Določimo pomembne podrobnosti in pripravimo vse potrebno za izvedbo.",
         },
         {
-          title: "Fine inštalacije in priklop",
-          body: "Namestimo vtičnice, stikala in svetila ter izvedemo priklop.",
+          title: "Izvedba",
+          body: "Dogovorjena elektro dela izvedemo in uredimo potrebne priklope.",
         },
         {
-          title: "Zaključek del in nadaljnji kontakt",
-          body: "Po zaključku del preverimo izvedbo in ostanemo dosegljivi za dodatna vprašanja.",
+          title: "Zaključek del",
+          body: "Izvedbo preverimo in ostanemo dosegljivi za nadaljnja vprašanja.",
         },
       ],
     },

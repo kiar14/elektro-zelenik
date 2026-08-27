@@ -9,11 +9,10 @@ import { allServicesLink, services, type Service } from "@/content/services";
  * column and `/storitve` all read the same seven records from there, so the
  * four surfaces cannot drift apart.
  *
- * Four destinations, plus the phone and the enquiry action on the right. Sončne
- * elektrarne used to sit between Storitve and Reference; it is gone, along with
- * its route, because the company does not present photovoltaics as one of its
- * public services. The row was re-measured around what remains rather than
- * being left with a hole where the fifth item used to be.
+ * Five destinations, plus the phone and the enquiry action on the right. FAQ
+ * sits directly after Reference: both are things a visitor reads before they
+ * are ready to enquire, and putting it there keeps the two "about the work"
+ * items together and the two "about the company" items after them.
  *
  * Subvencije is deliberately absent. The page still exists and is reachable
  * from the footer, but it is a piece of reference information rather than a
@@ -31,6 +30,7 @@ export interface NavItem {
 export const primaryNav: readonly NavItem[] = [
   { label: "Storitve", href: "/storitve", menu: services },
   { label: "Reference", href: "/reference" },
+  { label: "FAQ", href: "/faq" },
   { label: "O podjetju", href: "/o-podjetju" },
   { label: "Kontakt", href: "/kontakt" },
 ];

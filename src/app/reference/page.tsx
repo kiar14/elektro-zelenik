@@ -4,7 +4,7 @@ import { Container } from "@/components/layout/Container";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { PageHero } from "@/components/sections/PageHero";
 import { ProjectGallery } from "@/components/sections/ProjectGallery";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { CenteredHeading } from "@/components/ui/SectionHeading";
 import { references } from "@/content/references";
 import { pageSeo } from "@/lib/seo";
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = pageSeo({
   path: "/reference",
   title: TITLE,
   description:
-    "Izbor objektov, na katerih smo izvajali elektroinštalacijska dela, razsvetljavo in povezane tehnične sisteme.",
+    "Izbor stanovanjskih, poslovnih in kmetijskih objektov, na katerih smo izvajali elektroinštalacijska dela, razsvetljavo in povezane tehnične sisteme.",
 });
 
 /**
@@ -41,10 +41,11 @@ export default function Page() {
 
       <section aria-labelledby="projekti-naslov" className="bg-ground">
         <Container width="wide" className="pt-20 lg:pt-24">
-          <SectionHeading
+          <CenteredHeading
             id="projekti-naslov"
             eyebrow="Projekti"
             title="Različni objekti, različne rešitve"
+            titleWidth="wide"
             lead="Vsak projekt zahteva svoj pristop in premišljeno izvedbo."
           />
         </Container>

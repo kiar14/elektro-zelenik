@@ -4,19 +4,20 @@
  * One real-world property is one project. That is the rule this file exists to
  * enforce: the page used to show three photographs of the same modern house as
  * three separate references, which made one job look like three and made the
- * whole page less trustworthy, not more. A project now owns its photographs and
+ * whole page less trustworthy, not more. A project owns its photographs and
  * shows them together as a gallery.
  *
  * Every photograph here is the company's own. No generated or licensed service
- * imagery appears on the Reference page, and no caption describes work that is
- * not visible in the frame: nothing is inferred from a photograph. Where the
- * building is not documented, the title stays at the conservative category name
- * rather than being invented. No year, town, capacity, client name, equipment
- * or brand appears anywhere on this page, because none of it is documented.
+ * imagery appears on the Reference page. Nothing is inferred from a photograph:
+ * a project carries a category, a title, and a short subtitle only where the
+ * scope is genuinely confirmed. Where it is not, there is no subtitle, because
+ * a sentence written to fill the space would be a guess about somebody's
+ * building. No year, town, capacity, client name, equipment or brand appears
+ * anywhere on this page.
  *
  * The one piece of scope confirmed beyond what a frame shows is the dental
- * centre: the client has confirmed that those five photographs are interior
- * lighting work carried out by the company.
+ * centre: the client has confirmed that those photographs are interior lighting
+ * work carried out by the company.
  *
  * TODO_CLIENT: the veterinary centre photograph carries an "Albin Bezjak
  * Photography" watermark. It is published on the company's own site, but
@@ -31,15 +32,20 @@
 /**
  * A photograph inside a project gallery.
  *
- * `span` is the number of the twelve grid columns the cell takes from `lg` up.
- * `aspect` belongs to the row, not the image, so every cell in a row resolves
- * to the same height and the row never comes out ragged. Spans are chosen so
- * that the resulting cell ratio is close to the photograph's own, which is what
- * keeps the crops honest: no portrait is squeezed into a landscape box.
+ * `span` is the number of the twelve grid columns the cell takes from `lg` up,
+ * and `start` places it where a lone photograph should sit centred rather than
+ * hard left. `aspect` belongs to the row, not the image, so every cell in a row
+ * resolves to the same height and the row never comes out ragged.
+ *
+ * Spans are chosen against each photograph's real proportions: a landscape gets
+ * the wide cell, a portrait the narrow one. Every portrait below lands on its
+ * native 3:4 and is not cropped at all; the landscapes take a small crop off
+ * the height, which in each case removes foreground floor rather than subject.
  */
 export interface GalleryImage {
-  kind: "image";
   span: number;
+  /** 1-based grid column to start at. Only needed to centre a lone image. */
+  start?: number;
   src: string;
   alt: string;
   /** Steers the crop where the subject is not centred. */
@@ -48,24 +54,17 @@ export interface GalleryImage {
   mobileAspect?: string;
 }
 
-/** A short factual line occupying the columns a row's photographs leave. */
-export interface GalleryText {
-  kind: "text";
-  span: number;
-  body: string;
-}
-
 export interface GalleryRow {
   /** Ratio of the whole row from `lg` up. */
   aspect: string;
-  cells: readonly (GalleryImage | GalleryText)[];
+  images: readonly GalleryImage[];
 }
 
 export interface ReferenceProject {
   slug: string;
   category: string;
   title: string;
-  /** Only where the scope is genuinely confirmed. */
+  /** Only where the scope is genuinely confirmed. Usually absent. */
   description?: string;
   rows: readonly GalleryRow[];
   /** The single frame used where the project is shown as one card. */
@@ -78,6 +77,8 @@ const HOUSE_WINTER_ALT =
   "Sodobna dvonivojska stanovanjska hiša na pobočju pozimi, z dovozom in garažo.";
 const DENTAL_WAITING_ALT =
   "Čakalnica zobozdravstvenega centra z linijsko stropno razsvetljavo in osvetlitvijo pod klopjo.";
+const BARN_ALT =
+  "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.";
 
 export const references: readonly ReferenceProject[] = [
   /* ---------------------------------------------------------------------- */
@@ -92,9 +93,8 @@ export const references: readonly ReferenceProject[] = [
     rows: [
       {
         aspect: "16/9",
-        cells: [
+        images: [
           {
-            kind: "image",
             span: 12,
             src: "/images/reference/veterinarski-center.webp",
             alt: VETERINARY_ALT,
@@ -105,7 +105,10 @@ export const references: readonly ReferenceProject[] = [
     ],
   },
 
-  /* ---------------------------------------------------------------------- */
+  /* ----------------------------------------------------------------------
+     Three frames of one house, as one row. A wide exterior carries the row and
+     the two portraits sit beside it at their native ratio.
+     ---------------------------------------------------------------------- */
   {
     slug: "stanovanjski-objekt",
     category: "Stanovanjski objekt",
@@ -116,46 +119,36 @@ export const references: readonly ReferenceProject[] = [
     },
     rows: [
       {
-        aspect: "9/4",
-        cells: [
+        aspect: "3/1",
+        images: [
           {
-            kind: "image",
-            span: 8,
+            span: 6,
             src: "/images/reference/stanovanjski-objekt-zima.webp",
             alt: HOUSE_WINTER_ALT,
             position: "50% 42%",
             mobileAspect: "4/3",
           },
           {
-            kind: "image",
-            span: 4,
+            span: 3,
             src: "/images/reference/stanovanjski-objekt-fasada.webp",
             alt: "Fasada iste hiše ob mraku, z osvetljenim napuščem in stekleno ograjo terase.",
             mobileAspect: "3/4",
           },
-        ],
-      },
-      {
-        aspect: "9/4",
-        cells: [
           {
-            kind: "image",
-            span: 4,
+            span: 3,
             src: "/images/reference/stanovanjski-objekt-kopalnica.webp",
             alt: "Kopalnica s stropno linijsko razsvetljavo in vgrajenimi svetili pred vhodom v savno.",
             mobileAspect: "3/4",
-          },
-          {
-            kind: "text",
-            span: 8,
-            body: "Vse fotografije so z istega objekta: zunanjost, terasa in notranji prostori.",
           },
         ],
       },
     ],
   },
 
-  /* ---------------------------------------------------------------------- */
+  /* ----------------------------------------------------------------------
+     Two rows, and the wide frame changes side between them so the pair reads
+     as a composition rather than as the same row printed twice.
+     ---------------------------------------------------------------------- */
   {
     slug: "zobozdravstveni-center",
     category: "Poslovni objekt",
@@ -167,58 +160,37 @@ export const references: readonly ReferenceProject[] = [
     },
     rows: [
       {
-        aspect: "16/10",
-        cells: [
+        aspect: "9/4",
+        images: [
           {
-            kind: "image",
-            span: 12,
+            span: 8,
             src: "/images/reference/zobozdravstveni-center/cakalnica.webp",
             alt: DENTAL_WAITING_ALT,
-            position: "50% 42%",
-            mobileAspect: "4/3",
-          },
-        ],
-      },
-      {
-        aspect: "9/4",
-        cells: [
-          {
-            kind: "image",
-            span: 8,
-            src: "/images/reference/zobozdravstveni-center/recepcija.webp",
-            alt: "Recepcija zobozdravstvenega centra z barvno razsvetljavo v stenskih in stropnih linijah.",
+            position: "50% 40%",
             mobileAspect: "4/3",
           },
           {
-            kind: "image",
-            span: 4,
-            src: "/images/reference/zobozdravstveni-center/cakalnica-igralni-kotcek.webp",
-            alt: "Vhodni del čakalnice z leseno hišico in linijsko razsvetljavo v stropu.",
-            mobileAspect: "3/4",
-          },
-        ],
-      },
-      {
-        aspect: "9/4",
-        cells: [
-          {
-            kind: "image",
             span: 4,
             src: "/images/reference/zobozdravstveni-center/sanitarije-umivalnika.webp",
             alt: "Sanitarni prostor z visečimi svetili nad umivalnikoma in vgrajenimi stropnimi svetili.",
             mobileAspect: "3/4",
           },
+        ],
+      },
+      {
+        aspect: "9/4",
+        images: [
           {
-            kind: "image",
             span: 4,
             src: "/images/reference/zobozdravstveni-center/sanitarije-police.webp",
             alt: "Sanitarni prostor z osvetljenimi nišnimi policami.",
             mobileAspect: "3/4",
           },
           {
-            kind: "text",
-            span: 4,
-            body: "Linijska razsvetljava v stropu, barvna razsvetljava ob recepciji in vgrajena svetila v sanitarnih prostorih.",
+            span: 8,
+            src: "/images/reference/zobozdravstveni-center/recepcija.webp",
+            alt: "Recepcija zobozdravstvenega centra z barvno razsvetljavo v stenskih in stropnih linijah.",
+            mobileAspect: "4/3",
           },
         ],
       },
@@ -232,52 +204,20 @@ export const references: readonly ReferenceProject[] = [
     title: "Gospodarski objekt",
     cover: {
       src: "/images/reference/kmetijski-objekt-razsvetljava.webp",
-      alt: "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.",
+      alt: BARN_ALT,
     },
     rows: [
       {
-        aspect: "9/5",
-        cells: [
+        aspect: "9/4",
+        images: [
           {
-            kind: "image",
-            span: 5,
+            // Centred rather than hard left: a lone portrait pushed to one edge
+            // of a twelve-column grid reads as a layout that lost its second
+            // cell.
+            span: 4,
+            start: 5,
             src: "/images/reference/kmetijski-objekt-razsvetljava.webp",
-            alt: "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.",
-            mobileAspect: "3/4",
-          },
-          {
-            kind: "text",
-            span: 7,
-            body: "Razsvetljava, nameščena po celotni dolžini objekta.",
-          },
-        ],
-      },
-    ],
-  },
-
-  /* ---------------------------------------------------------------------- */
-  {
-    slug: "elektro-omarica",
-    category: "Elektroinštalacije",
-    title: "Elektro omarica",
-    cover: {
-      src: "/images/reference/elektro-omarica.webp",
-      alt: "Elektroinštalater na lestvi vezuje odprto elektro omarico v objektu med gradnjo.",
-    },
-    rows: [
-      {
-        aspect: "9/5",
-        cells: [
-          {
-            kind: "text",
-            span: 7,
-            body: "Vezava elektro omarice med izvedbo inštalacij v objektu v gradnji.",
-          },
-          {
-            kind: "image",
-            span: 5,
-            src: "/images/reference/elektro-omarica.webp",
-            alt: "Elektroinštalater na lestvi vezuje odprto elektro omarico v objektu med gradnjo.",
+            alt: BARN_ALT,
             mobileAspect: "3/4",
           },
         ],

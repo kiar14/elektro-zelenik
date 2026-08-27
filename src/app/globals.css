@@ -298,6 +298,55 @@
     background-color: var(--color-surface);
   }
 
+  /* --- Selectable chip ---------------------------------------------------
+     The multi-select on /povprasevanje. A visually hidden checkbox with the
+     chip as its label, so the control stays a real checkbox for the keyboard
+     and for assistive technology, and only the paint is ours.
+
+     Both states are written as sibling selectors of the input rather than as a
+     base rule plus a `:checked` override. A base declaration and its own
+     override end up competing for the same property, and which one wins then
+     depends on cascade layer and source order, which is not something a
+     component should be sensitive to. `:not(:checked)` and `:checked` cannot
+     both match, so there is nothing left to resolve. */
+  .select-chip {
+    border-width: 1px;
+    border-style: solid;
+  }
+
+  .peer:not(:checked) ~ .select-chip {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-ground);
+    color: var(--color-ink-muted);
+  }
+
+  .peer:not(:checked) ~ .select-chip:hover {
+    border-color: var(--color-ink-muted);
+  }
+
+  .peer:checked ~ .select-chip {
+    border-color: var(--color-brand-strong);
+    background-color: var(--color-brand-tint);
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  /* The tick is inside the chip, so it is not a sibling of the input and has to
+     be reached through the chip. */
+  .peer:not(:checked) ~ .select-chip svg {
+    opacity: 0;
+  }
+
+  .peer:checked ~ .select-chip svg {
+    opacity: 1;
+  }
+
+  /* The input is `sr-only`, so the ring has to be drawn on the chip. */
+  .peer:focus-visible ~ .select-chip {
+    outline: 2px solid var(--color-brand-strong);
+    outline-offset: 2px;
+  }
+
   /* Both hero frames are positioned by this single rule, so the unlit and lit
      photographs can never drift apart: same box, same fit, same origin. Any
      change here applies to both at once. */

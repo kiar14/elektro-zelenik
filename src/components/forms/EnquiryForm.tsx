@@ -8,9 +8,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
 
 import {
+  CheckboxChips,
   Consent,
   Field,
-  Select,
   TextArea,
 } from "@/components/forms/Fields";
 import { company } from "@/content/company";
@@ -23,11 +23,18 @@ import {
 /**
  * The site's enquiry form.
  *
- * Two shapes, one implementation. `variant="kontakt"` is the short form on the
- * contact page; `variant="povprasevanje"` adds the place and one optional
- * follow-up question chosen by the selected service. Everything beyond the four
- * fields we genuinely need is optional, because an enquiry form that reads as an
- * interrogation gets abandoned.
+ * Two shapes, one implementation, and they are now genuinely different jobs
+ * rather than one form with a field hidden.
+ *
+ * `variant="kontakt"` is a message, not a brief: name, phone, email, message.
+ * It carried a service dropdown, which asked a visitor to classify their own
+ * question before they were allowed to ask it. That has gone.
+ *
+ * `variant="povprasevanje"` is the brief, and a real job is often more than one
+ * of the seven: an objekt that needs elektroinštalacije usually also needs the
+ * omrežje pulled at the same time. The service field is therefore a set of
+ * checkboxes, so a visitor can say so in one pass instead of sending two
+ * enquiries or picking whichever one felt most important.
  *
  * IMPORTANT: there is no backend yet, and nothing here pretends otherwise.
  * A valid submission does not claim to have sent anything. It hands the visitor
@@ -41,8 +48,22 @@ const VALUES = enquiryOptions.map((option) => option.value) as [
   ...EnquiryValue[],
 ];
 
-const baseSchema = z.object({
-  storitev: z.enum(VALUES, "Izberite vrsto storitve."),
+/**
+ * One shape, two rule sets.
+ *
+ * Both schemas declare exactly the same keys, so they infer the same type and
+ * the form needs no cast to switch between them. The only difference is that
+ * the brief requires at least one service and the contact form does not ask for
+ * any, which is a validation rule rather than a different set of fields.
+ */
+const contactSchema = z.object({
+  storitve: z.array(z.enum(VALUES)),
+  kraj: z.string().trim().max(80, "Kraj naj bo krajši od 80 znakov.").optional(),
+  podrobnost: z
+    .string()
+    .trim()
+    .max(300, "Odgovor naj bo krajši od 300 znakov.")
+    .optional(),
   ime: z.string().trim().min(2, "Vpišite svoje ime."),
   telefon: z
     .string()
@@ -52,12 +73,6 @@ const baseSchema = z.object({
   email: z
     .union([z.literal(""), z.email("Vpišite veljaven e-naslov.")])
     .optional(),
-  kraj: z.string().trim().max(80, "Kraj naj bo krajši od 80 znakov.").optional(),
-  podrobnost: z
-    .string()
-    .trim()
-    .max(300, "Odgovor naj bo krajši od 300 znakov.")
-    .optional(),
   sporocilo: z
     .string()
     .trim()
@@ -66,10 +81,14 @@ const baseSchema = z.object({
   soglasje: z.literal(true, "Za oddajo potrebujemo vaše soglasje."),
 });
 
-type EnquiryValues = z.infer<typeof baseSchema>;
+const enquirySchema = contactSchema.extend({
+  storitve: z.array(z.enum(VALUES)).min(1, "Izberite vsaj eno storitev."),
+});
+
+type EnquiryValues = z.infer<typeof enquirySchema>;
 
 export interface EnquiryDefaults {
-  storitev?: EnquiryValue;
+  storitve?: readonly EnquiryValue[];
   ime?: string;
   telefon?: string;
   sporocilo?: string;
@@ -92,9 +111,9 @@ export function EnquiryForm({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<EnquiryValues>({
-    resolver: zodResolver(baseSchema),
+    resolver: zodResolver(detailed ? enquirySchema : contactSchema),
     defaultValues: {
-      storitev: defaults?.storitev ?? "elektroinstalacije",
+      storitve: defaults?.storitve ? [...defaults.storitve] : [],
       ime: defaults?.ime ?? "",
       telefon: defaults?.telefon ?? "",
       email: "",
@@ -108,29 +127,43 @@ export function EnquiryForm({
   // `useWatch` rather than the `watch()` function: it subscribes this one
   // component to this one field, and unlike `watch()` it returns a value the
   // React Compiler can reason about.
-  const selected = useWatch({ control, name: "storitev" });
-  const followUp = detailed ? conditionalQuestion[selected] : undefined;
+  const selected = useWatch({ control, name: "storitve" });
+
+  /**
+   * The follow-up question survives multi-select, but only where it still has
+   * one unambiguous answer. Asking "gre za novogradnjo ali obstoječi objekt"
+   * makes sense for a single service and becomes a guess the moment three are
+   * ticked, so it appears only when exactly one is chosen.
+   */
+  const followUp =
+    detailed && selected?.length === 1
+      ? conditionalQuestion[selected[0]]
+      : undefined;
 
   const onSubmit = handleSubmit((values) => setSubmitted(values));
 
   if (submitted) {
-    return <PendingDelivery values={submitted} followUp={followUp} />;
+    return (
+      <PendingDelivery
+        values={submitted}
+        followUp={followUp}
+        detailed={detailed}
+      />
+    );
   }
 
   return (
     <form noValidate onSubmit={onSubmit} className="grid gap-6">
-      <Select
-        id={`${fieldId}-storitev`}
-        label="Storitev"
-        error={errors.storitev?.message}
-        {...register("storitev")}
-      >
-        {enquiryOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
+      {detailed ? (
+        <CheckboxChips
+          id={`${fieldId}-storitve`}
+          legend="Katere storitve vas zanimajo?"
+          hint="Izberete lahko več storitev."
+          options={enquiryOptions}
+          error={errors.storitve?.message}
+          {...register("storitve")}
+        />
+      ) : null}
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field
@@ -151,7 +184,7 @@ export function EnquiryForm({
         />
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className={detailed ? "grid gap-6 sm:grid-cols-2" : undefined}>
         <Field
           id={`${fieldId}-email`}
           label="E-pošta"
@@ -195,7 +228,11 @@ export function EnquiryForm({
         {...register("sporocilo")}
       />
 
-      <Consent id={`${fieldId}-soglasje`} error={errors.soglasje?.message} {...register("soglasje")}>
+      <Consent
+        id={`${fieldId}-soglasje`}
+        error={errors.soglasje?.message}
+        {...register("soglasje")}
+      >
         Strinjam se, da podatke uporabite za odgovor na to povpraševanje. Več v{" "}
         <Link
           href="/politika-zasebnosti"
@@ -229,16 +266,23 @@ export function EnquiryForm({
 function PendingDelivery({
   values,
   followUp,
+  detailed,
 }: {
   values: EnquiryValues;
   followUp?: string;
+  detailed: boolean;
 }) {
-  const label =
-    enquiryOptions.find((option) => option.value === values.storitev)?.label ??
-    values.storitev;
+  const labels = (values.storitve ?? []).map(
+    (value) =>
+      enquiryOptions.find((option) => option.value === value)?.label ?? value,
+  );
+
+  const subject = detailed
+    ? `Povpraševanje: ${labels.join(", ") || "splošno"}`
+    : `Sporočilo s spletne strani, ${values.ime}`;
 
   const lines = [
-    `Storitev: ${label}`,
+    detailed && labels.length ? `Storitve: ${labels.join(", ")}` : null,
     `Ime: ${values.ime}`,
     `Telefon: ${values.telefon}`,
     values.email ? `E-pošta: ${values.email}` : null,
@@ -248,7 +292,7 @@ function PendingDelivery({
   ].filter(Boolean) as string[];
 
   const mailto = `mailto:${company.email.primary}?subject=${encodeURIComponent(
-    `Povpraševanje: ${label}`,
+    subject,
   )}&body=${encodeURIComponent(lines.join("\n"))}`;
 
   return (
@@ -259,7 +303,7 @@ function PendingDelivery({
         </h3>
         <p className="mt-3 max-w-prose text-base text-ink-muted">
           Samodejno pošiljanje s te strani še ni vzpostavljeno, zato vašega
-          povpraševanja nismo prejeli. Da vaš vnos ne bi bil izgubljen, ga lahko
+          sporočila nismo prejeli. Da vaš vnos ne bi bil izgubljen, ga lahko
           takoj pošljete po e-pošti ali nas pokličete.
         </p>
       </div>

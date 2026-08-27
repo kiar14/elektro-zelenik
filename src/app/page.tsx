@@ -19,7 +19,7 @@ import { OG_HOME, pageSeo } from "@/lib/seo";
  */
 export const metadata: Metadata = pageSeo({
   path: "/",
-  title: `${company.tradingName}, elektroinštalacije in tehnične rešitve`,
+  title: `${company.tradingName} | ${company.address.city} in okolica`,
   titleAbsolute: true,
   description:
     "Elektroinštalacije v novogradnjah in obstoječih objektih, servis, tehnični sistemi in toplotne črpalke. Destrnik pri Ptuju, od leta 2000.",

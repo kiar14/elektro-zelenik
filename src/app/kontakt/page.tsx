@@ -17,7 +17,7 @@ const TITLE = "Kontakt";
 export const metadata: Metadata = pageSeo({
   path: "/kontakt",
   title: TITLE,
-  description: `Pokličite ${company.phone.display} ali pišite na ${company.email.primary}. ${company.address.full}.`,
+  description: `Pokličite ${company.phone.display} ali nam pišite. Sedež podjetja je na naslovu ${company.address.full}.`,
 });
 
 /**

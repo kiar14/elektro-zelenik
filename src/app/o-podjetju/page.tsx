@@ -1,10 +1,11 @@
-import { ImageIcon, MapPin } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/motion/RevealGroup";
 import { BenefitGrid } from "@/components/sections/BenefitGrid";
 import { CtaSection } from "@/components/sections/CtaSection";
+import { LocationMap } from "@/components/sections/LocationMap";
 import { PageHero } from "@/components/sections/PageHero";
 import { ReferenceGrid } from "@/components/sections/ReferenceGrid";
 import { ActionLink } from "@/components/ui/ActionLink";
@@ -19,7 +20,7 @@ const TITLE = "O podjetju";
 export const metadata: Metadata = pageSeo({
   path: "/o-podjetju",
   title: TITLE,
-  description: `${company.tradingName}, ${company.sinceLabel}. Elektroinštalacije, servis in povezani tehnični sistemi na območju upravne enote ${company.serviceArea.administrativeUnit} in v ${company.serviceArea.regionAdjective} regiji.`,
+  description: `${company.tradingName} ${company.sinceLabel} izvaja elektroinštalacije, servis in povezane tehnične sisteme. Sedež v kraju ${company.address.city} pri ${company.serviceArea.administrativeUnit}u.`,
 });
 
 /**
@@ -36,11 +37,19 @@ export const metadata: Metadata = pageSeo({
  * document, the opening hours and the wider town list, are still absent.
  */
 
-/** Verified from the register. No metric, no count, nothing supplied. */
+/**
+ * The proof strip.
+ *
+ * The middle entry used to be the year the d.o.o. was incorporated, beside a
+ * paragraph explaining the move from s.p. That is legal history: it tells a
+ * customer nothing about whether the work will be any good, and it invited the
+ * question of what the company was before. What remains is the experience, the
+ * breadth and the evidence, all of which the rest of the site backs up.
+ */
 const FACTS = [
-  { value: String(company.foundedYear), label: "Začetek dejavnosti" },
-  { value: String(company.incorporatedYear), label: "Ustanovitev d.o.o." },
-  { value: company.address.city, label: "Sedež podjetja" },
+  { value: `Od leta ${company.foundedYear}`, label: "Izkušnje na objektih" },
+  { value: "Več povezanih storitev", label: "Pri enem izvajalcu" },
+  { value: "Izvedeni projekti", label: "Na različnih vrstah objektov" },
 ];
 
 export default function Page() {
@@ -75,21 +84,16 @@ export default function Page() {
 
               <div>
                 <p className="max-w-prose text-lead text-ink-muted">
-                  {company.tradingName} je podjetje s sedežem v kraju{" "}
-                  {company.address.city}, ki se ukvarja z elektroinštalacijami
-                  in povezanimi tehničnimi sistemi.
+                  {company.tradingName} že {company.sinceLabel} izvajamo dela na
+                  področju elektrotehnike in elektroinštalacij. Izkušnje iz
+                  različnih vrst objektov nam pomagajo pri načrtovanju rešitev,
+                  izvedbi in reševanju praktičnih situacij na objektu.
                 </p>
                 <p className="mt-5 max-w-prose text-lead text-ink-muted">
-                  Delo prevzamemo v obsegu, ki ga uskladimo vnaprej, in ga
-                  izvedemo sami. Kjer je za posamezen del potreben poslovni
-                  partner, to povemo vnaprej.
-                </p>
-                <p className="mt-5 max-w-prose text-lead text-ink-muted">
-                  Z elektroinštalacijami se ukvarjamo {company.sinceLabel}. V
-                  tem času se je spremenilo marsikaj, od razsvetljave do naprav,
-                  ki jih objekti danes vsebujejo, osnova pa je ostala ista:
-                  napeljava mora biti izvedena tako, da bo objekt v njej deloval
-                  še čez leta.
+                  Strankam želimo ponuditi jasen dogovor, strokovno svetovanje
+                  in kakovostno izvedbo. Poleg elektroinštalacij izvajamo tudi
+                  servis, računalniške mreže, alarmne sisteme, video nadzor,
+                  toplotne črpalke in svetovanje.
                 </p>
               </div>
             </div>
@@ -100,7 +104,8 @@ export default function Page() {
             >
               {FACTS.map((fact) => (
                 <div key={fact.label}>
-                  <p className="font-display text-2xl font-semibold tracking-[-0.02em] tabular-nums text-ink">
+                  <span aria-hidden className="block h-px w-9 bg-brand" />
+                  <p className="mt-4 font-display text-xl font-semibold tracking-[-0.018em] text-ink">
                     {fact.value}
                   </p>
                   <p className="mt-1.5 text-base text-ink-muted">
@@ -110,14 +115,6 @@ export default function Page() {
               ))}
             </div>
 
-            <p
-              data-reveal
-              className="mt-9 max-w-[46rem] border-l-2 border-brand pl-6 text-xl text-ink sm:pl-8"
-            >
-              Leta {company.incorporatedYear} je dejavnost prešla v družbo z
-              omejeno odgovornostjo. Delo in način dela sta ostala
-              nespremenjena.
-            </p>
           </RevealGroup>
         </Container>
       </section>
@@ -165,14 +162,8 @@ export default function Page() {
                   id="ekipa-naslov"
                   eyebrow="Ekipa"
                   title={`Ekipa ${company.tradingName}`}
-                  lead="Za vsakim projektom stoji ekipa, ki povezuje dogovor, pripravo in izvedbo del."
+                  lead="Za izvedbo projektov skrbi ekipa, ki povezuje dogovor, pripravo in izvedbo del ter ostaja dosegljiva tudi po zaključku."
                 />
-                <p className="mt-5 max-w-prose text-base text-ink-muted">
-                  Tako se informacije iz pogovora prenesejo tudi v delo na
-                  objektu, komunikacija pa ostane jasna skozi celoten postopek.
-                  Ko so dela zaključena, ostanemo dosegljivi za dodatna
-                  vprašanja.
-                </p>
               </div>
             </RevealGroup>
           </div>
@@ -231,57 +222,15 @@ export default function Page() {
         </Container>
       </section>
 
-      {/* Only what the registered seat documents: the municipality, its
-          administrative unit and the statistical region. A wider town list
-          stays out until the client says how far they actually travel. */}
-      <section aria-labelledby="obmocje-naslov" className="bg-ground">
-        <Container width="wide" className="py-20 lg:py-24">
-          <RevealGroup>
-            <div
-              data-reveal
-              className="grid gap-8 rounded-lg border border-border bg-surface px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16 lg:px-12 lg:py-12"
-            >
-              <div>
-                <SectionHeading
-                  id="obmocje-naslov"
-                  eyebrow="Območje"
-                  title="Kje delamo"
-                />
-
-                <p className="mt-8 flex items-start gap-3 text-base text-ink">
-                  <MapPin
-                    aria-hidden
-                    className="mt-1 size-[18px] shrink-0 text-brand-strong"
-                  />
-                  <span>
-                    {company.serviceArea.municipality},{" "}
-                    {company.serviceArea.administrativeUnit},{" "}
-                    {company.serviceArea.region}
-                  </span>
-                </p>
-              </div>
-
-              <div className="lg:self-center">
-                <p className="max-w-prose text-lead text-ink-muted">
-                  Sedež podjetja je na naslovu {company.address.full}. Delujemo
-                  na območju upravne enote{" "}
-                  {company.serviceArea.administrativeUnit} in v širši{" "}
-                  {company.serviceArea.regionAdjective} regiji.
-                </p>
-                <p className="mt-5 max-w-prose text-base text-ink-muted">
-                  Če niste prepričani, ali vaša lokacija sodi zraven, nas
-                  pokličite in vam povemo takoj.
-                </p>
-              </div>
-            </div>
-          </RevealGroup>
-        </Container>
-      </section>
-
       <CtaSection
         title="Se pogovorimo o vašem objektu?"
         body="Povejte, kaj načrtujete. Skupaj opredelimo obseg del in naslednji korak."
       />
+
+      {/* Last band before the footer, and the only place the address needs to
+          be shown at size. Nothing from Google loads until the visitor asks
+          for it: see the note in LocationMap. */}
+      <LocationMap />
     </>
   );
 }

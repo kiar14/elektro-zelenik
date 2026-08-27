@@ -9,13 +9,11 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { services } from "@/content/services";
 import { pageSeo } from "@/lib/seo";
 
-const TITLE = "Storitve";
-
 export const metadata: Metadata = pageSeo({
   path: "/storitve",
-  title: TITLE,
+  title: "Elektro storitve",
   description:
-    "Elektroinštalacije, servisiranje, računalniške mreže, alarmni sistemi, video nadzor, toplotne črpalke in svetovanje.",
+    "Sedem storitev pri enem izvajalcu: elektroinštalacije, servisiranje, računalniške mreže, alarmni sistemi, video nadzor, toplotne črpalke in svetovanje.",
 });
 
 /**

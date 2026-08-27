@@ -5,6 +5,7 @@ import "./globals.css";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipLink } from "@/components/layout/SkipLink";
+import { StructuredData } from "@/components/layout/StructuredData";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { company } from "@/content/company";
 import { ibmPlexSans, inter } from "@/lib/fonts";
@@ -26,8 +27,8 @@ import { SITE_URL } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${company.tradingName}, elektroinštalacije in tehnične rešitve`,
-    template: `%s, ${company.tradingName}`,
+    default: `${company.tradingName} | ${company.address.city} in okolica`,
+    template: `%s | ${company.tradingName}`,
   },
   description:
     "Elektroinštalacije v novogradnjah in obstoječih objektih, servis, tehnični sistemi in toplotne črpalke. Destrnik pri Ptuju, od leta 2000.",
@@ -54,6 +55,7 @@ export default function RootLayout({
             {"[data-reveal],[data-trust-column],[data-hero-title],[data-hero-item],[data-hero-rule],[data-process-line]{opacity:1!important;transform:none!important}"}
           </style>
         </noscript>
+        <StructuredData />
         <SmoothScroll />
         <SkipLink />
         <SiteHeader />

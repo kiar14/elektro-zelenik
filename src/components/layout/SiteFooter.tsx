@@ -23,6 +23,7 @@ import { allServicesLink, headerPhone, services } from "@/content/navigation";
  */
 const COMPANY_LINKS = [
   { label: "Reference", href: "/reference" },
+  { label: "Pogosta vprašanja", href: "/faq" },
   { label: "O podjetju", href: "/o-podjetju" },
   { label: "Kontakt", href: "/kontakt" },
   { label: "Povpraševanje", href: "/povprasevanje" },
