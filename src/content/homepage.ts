@@ -1,21 +1,17 @@
 import {
   BadgeCheck,
-  BellRing,
   CalendarCheck,
-  Cctv,
   ClipboardCheck,
-  Handshake,
   History,
-  Network,
-  ThermometerSun,
   Timer,
   Workflow,
-  Wrench,
-  Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import { company } from "@/content/company";
+import type { EnquiryValue } from "@/content/enquiry";
+import { homeReferences } from "@/content/references";
+import { services } from "@/content/services";
 
 /**
  * Homepage content.
@@ -88,11 +84,9 @@ export const trustMetrics: readonly TrustMetric[] = [
 /* -------------------------------------------------------------------------
  * Storitve
  *
- * The seven homepage services, including the client's supplied consulting
- * offer and photograph.
- *
- * Nothing inferred and nothing added. Batteries, EV charging and electrical
- * measurements stay off the homepage until the client confirms them.
+ * Derived from content/services.ts rather than restated here, so the homepage
+ * grid, the header dropdown, the footer column and /storitve are guaranteed to
+ * show the same seven services in the same order.
  * ---------------------------------------------------------------------- */
 
 export interface HomeService {
@@ -104,80 +98,34 @@ export interface HomeService {
   alt: string;
 }
 
-export const homeServices: readonly HomeService[] = [
-  {
-    title: "Elektroinštalacije",
-    body: "Klasične in pametne elektroinštalacije, skupaj s strokovnim svetovanjem pri načrtovanju.",
-    href: "/storitve/elektroinstalacije",
-    icon: Zap,
-    image: "/images/storitve/elektroinstalacije.jpg",
-    alt: "Elektroinštalater vezuje elektro omarico v stanovanjskem objektu.",
-  },
-  {
-    title: "Servisiranje",
-    body: "Priklop naprav ter servis strojev in klimatskih naprav.",
-    href: "/storitve/servis-in-priklop-naprav",
-    icon: Wrench,
-    image: "/images/storitve/servisiranje.jpg",
-    alt: "Serviser med vzdrževanjem stenske klimatske naprave.",
-  },
-  {
-    title: "Računalniške mreže",
-    body: "Izvedba omrežij za poslovne in zasebne objekte.",
-    href: "/storitve/racunalniske-mreze",
-    icon: Network,
-    image: "/images/storitve/racunalniske-mreze.jpg",
-    alt: "Tehnik priklaplja mrežne kable v omrežno omaro.",
-  },
-  {
-    title: "Alarmni sistemi",
-    body: "Montaža alarmnih sistemov, po potrebi v sodelovanju s poslovnimi partnerji.",
-    href: "/storitve/alarmni-sistemi",
-    icon: BellRing,
-    image: "/images/storitve/alarmni-sistemi.jpg",
-    alt: "Monter namešča upravljalno enoto alarmnega sistema ob vhodu.",
-  },
-  {
-    title: "Video nadzor",
-    body: "Načrtovanje, montaža in vzdrževanje video-nadzornih sistemov.",
-    href: "/storitve/video-nadzor",
-    icon: Cctv,
-    image: "/images/storitve/video-nadzor.jpg",
-    alt: "Montaža zunanje nadzorne kamere pod napuščem objekta.",
-  },
-  {
-    title: "Toplotne črpalke",
-    body: "Dobava toplotnih črpalk Panasonic, montaža, priklop in zagon.",
-    href: "/storitve/toplotne-crpalke",
-    icon: ThermometerSun,
-    image: "/images/storitve/toplotne-crpalke.jpg",
-    alt: "Zunanja enota toplotne črpalke ob fasadi stanovanjske hiše.",
-  },
-  {
-    title: "Svetovanje",
-    body: "Nudimo vam strokovno svetovanje na področju električnih inštalacij.",
-    href: "/storitve/svetovanje",
-    icon: Handshake,
-    image: "/images/storitve/service-svetovanje.png",
-    alt: "Elektro strokovnjak stranki ob načrtih svetuje o električnih inštalacijah.",
-  },
-];
+export const homeServices: readonly HomeService[] = services.map((service) => ({
+  title: service.title,
+  body: service.cardBody,
+  href: service.href,
+  icon: service.icon,
+  image: service.image,
+  alt: service.alt,
+}));
 
 /* -------------------------------------------------------------------------
  * Quick enquiry
  *
- * Sončna elektrarna appears here even though it is not one of the six service
+ * The five shortest paths, using the site-wide enquiry values from
+ * content/enquiry.ts. The selection is carried to /povprasevanje as a search
+ * param, so the strings have to be the same ones that page understands.
+ *
+ * Sončna elektrarna appears here even though it is not one of the seven service
  * cards: the About page names photovoltaics as a principal activity, so it is
  * a confirmed thing to enquire about.
  * ---------------------------------------------------------------------- */
 
 export const enquiryCategories = [
   { value: "elektroinstalacije", label: "Elektroinštalacije" },
-  { value: "servis", label: "Servis" },
-  { value: "toplotna-crpalka", label: "Toplotna črpalka" },
+  { value: "servisiranje", label: "Servis" },
+  { value: "toplotne-crpalke", label: "Toplotna črpalka" },
   { value: "soncna-elektrarna", label: "Sončna elektrarna" },
   { value: "drugo", label: "Drugo" },
-] as const;
+] as const satisfies ReadonlyArray<{ value: EnquiryValue; label: string }>;
 
 export type EnquiryCategory = (typeof enquiryCategories)[number]["value"];
 
@@ -250,41 +198,10 @@ export const processSteps: ReadonlyArray<{ title: string; body: string }> = [
  * Reference
  *
  * Exactly three, deliberately one of each kind: commercial, residential,
- * agricultural. All are the company's own photographs. Captions describe what
- * is in the frame and nothing more, because no towns, dates, capacities or
- * client names are documented anywhere.
- *
- * TODO(stranka): the veterinary centre photograph carries an "Albin Bezjak
- * Photography" watermark. It is published on the company's own site, but
- * confirm publication rights, and ask whether a watermark-free original
- * exists, before launch. Do not crop or retouch the watermark out.
+ * agricultural. Taken from content/references.ts, which holds the company's
+ * own photographs and the notes on what is still unverified about them.
  * ---------------------------------------------------------------------- */
 
-export interface ReferenceItem {
-  src: string;
-  alt: string;
-  category: string;
-  title: string;
-  note?: string;
-}
+export type { ReferenceItem } from "@/content/references";
 
-export const references: readonly ReferenceItem[] = [
-  {
-    src: "/images/reference/poslovni-objekt-veterinarski-center.jpg",
-    alt: "Veterinarski center z osvetljeno okroglo fasado in urejenim parkiriščem ob mraku.",
-    category: "Poslovni objekt",
-    title: "Veterinarski center",
-  },
-  {
-    src: "/images/reference/stanovanjski-objekt-fasada.jpg",
-    alt: "Sodobna stanovanjska hiša ob mraku z osvetljenim napuščem in teraso.",
-    category: "Stanovanjski objekt",
-    title: "Stanovanjski objekt",
-  },
-  {
-    src: "/images/reference/kmetijski-objekt-razsvetljava.jpg",
-    alt: "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.",
-    category: "Kmetijski objekt",
-    title: "Gospodarski objekt",
-  },
-];
+export const references = homeReferences;

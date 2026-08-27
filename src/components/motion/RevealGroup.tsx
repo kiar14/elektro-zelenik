@@ -28,10 +28,23 @@ export function RevealGroup({
   children,
   className,
   stagger = REVEAL.stagger,
+  immediate = false,
 }: {
   children: ReactNode;
   className?: string;
   stagger?: number;
+  /**
+   * Play on mount instead of on a ScrollTrigger.
+   *
+   * For a group that is already on screen when the page paints, chiefly an
+   * inner-page hero. A scroll trigger is the wrong tool there: it is asked to
+   * fire for something the visitor has not scrolled to and never will, and if
+   * that initial evaluation is ever missed the content stays at the opacity
+   * this stylesheet gave it, which for a page heading means an empty screen.
+   * Playing on mount removes the question. It is also what the homepage hero
+   * does, for the same reason.
+   */
+  immediate?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +83,15 @@ export function RevealGroup({
           // Releases the hidden state and drops the inline transform, in that
           // order and in one frame. See finishReveal.
           onComplete: () => finishReveal(targets),
-          scrollTrigger: { trigger: root, start: REVEAL.start, once: true },
+          ...(immediate
+            ? {}
+            : {
+                scrollTrigger: {
+                  trigger: root,
+                  start: REVEAL.start,
+                  once: true,
+                },
+              }),
         },
       );
     }, root);
@@ -79,7 +100,7 @@ export function RevealGroup({
       endAnimating(targets);
       context.revert();
     };
-  }, [stagger]);
+  }, [stagger, immediate]);
 
   return (
     <div ref={rootRef} className={className}>

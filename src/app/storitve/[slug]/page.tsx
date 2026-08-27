@@ -1,30 +1,28 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PageStub } from "@/components/layout/PageStub";
-import { services } from "@/content/navigation";
+import { ContentSections } from "@/components/sections/ContentSections";
+import { CtaSection } from "@/components/sections/CtaSection";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { PageHero } from "@/components/sections/PageHero";
+import { ProcessSteps } from "@/components/sections/ProcessSteps";
+import { RelatedServices } from "@/components/sections/RelatedServices";
+import { findService, relatedServices, services } from "@/content/services";
 
 /**
- * Phase-1 stubs for every service route the header can reach, generated from
- * the same content module the navigation is built from. Anything not in that
- * module is a 404 rather than an empty page.
+ * The seven service pages.
+ *
+ * One route, seven records. Every page is built from the same shared sections
+ * in the same order, so the design cannot drift between them, and the only
+ * thing that differs from page to page is content: the copy, the number of
+ * process steps and whether there are questions worth answering.
+ *
+ * Anything not in `content/services.ts` is a 404 rather than an empty page.
  */
-const SERVICE_ROUTES = services.filter((service) =>
-  service.href.startsWith("/storitve/"),
-);
-
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return SERVICE_ROUTES.map((service) => ({
-    slug: service.href.replace("/storitve/", ""),
-  }));
-}
-
-function findService(slug: string) {
-  return SERVICE_ROUTES.find(
-    (service) => service.href === `/storitve/${slug}`,
-  );
+  return services.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({
@@ -33,10 +31,13 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  return { title: findService(slug)?.label ?? "Storitev" };
+  const service = findService(slug);
+  if (!service) return { title: "Storitev" };
+
+  return { title: service.title, description: service.lead };
 }
 
-export default async function ServiceStubPage({
+export default async function ServicePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -45,5 +46,51 @@ export default async function ServiceStubPage({
   const service = findService(slug);
   if (!service) notFound();
 
-  return <PageStub title={service.label} />;
+  const related = relatedServices(service);
+
+  return (
+    <>
+      <PageHero
+        eyebrow={service.title}
+        title={service.h1}
+        lead={service.lead}
+        image={service.image}
+        imageAlt={service.alt}
+        crumbs={[
+          { label: "Storitve", href: "/storitve" },
+          { label: service.title },
+        ]}
+      />
+
+      <ContentSections sections={service.sections} />
+
+      {service.process ? (
+        <ProcessSteps
+          id="postopek-naslov"
+          eyebrow={service.process.eyebrow}
+          title={service.process.title}
+          steps={service.process.steps}
+          surface="surface"
+        />
+      ) : null}
+
+      {service.faq ? (
+        // The process band above is already on the tonal surface, so the
+        // questions drop back to the page background rather than stacking two
+        // identical bands on top of one another.
+        <FaqSection
+          items={service.faq}
+          title={`Pogosta vprašanja, ${service.title.toLowerCase()}`}
+          surface={service.process ? "ground" : "surface"}
+        />
+      ) : null}
+
+      <RelatedServices items={related} />
+
+      <CtaSection
+        title="Se dogovorimo za ogled?"
+        body="Opišite objekt in kaj načrtujete. Uskladimo obseg del in pripravimo naslednji korak."
+      />
+    </>
+  );
 }

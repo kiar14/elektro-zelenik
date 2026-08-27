@@ -7,6 +7,7 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Field } from "@/components/forms/Fields";
 import { enquiryCategories } from "@/content/homepage";
 
 /**
@@ -158,39 +159,5 @@ export function QuickEnquiryForm() {
         Podatke uporabimo samo za odgovor na vaše povpraševanje.
       </p>
     </form>
-  );
-}
-
-/** Text input with its label, error and the wiring between them. */
-function Field({
-  id,
-  label,
-  error,
-  ...input
-}: {
-  id: string;
-  label: string;
-  error?: string;
-} & React.InputHTMLAttributes<HTMLInputElement>) {
-  const errorId = `${id}-napaka`;
-
-  return (
-    <div>
-      <label htmlFor={id} className="block text-base font-medium text-ink">
-        {label}
-      </label>
-      <input
-        id={id}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? errorId : undefined}
-        className="mt-2.5 block h-13 w-full rounded-sm border border-border-strong bg-ground px-3.5 text-base text-ink transition-colors duration-150 ease-standard placeholder:text-ink-muted hover:border-ink-muted aria-invalid:border-ink"
-        {...input}
-      />
-      {error ? (
-        <p id={errorId} role="alert" className="mt-2 text-base text-ink">
-          {error}
-        </p>
-      ) : null}
-    </div>
   );
 }

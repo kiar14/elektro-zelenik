@@ -146,6 +146,28 @@
   }
 }
 
+/* The mobile navigation sheet. Travel is short: this is a panel taking its
+   place, not an object flying in. */
+@keyframes sheet-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes backdrop-wash {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* ==========================================================================
    Base
    ========================================================================== */
@@ -159,6 +181,10 @@
 
   html {
     -webkit-text-size-adjust: 100%;
+    /* The mobile sheet locks the document while it is open. Reserving the
+       gutter permanently means that lock cannot shift the page sideways by the
+       width of a scrollbar as it engages. */
+    scrollbar-gutter: stable;
   }
 
   /* Lenis drives scrolling, so the native smooth behaviour must stay off — the
@@ -447,8 +473,24 @@
     }
   }
 
+  /* --- Mobile navigation sheet ------------------------------------------
+     The sheet rises from the foot of the viewport and the backdrop washes in
+     with it. One short entrance, no exit choreography: closing is immediate,
+     because a menu that takes time to get out of the way reads as slow.
+
+     Under reduced motion the global rule collapses both durations to nothing
+     and the sheet simply appears, which is the correct behaviour rather than a
+     degraded one. */
   .mobile-nav::backdrop {
     background-color: rgb(20 24 26 / 0.55);
+  }
+
+  .mobile-nav[open] {
+    animation: sheet-rise 320ms var(--ease-smooth);
+  }
+
+  .mobile-nav[open]::backdrop {
+    animation: backdrop-wash 320ms var(--ease-standard);
   }
 
   .site-header {

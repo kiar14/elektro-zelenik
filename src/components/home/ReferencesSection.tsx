@@ -1,9 +1,7 @@
-import Image from "next/image";
-
-import { SectionHeading } from "@/components/home/SectionHeading";
 import { Container } from "@/components/layout/Container";
-import { RevealGroup } from "@/components/motion/RevealGroup";
+import { ReferenceGrid } from "@/components/sections/ReferenceGrid";
 import { ActionLink } from "@/components/ui/ActionLink";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { references } from "@/content/homepage";
 
 /**
@@ -12,11 +10,9 @@ import { references } from "@/content/homepage";
  * twice and no illustrative marketing imagery appears at all.
  *
  * The commercial photograph carries its photographer's watermark. It is left
- * intact deliberately, see the TODO in content/homepage.ts.
+ * intact deliberately, see the note in content/references.ts.
  */
 export function ReferencesSection() {
-  const [feature, ...supporting] = references;
-
   return (
     <section aria-labelledby="reference-naslov" className="bg-ground">
       <Container className="py-20 lg:py-28">
@@ -36,30 +32,7 @@ export function ReferencesSection() {
           </ActionLink>
         </div>
 
-        <RevealGroup
-          stagger={0.09}
-          className="mt-14 grid gap-8 lg:mt-20 lg:grid-cols-2 lg:gap-10"
-        >
-          {/* The widest photograph leads, and it is the only landscape one. */}
-          <ReferenceCard
-            item={feature}
-            data-reveal
-            className="lg:col-span-2"
-            aspect="aspect-[16/10] lg:aspect-[21/9]"
-            sizes="(min-width: 1024px) 76vw, 100vw"
-            lead
-          />
-
-          {supporting.map((item) => (
-            <ReferenceCard
-              key={item.src}
-              item={item}
-              data-reveal
-              aspect="aspect-[4/3] lg:aspect-[3/2]"
-              sizes="(min-width: 1024px) 37vw, 100vw"
-            />
-          ))}
-        </RevealGroup>
+        <ReferenceGrid items={references} lead className="mt-14 lg:mt-20" />
 
         <ActionLink
           href="/reference"
@@ -71,54 +44,5 @@ export function ReferencesSection() {
         </ActionLink>
       </Container>
     </section>
-  );
-}
-
-function ReferenceCard({
-  item,
-  aspect,
-  sizes,
-  className,
-  lead,
-  ...rest
-}: {
-  item: (typeof references)[number];
-  aspect: string;
-  sizes: string;
-  className?: string;
-  lead?: boolean;
-} & React.HTMLAttributes<HTMLElement>) {
-  return (
-    <figure className={className} {...rest}>
-      <div
-        className={`group relative overflow-hidden rounded-lg bg-surface-sunk ${aspect}`}
-      >
-        <Image
-          src={item.src}
-          alt={item.alt}
-          fill
-          sizes={sizes}
-          className="object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        />
-      </div>
-
-      <figcaption className="mt-5">
-        <span className="text-eyebrow font-semibold uppercase text-brand-strong">
-          {item.category}
-        </span>
-        <span
-          className={`mt-2 block font-semibold tracking-[-0.015em] text-ink ${
-            lead ? "text-2xl" : "text-xl"
-          }`}
-        >
-          {item.title}
-        </span>
-        {item.note ? (
-          <span className="mt-1.5 block text-base text-ink-muted">
-            {item.note}
-          </span>
-        ) : null}
-      </figcaption>
-    </figure>
   );
 }

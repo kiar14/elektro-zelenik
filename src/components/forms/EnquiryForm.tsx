@@ -1,0 +1,293 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight, Mail, Phone } from "lucide-react";
+import Link from "next/link";
+import { useId, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { z } from "zod";
+
+import {
+  Consent,
+  Field,
+  Select,
+  TextArea,
+} from "@/components/forms/Fields";
+import { company } from "@/content/company";
+import {
+  conditionalQuestion,
+  enquiryOptions,
+  type EnquiryValue,
+} from "@/content/enquiry";
+
+/**
+ * The site's enquiry form.
+ *
+ * Two shapes, one implementation. `variant="kontakt"` is the short form on the
+ * contact page; `variant="povprasevanje"` adds the place and one optional
+ * follow-up question chosen by the selected service. Everything beyond the four
+ * fields we genuinely need is optional, because an enquiry form that reads as an
+ * interrogation gets abandoned.
+ *
+ * IMPORTANT: there is no backend yet, and nothing here pretends otherwise.
+ * A valid submission does not claim to have sent anything. It hands the visitor
+ * the two paths that do work today: the phone, and a mail client opened with
+ * everything they typed already in it. Wiring this to a route handler is the
+ * next phase; when that happens, only `onSubmit` changes.
+ */
+
+const VALUES = enquiryOptions.map((option) => option.value) as [
+  EnquiryValue,
+  ...EnquiryValue[],
+];
+
+const baseSchema = z.object({
+  storitev: z.enum(VALUES, "Izberite vrsto storitve."),
+  ime: z.string().trim().min(2, "Vpišite svoje ime."),
+  telefon: z
+    .string()
+    .trim()
+    .min(6, "Vpišite telefonsko številko.")
+    .regex(/^[0-9+()\s/-]+$/, "Uporabite le številke in znake + ( ) / -."),
+  email: z
+    .union([z.literal(""), z.email("Vpišite veljaven e-naslov.")])
+    .optional(),
+  kraj: z.string().trim().max(80, "Kraj naj bo krajši od 80 znakov.").optional(),
+  podrobnost: z
+    .string()
+    .trim()
+    .max(300, "Odgovor naj bo krajši od 300 znakov.")
+    .optional(),
+  sporocilo: z
+    .string()
+    .trim()
+    .max(1200, "Sporočilo naj bo krajše od 1200 znakov.")
+    .optional(),
+  soglasje: z.literal(true, "Za oddajo potrebujemo vaše soglasje."),
+});
+
+type EnquiryValues = z.infer<typeof baseSchema>;
+
+export interface EnquiryDefaults {
+  storitev?: EnquiryValue;
+  ime?: string;
+  telefon?: string;
+  sporocilo?: string;
+}
+
+export function EnquiryForm({
+  variant = "povprasevanje",
+  defaults,
+}: {
+  variant?: "kontakt" | "povprasevanje";
+  defaults?: EnquiryDefaults;
+}) {
+  const fieldId = useId();
+  const detailed = variant === "povprasevanje";
+  const [submitted, setSubmitted] = useState<EnquiryValues | null>(null);
+
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<EnquiryValues>({
+    resolver: zodResolver(baseSchema),
+    defaultValues: {
+      storitev: defaults?.storitev ?? "elektroinstalacije",
+      ime: defaults?.ime ?? "",
+      telefon: defaults?.telefon ?? "",
+      email: "",
+      kraj: "",
+      podrobnost: "",
+      sporocilo: defaults?.sporocilo ?? "",
+      soglasje: false as unknown as true,
+    },
+  });
+
+  // `useWatch` rather than the `watch()` function: it subscribes this one
+  // component to this one field, and unlike `watch()` it returns a value the
+  // React Compiler can reason about.
+  const selected = useWatch({ control, name: "storitev" });
+  const followUp = detailed ? conditionalQuestion[selected] : undefined;
+
+  const onSubmit = handleSubmit((values) => setSubmitted(values));
+
+  if (submitted) {
+    return <PendingDelivery values={submitted} followUp={followUp} />;
+  }
+
+  return (
+    <form noValidate onSubmit={onSubmit} className="grid gap-6">
+      <Select
+        id={`${fieldId}-storitev`}
+        label="Storitev"
+        error={errors.storitev?.message}
+        {...register("storitev")}
+      >
+        {enquiryOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Field
+          id={`${fieldId}-ime`}
+          label="Ime"
+          autoComplete="name"
+          error={errors.ime?.message}
+          {...register("ime")}
+        />
+        <Field
+          id={`${fieldId}-telefon`}
+          label="Telefon"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          error={errors.telefon?.message}
+          {...register("telefon")}
+        />
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2">
+        <Field
+          id={`${fieldId}-email`}
+          label="E-pošta"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          optional
+          error={errors.email?.message}
+          {...register("email")}
+        />
+
+        {detailed ? (
+          <Field
+            id={`${fieldId}-kraj`}
+            label="Kraj"
+            autoComplete="address-level2"
+            optional
+            error={errors.kraj?.message}
+            {...register("kraj")}
+          />
+        ) : null}
+      </div>
+
+      {followUp ? (
+        <Field
+          id={`${fieldId}-podrobnost`}
+          label={followUp}
+          optional
+          error={errors.podrobnost?.message}
+          {...register("podrobnost")}
+        />
+      ) : null}
+
+      <TextArea
+        id={`${fieldId}-sporocilo`}
+        label="Sporočilo"
+        rows={detailed ? 6 : 5}
+        optional
+        placeholder="Na kratko opišite, kaj potrebujete."
+        error={errors.sporocilo?.message}
+        {...register("sporocilo")}
+      />
+
+      <Consent id={`${fieldId}-soglasje`} error={errors.soglasje?.message} {...register("soglasje")}>
+        Strinjam se, da podatke uporabite za odgovor na to povpraševanje. Več v{" "}
+        <Link
+          href="/politika-zasebnosti"
+          className="font-medium text-brand-strong underline underline-offset-4"
+        >
+          politiki zasebnosti
+        </Link>
+        .
+      </Consent>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70 sm:justify-self-start"
+      >
+        Pošlji povpraševanje
+        <ArrowRight aria-hidden className="size-[18px]" />
+      </button>
+    </form>
+  );
+}
+
+/**
+ * What happens after a valid submission, today.
+ *
+ * Automatic delivery is not connected yet, so this says so plainly instead of
+ * showing a confirmation that would not be true. The two routes offered here
+ * both genuinely work: the phone, and a prefilled mail draft carrying every
+ * answer the visitor gave, so nothing they typed is lost.
+ */
+function PendingDelivery({
+  values,
+  followUp,
+}: {
+  values: EnquiryValues;
+  followUp?: string;
+}) {
+  const label =
+    enquiryOptions.find((option) => option.value === values.storitev)?.label ??
+    values.storitev;
+
+  const lines = [
+    `Storitev: ${label}`,
+    `Ime: ${values.ime}`,
+    `Telefon: ${values.telefon}`,
+    values.email ? `E-pošta: ${values.email}` : null,
+    values.kraj ? `Kraj: ${values.kraj}` : null,
+    followUp && values.podrobnost ? `${followUp} ${values.podrobnost}` : null,
+    values.sporocilo ? `\nSporočilo:\n${values.sporocilo}` : null,
+  ].filter(Boolean) as string[];
+
+  const mailto = `mailto:${company.email.primary}?subject=${encodeURIComponent(
+    `Povpraševanje: ${label}`,
+  )}&body=${encodeURIComponent(lines.join("\n"))}`;
+
+  return (
+    <div role="status" className="grid gap-5">
+      <div>
+        <h3 className="text-xl font-semibold tracking-[-0.018em] text-ink">
+          Povzetek je pripravljen
+        </h3>
+        <p className="mt-3 max-w-prose text-base text-ink-muted">
+          Samodejno pošiljanje s te strani še ni vzpostavljeno, zato vašega
+          povpraševanja nismo prejeli. Da vaš vnos ne bi bil izgubljen, ga lahko
+          takoj pošljete po e-pošti ali nas pokličete.
+        </p>
+      </div>
+
+      <dl className="grid gap-2 rounded-sm border border-border bg-surface px-4 py-4 text-base">
+        {lines.map((line) => (
+          <dd key={line} className="whitespace-pre-line text-ink-muted">
+            {line}
+          </dd>
+        ))}
+      </dl>
+
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <a
+          href={mailto}
+          className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+        >
+          <Mail aria-hidden className="size-[18px]" />
+          Pošlji po e-pošti
+        </a>
+        <a
+          href={company.phone.href}
+          className="btn-outline inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-sm px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+        >
+          <Phone aria-hidden className="size-[18px] text-brand-strong" />
+          {company.phone.display}
+        </a>
+      </div>
+    </div>
+  );
+}
