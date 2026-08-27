@@ -600,15 +600,38 @@
 
     .site-header[data-homepage]:not([data-scrolled])
       [data-mobile-header-control] {
-      background-color: rgb(255 255 255 / 0.88);
-      box-shadow: 0 1px 6px rgb(5 10 16 / 0.14);
+      background-color: rgb(255 255 255 / 0.76);
+      box-shadow: 0 1px 4px rgb(5 10 16 / 0.08);
     }
 
     .site-header[data-homepage]:not([data-scrolled])
       .mobile-header-logo
       img {
-      filter: drop-shadow(0 1px 2px rgb(255 255 255 / 0.75));
+      filter: none;
     }
+  }
+}
+
+/* These phone-only refinements sit outside the component layer so they can
+   override shared utilities without changing controls or actions elsewhere. */
+@media (max-width: 39.999rem) {
+  .home-hero-height .mobile-hero-title {
+    font-size: 2.1875rem;
+  }
+
+  .home-hero-height [data-hero-action] {
+    min-height: 3.125rem;
+  }
+
+  .site-header[data-homepage]:not([data-scrolled])
+    [data-mobile-header-control] {
+    border-color: rgb(255 255 255 / 0.68);
+  }
+}
+
+@media (max-width: 20.5rem) {
+  .home-hero-height .mobile-hero-title {
+    font-size: 2.15625rem;
   }
 }
 

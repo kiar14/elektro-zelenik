@@ -85,16 +85,32 @@ export function CountUpGroup({
     });
 
     /**
-     * From `lg` up this strip is not a scroll target at all: the stylesheet
-     * sizes header + hero + strip to exactly 100svh, so it is part of the first
-     * screen and is already on show when the page paints. Hung off a scroll
-     * trigger it would sit blank at nought until the visitor happened to move
-     * the page, which is the one thing a set of credibility figures must not
-     * do. Measured rather than assumed from a breakpoint, because what decides
-     * this is whether the strip is actually in view, not how wide the window is.
+     * Wider layouts can include this strip in the first screen, so retain the
+     * measured immediate path there. Phones are different: their hero uses
+     * `svh`, while Safari can report `innerHeight` from its larger viewport.
+     * Comparing those two made the strip look visible before the user scrolled.
      */
+    const phoneViewport = window.matchMedia("(max-width: 39.999rem)").matches;
     const inViewOnLoad =
+      !phoneViewport &&
       root.getBoundingClientRect().top < window.innerHeight * 0.9;
+
+    // On phones, measure the trigger against the pixels Safari is actually
+    // showing, not the larger layout viewport behind its browser chrome.
+    const visibleViewportHeight = () =>
+      Math.min(
+        window.innerHeight,
+        window.visualViewport?.height ?? window.innerHeight,
+      );
+
+    const phoneTriggerStart = () =>
+      Math.max(
+        // Never let Safari's initial viewport math place the trigger at zero.
+        24,
+        root.getBoundingClientRect().top +
+          window.scrollY -
+          visibleViewportHeight() * 0.85,
+      );
 
     const context = gsap.context(() => {
       const timeline = gsap.timeline(
@@ -102,7 +118,13 @@ export function CountUpGroup({
           ? // Held back just long enough to land after the hero copy, so the
             // first screen resolves top to bottom rather than all at once.
             { delay: 0.55 }
-          : { scrollTrigger: { trigger: root, start: "top 90%", once: true } },
+          : {
+              scrollTrigger: {
+                trigger: root,
+                start: phoneViewport ? phoneTriggerStart : "top 90%",
+                once: true,
+              },
+            },
       );
 
       timeline.fromTo(

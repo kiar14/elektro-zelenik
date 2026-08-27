@@ -55,7 +55,7 @@ export function HomeHero() {
 
       <Container
         width="wide"
-        className="home-hero-height relative flex items-end pb-12 sm:pb-16 lg:items-center lg:pt-20 lg:pb-12 xl:pt-32 xl:pb-20"
+        className="home-hero-height relative flex items-end pb-[4.5rem] sm:pb-16 lg:items-center lg:pt-20 lg:pb-12 xl:pt-32 xl:pb-20"
       >
         <HeroReveal>
           <p
@@ -73,12 +73,17 @@ export function HomeHero() {
           <h1
             id="hero-title"
             data-hero-title
-            className="mt-5 text-display text-on-photo"
+            className="mobile-hero-title mt-5 text-display text-on-photo"
           >
-            Elektroinštalacije in energetske rešitve
+            <span className="block sm:inline">Elektroinštalacije</span>{" "}
+            <span className="block sm:inline">in energetske</span>{" "}
+            <span className="block sm:inline">rešitve</span>
           </h1>
 
-          <p data-hero-item className="mt-6 text-lead text-on-photo-muted">
+          <p
+            data-hero-item
+            className="mt-6 max-w-[40ch] text-[1rem] leading-[1.42] text-on-photo-muted sm:max-w-none sm:text-lead sm:leading-[1.55]"
+          >
             Elektroinštalacije, servis in tehnične rešitve, od načrtovanja do
             izvedbe.
           </p>
@@ -94,6 +99,7 @@ export function HomeHero() {
               href="/povprasevanje"
               variant="solid"
               size="lg"
+              data-hero-action
               className="w-full @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
             >
               Pošlji povpraševanje
@@ -104,6 +110,7 @@ export function HomeHero() {
               variant="outline"
               size="lg"
               aria-label={headerPhone.accessibleLabel}
+              data-hero-action
               className="w-full border-white/50 bg-white/10 text-on-photo hover:border-white hover:bg-white/20 @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
             >
               <Phone aria-hidden className="size-[18px] text-brand" />
