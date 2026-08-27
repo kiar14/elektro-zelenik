@@ -25,7 +25,7 @@ export function ReferencesSection() {
             id="reference-naslov"
             eyebrow="Reference"
             title="Izvedeni objekti"
-            lead="Poslovni, stanovanjski in kmetijski objekti. Vse fotografije so z naših gradbišč in dokončanih objektov."
+            lead="Izbor poslovnega, stanovanjskega in kmetijskega objekta."
           />
           <ActionLink
             href="/reference"

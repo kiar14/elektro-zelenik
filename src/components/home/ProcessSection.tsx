@@ -21,7 +21,7 @@ export function ProcessSection() {
       aria-labelledby="postopek-naslov"
       className="border-y border-border bg-surface"
     >
-      <Container className="py-20 lg:py-28">
+      <Container width="wide" className="py-20 lg:py-30">
         <div className="text-center">
           <p className="flex items-center justify-center gap-4 text-eyebrow font-semibold uppercase text-ink-muted">
             <span aria-hidden className="h-px w-9 shrink-0 bg-border-strong" />
@@ -36,7 +36,7 @@ export function ProcessSection() {
           </h2>
         </div>
 
-        <ProcessMotion className="relative mt-14 lg:mt-20">
+        <ProcessMotion className="relative mt-16 lg:mt-24">
           {/* The rule the markers sit on. Desktop only. On mobile the
               connectors inside each step carry the sequence instead. */}
           <span
@@ -48,7 +48,7 @@ export function ProcessSection() {
 
           {/* Vertical timeline all the way to lg. A two-by-two grid in between
               would drop the connecting line entirely and lose the sequence. */}
-          <ol className="grid gap-y-10 lg:grid-cols-4 lg:gap-x-8">
+          <ol className="grid gap-y-12 lg:grid-cols-4 lg:gap-x-12 xl:gap-x-16">
             {processSteps.map((step, index) => (
               <li
                 key={step.title}
@@ -75,7 +75,7 @@ export function ProcessSection() {
                   {String(index + 1).padStart(2, "0")}
                 </span>
 
-                <div className="pb-2 lg:mt-7 lg:max-w-[268px]">
+                <div className="pb-2 lg:mt-8 lg:max-w-[280px]">
                   <h3 className="text-lg font-semibold tracking-[-0.014em] text-ink">
                     {step.title}
                   </h3>

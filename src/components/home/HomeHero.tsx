@@ -52,7 +52,7 @@ export function HomeHero() {
 
       <Container
         width="wide"
-        className="relative flex min-h-[clamp(38rem,86svh,44rem)] items-end pb-12 sm:pb-16 lg:min-h-[clamp(40.625rem,78svh,47.5rem)] lg:items-center lg:pt-32 lg:pb-20"
+        className="home-hero-height relative flex items-end pb-12 sm:pb-16 lg:items-center lg:pt-20 lg:pb-12 xl:pt-32 xl:pb-20"
       >
         <div data-surface="photo" className="hero-copy @container">
           <p className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-on-photo-muted">

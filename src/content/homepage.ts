@@ -1,13 +1,15 @@
 import {
+  BadgeCheck,
   BellRing,
-  Building2,
+  CalendarCheck,
   Cctv,
-  Layers,
-  MapPin,
+  ClipboardCheck,
+  Handshake,
+  History,
   Network,
-  PencilRuler,
   ThermometerSun,
-  Users,
+  Timer,
+  Workflow,
   Wrench,
   Zap,
 } from "lucide-react";
@@ -86,9 +88,8 @@ export const trustMetrics: readonly TrustMetric[] = [
 /* -------------------------------------------------------------------------
  * Storitve
  *
- * The six services the company's own website presents, with their own scope.
- * Consulting is not a seventh card: it is folded into the electrical
- * installation description, where it actually belongs.
+ * The seven homepage services, including the client's supplied consulting
+ * offer and photograph.
  *
  * Nothing inferred and nothing added. Batteries, EV charging and electrical
  * measurements stay off the homepage until the client confirms them.
@@ -152,6 +153,14 @@ export const homeServices: readonly HomeService[] = [
     image: "/images/storitve/toplotne-crpalke.jpg",
     alt: "Zunanja enota toplotne črpalke ob fasadi stanovanjske hiše.",
   },
+  {
+    title: "Svetovanje",
+    body: "Nudimo vam strokovno svetovanje na področju električnih inštalacij.",
+    href: "/storitve/svetovanje",
+    icon: Handshake,
+    image: "/images/storitve/service-svetovanje.png",
+    alt: "Elektro strokovnjak stranki ob načrtih svetuje o električnih inštalacijah.",
+  },
 ];
 
 /* -------------------------------------------------------------------------
@@ -176,44 +185,40 @@ export type EnquiryCategory = (typeof enquiryCategories)[number]["value"];
  * Zakaj Zelenik
  * ---------------------------------------------------------------------- */
 
-/** Three-cell proof strip. Deliberately not a repeat of the trust counters. */
-export const proofCells: ReadonlyArray<{
-  value: string;
-  label: string;
-  icon?: LucideIcon;
-}> = [
-  { value: company.sinceLabel, label: "lokalno elektro podjetje" },
-  {
-    value: "Različni tipi objektov",
-    label: "stanovanjski, poslovni in kmetijski",
-    icon: Layers,
-  },
-  {
-    value: "Neposreden kontakt",
-    label: `lokalna ekipa iz ${company.address.city}a`,
-    icon: Users,
-  },
-];
-
 export const whyCards: ReadonlyArray<{
   icon: LucideIcon;
   title: string;
   body: string;
 }> = [
   {
-    icon: PencilRuler,
-    title: "Od načrtovanja do izvedbe",
-    body: "Pomagamo pri načrtovanju inštalacije in izvedemo dogovorjena elektro dela vse do končnega priklopa.",
+    icon: History,
+    title: "26 let izkušenj",
+    body: "Od leta 2000 smo pridobili veliko praktičnih izkušenj na področju elektrotehnike in elektroinštalacij.",
   },
   {
-    icon: Building2,
-    title: "Izkušnje na različnih objektih",
-    body: "Med izvedenimi objekti so stanovanjske hiše, poslovni prostori in kmetijska poslopja.",
+    icon: ClipboardCheck,
+    title: "Strokovno svetovanje",
+    body: "Pomagamo pri izbiri rešitve in pri odločitvah, ki jih je smiselno sprejeti še pred začetkom izvedbe.",
   },
   {
-    icon: MapPin,
-    title: "Lokalni izvajalec",
-    body: "Sedež v Destrniku, neposredna komunikacija in delo po okoliškem območju.",
+    icon: BadgeCheck,
+    title: "Kakovostna izvedba",
+    body: "Dela izvedemo skrbno in po dogovorjenem obsegu, z namenom, da je končna rešitev urejena in zanesljiva.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Dogovorjeni roki",
+    body: "Termin in potek del uskladimo vnaprej ter se držimo dogovora, kolikor to dopuščajo razmere na objektu.",
+  },
+  {
+    icon: Timer,
+    title: "Hitra in učinkovita izvedba",
+    body: "Delo organiziramo tako, da je izvedba čim bolj učinkovita in da so nepotrebne prekinitve za naročnika čim manjše.",
+  },
+  {
+    icon: Workflow,
+    title: "Več storitev pri enem izvajalcu",
+    body: "Elektroinštalacije, servis, varnostni sistemi, računalniške mreže in toplotne črpalke lahko uskladite z enim izvajalcem.",
   },
 ];
 
@@ -225,19 +230,19 @@ export const whyCards: ReadonlyArray<{
 export const processSteps: ReadonlyArray<{ title: string; body: string }> = [
   {
     title: "Pošljete povpraševanje",
-    body: "Opišete, kaj potrebujete, in navedete osnovne podatke o objektu.",
+    body: "Opišete, kaj potrebujete, in dodate osnovne podatke o objektu.",
   },
   {
     title: "Dogovorimo se za ogled",
-    body: "Pogovorimo se o projektu in se, kadar je potrebno, dogovorimo za ogled na objektu.",
+    body: "Po potrebi objekt pregledamo, uskladimo obseg del in pripravimo naslednji korak.",
   },
   {
     title: "Izvedemo dogovorjena dela",
-    body: "Delo izvedemo v dogovorjenem obsegu in po dogovorjenem načrtu.",
+    body: "Dela izvedemo natančno, v dogovorjenem obsegu in v usklajenem terminu.",
   },
   {
     title: "Predaja in nadaljnji kontakt",
-    body: "Objekt predamo v uporabo, za poznejša vprašanja pa veste, na koga se obrniti.",
+    body: "Po zaključku preverimo izvedbo, objekt predamo in ostanemo dosegljivi za dodatna vprašanja.",
   },
 ];
 
@@ -269,18 +274,17 @@ export const references: readonly ReferenceItem[] = [
     alt: "Veterinarski center z osvetljeno okroglo fasado in urejenim parkiriščem ob mraku.",
     category: "Poslovni objekt",
     title: "Veterinarski center",
-    note: "Zunanja in fasadna razsvetljava",
   },
   {
     src: "/images/reference/stanovanjski-objekt-fasada.jpg",
     alt: "Sodobna stanovanjska hiša ob mraku z osvetljenim napuščem in teraso.",
     category: "Stanovanjski objekt",
-    title: "Elektroinštalacije in razsvetljava",
+    title: "Stanovanjski objekt",
   },
   {
     src: "/images/reference/kmetijski-objekt-razsvetljava.jpg",
     alt: "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.",
     category: "Kmetijski objekt",
-    title: "Razsvetljava gospodarskega objekta",
+    title: "Gospodarski objekt",
   },
 ];

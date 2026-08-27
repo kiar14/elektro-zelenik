@@ -259,7 +259,31 @@
 
   @media (min-width: 64rem) {
     .hero-frame {
-      object-position: 50% 50%;
+      /* Preserve the terrace, lower facade and foreground. Any necessary
+         vertical crop now comes only from the sky. */
+      object-position: 50% 100%;
+    }
+  }
+
+  /* Mobile keeps the established cinematic height and natural document flow.
+     From desktop upward, the first screen is calculated as one composition:
+     header + hero + the existing trust strip = 100svh.
+
+     64rem–79.99rem: 65px header + 102px trust strip = 167px.
+     80rem and wider: 69px header + 114px trust strip = 183px. */
+  .home-hero-height {
+    min-height: clamp(38rem, 86svh, 44rem);
+  }
+
+  @media (min-width: 64rem) {
+    .home-hero-height {
+      min-height: calc(100svh - 10.4375rem);
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .home-hero-height {
+      min-height: calc(100svh - 11.4375rem);
     }
   }
 

@@ -1,11 +1,14 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
+import type { ReactNode } from "react";
 
 import { gsap, prefersReducedMotion } from "@/lib/motion";
 
 /**
- * Counts a metric up once, when the strip reaches the viewport.
+ * Gives every metric in the strip one shared progress value and one shared
+ * ScrollTrigger. This guarantees that all four counters begin on the same
+ * frame, regardless of where their individual text nodes sit in the viewport.
  *
  * The tween writes straight to `textContent` through a ref, no React state,
  * so no re-render per frame. The final value is also rendered server-side and
@@ -15,58 +18,86 @@ import { gsap, prefersReducedMotion } from "@/lib/motion";
  * Slovenian formatting throughout: `.` groups thousands, `,` is the decimal
  * separator.
  */
-export function CountUp({
-  value,
-  decimals = 0,
-  suffix = "",
-  formatted,
+export function CountUpGroup({
+  metrics,
+  children,
+  className,
 }: {
-  value: number;
-  decimals?: number;
-  suffix?: string;
-  /** The finished string, rendered on the server and read by screen readers. */
-  formatted: string;
+  metrics: ReadonlyArray<{
+    value: number;
+    decimals?: number;
+    suffix?: string;
+  }>;
+  children: ReactNode;
+  className?: string;
 }) {
-  const ref = useRef<HTMLSpanElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    if (prefersReducedMotion()) return;
+    const root = rootRef.current;
+    if (!root || prefersReducedMotion()) return;
+
+    const nodes = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-trust-counter]"),
+    );
+    if (nodes.length !== metrics.length) return;
 
     // Slovenian CLDR does not group four-digit numbers, so `1500` would come
     // back as "1500" and drift from the server-rendered "1.500+". Grouping is
     // forced so the animated value and the accessible one always agree.
-    const format = (n: number) =>
-      n.toLocaleString("sl-SI", {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-        useGrouping: "always",
-      }) + suffix;
+    const format = (value: number, index: number) => {
+      const metric = metrics[index];
+      const decimals = metric.decimals ?? 0;
 
-    const counter = { current: 0 };
-    node.textContent = format(0);
+      return (
+        value.toLocaleString("sl-SI", {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+          useGrouping: "always",
+        }) + (metric.suffix ?? "")
+      );
+    };
+
+    const progress = { value: 0 };
+    nodes.forEach((node, index) => {
+      node.textContent = format(0, index);
+    });
 
     const context = gsap.context(() => {
-      gsap.to(counter, {
-        current: value,
+      gsap.to(progress, {
+        value: 1,
         duration: 1.5,
         ease: "power2.out",
         onUpdate: () => {
-          node.textContent = format(counter.current);
+          nodes.forEach((node, index) => {
+            node.textContent = format(
+              metrics[index].value * progress.value,
+              index,
+            );
+          });
         },
-        scrollTrigger: { trigger: node, start: "top 90%", once: true },
+        scrollTrigger: { trigger: root, start: "top 92%", once: true },
       });
-    }, node);
+    }, root);
 
     return () => context.revert();
-  }, [value, decimals, suffix]);
+  }, [metrics]);
+
+  return (
+    <div ref={rootRef} className={className}>
+      {children}
+    </div>
+  );
+}
+
+/** Server-rendered final value with a client-animation target beside it. */
+export function CountUp({ formatted }: { formatted: string }) {
 
   return (
     <>
       {/* Announced once, in its final form. */}
       <span className="sr-only">{formatted}</span>
-      <span ref={ref} aria-hidden>
+      <span data-trust-counter aria-hidden>
         {formatted}
       </span>
     </>

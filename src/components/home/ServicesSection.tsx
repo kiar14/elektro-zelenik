@@ -8,18 +8,18 @@ import { RevealGroup } from "@/components/motion/RevealGroup";
 import { homeServices } from "@/content/homepage";
 
 /**
- * Six services, three and three.
+ * Seven services: two full rows of three and a centred final card.
  *
  * The photograph is the card: it sits on the page background with no container
- * around it, no shadow and only a small radius, so the images carry the
- * section and the type sits quietly beneath them. The green Lucide mark next
+ * around it and only a small radius, so the images carry the section and the
+ * type sits quietly beneath them. Hover adds only restrained elevation. The green Lucide mark next
  * to each title identifies the service; the company logo is not repeated here,
  * because it already appears in the header and the footer.
  */
 export function ServicesSection() {
   return (
     <section aria-labelledby="storitve-naslov" className="bg-ground">
-      <Container className="py-20 lg:py-28">
+      <Container width="wide" className="py-20 lg:py-28">
         <SectionHeading
           id="storitve-naslov"
           eyebrow="Storitve"
@@ -29,22 +29,33 @@ export function ServicesSection() {
 
         <RevealGroup
           stagger={0.055}
-          className="mt-14 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-x-10"
+          className="mt-14 grid gap-x-8 gap-y-16 sm:grid-cols-2 lg:mt-20 xl:grid-cols-3 xl:gap-x-12 xl:gap-y-18"
         >
-          {homeServices.map((service) => (
-            <article key={service.href} data-reveal>
-              <Link href={service.href} className="group block">
-                <div className="relative aspect-[3/2] overflow-hidden rounded-lg bg-surface-sunk">
+          {homeServices.map((service, index) => (
+            <article
+              key={service.title}
+              data-reveal
+              className={
+                index === homeServices.length - 1
+                  ? "sm:col-span-2 sm:mx-auto sm:w-[calc(50%-1rem)] xl:col-span-1 xl:col-start-2 xl:mx-0 xl:w-auto"
+                  : undefined
+              }
+            >
+              <Link
+                href={service.href}
+                className="group block transition-transform duration-250 ease-standard hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden rounded-lg border border-transparent bg-surface-sunk transition-[border-color,box-shadow] duration-250 ease-standard group-hover:border-border-strong group-hover:shadow-raised motion-reduce:transition-none">
                   <Image
                     src={service.image}
                     alt={service.alt}
                     fill
-                    sizes="(min-width: 1024px) 32vw, (min-width: 640px) 46vw, 100vw"
+                    sizes="(min-width: 1280px) 32vw, (min-width: 640px) 46vw, 100vw"
                     className="object-cover transition-transform duration-500 ease-standard group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                   />
                 </div>
 
-                <div className="mt-6 flex items-center gap-2.5">
+                <div className="mt-7 flex items-center gap-2.5">
                   <service.icon
                     aria-hidden
                     className="size-[22px] shrink-0 text-brand-strong"
@@ -55,7 +66,7 @@ export function ServicesSection() {
                   </h3>
                 </div>
 
-                <p className="mt-3 max-w-prose text-base text-ink-muted">
+                <p className="mt-3 max-w-[44ch] text-base text-ink-muted">
                   {service.body}
                 </p>
 
