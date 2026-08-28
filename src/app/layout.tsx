@@ -60,8 +60,14 @@ export default function RootLayout({
         <SkipLink />
         <SiteHeader />
         {/* tabIndex makes the skip link actually move focus, not just scroll.
-            The ring is suppressed because the skip link is the affordance. */}
-        <main id="main" tabIndex={-1} className="focus:outline-none">
+            The ring is suppressed because the skip link is the affordance.
+
+            `isolate` puts every page section into one stacking context beneath
+            the header, so no full-bleed layer inside a page can ever paint or
+            hit-test above the navigation, whatever creates a stacking context
+            inside it. The homepage hero now runs underneath the header, which
+            makes that a guarantee worth having rather than an assumption. */}
+        <main id="main" tabIndex={-1} className="isolate focus:outline-none">
           {children}
         </main>
         <SiteFooter />

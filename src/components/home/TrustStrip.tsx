@@ -1,5 +1,5 @@
+import { CountUp, CountUpGroup } from "@/components/home/CountUp";
 import { Container } from "@/components/layout/Container";
-import { RevealGroup } from "@/components/motion/RevealGroup";
 import { trustMetrics } from "@/content/homepage";
 
 /**
@@ -10,23 +10,26 @@ import { trustMetrics } from "@/content/homepage";
  * separators sit precisely on the 25 / 50 / 75 boundaries. Nothing is aligned
  * to a cell's left edge.
  *
- * The layout, the grid rows, the heights, the type scale and the spacing are
- * the approved ones and are not to be adjusted here. The only thing that
- * changed in the visual pass is the surface: the strip is graphite rather than
- * warm stone, so that it belongs to the photograph above it instead of starting
- * the page's pale sections a screen early. The values and labels take the
- * light-on-dark pair for that reason and nothing else.
+ * The layout, the grid rows, the heights, the type scale and the counting are
+ * the approved ones. The only thing the visual pass changed is the surface: the
+ * strip is graphite rather than warm stone, so it belongs to the photograph
+ * above it instead of starting the page's pale sections a screen early. The
+ * values and labels take the light-on-dark pair for that reason and nothing
+ * else.
+ *
+ * On a desktop the counting starts on landing, without a scroll: the hero is
+ * sized so that the photograph and this band together are exactly one viewport,
+ * so the strip is always part of the first screen. See CountUpGroup.
  */
 export function TrustStrip() {
   return (
     <section aria-label="Podjetje v številkah" className="bg-graphite">
       <Container width="wide">
-        <RevealGroup stagger={0.06}>
+        <CountUpGroup metrics={trustMetrics}>
           <ul className="grid grid-cols-2 lg:grid-cols-4">
             {trustMetrics.map((metric, index) => (
               <li
                 key={metric.label}
-                data-reveal
                 data-trust-column
                 className={[
                   "grid min-h-[132px] grid-rows-[auto_2.9em] content-center items-start px-3 py-8 text-center",
@@ -39,7 +42,7 @@ export function TrustStrip() {
                 ].join(" ")}
               >
                 <p className="w-full font-display text-[clamp(2.5rem,6vw,3.5rem)] leading-none font-semibold tabular-nums text-on-photo lg:text-[2.75rem] xl:text-[3rem] 2xl:text-[3.25rem]">
-                  {metric.formatted}
+                  <CountUp formatted={metric.formatted} />
                 </p>
                 <p className="mx-auto mt-2 flex max-w-[18ch] items-start justify-center text-eyebrow font-semibold uppercase text-on-photo-muted">
                   {metric.label}
@@ -47,7 +50,7 @@ export function TrustStrip() {
               </li>
             ))}
           </ul>
-        </RevealGroup>
+        </CountUpGroup>
       </Container>
     </section>
   );

@@ -38,8 +38,15 @@ export function HomeHero() {
     // `.site-header[data-homepage]` in globals.css.
     <section aria-labelledby="hero-title" className="relative bg-ink">
       {/* The photograph is the hero. It fills the section edge to edge; the copy
-          sits over it, never beside it. */}
-      <div className="absolute inset-0 overflow-hidden">
+          sits over it, never beside it.
+
+          `pointer-events-none` is load-bearing now that this layer reaches the
+          very top of the document and therefore lies underneath the header.
+          Nothing in here is interactive, and a decorative full-bleed layer
+          spanning the navigation has no business being in the hit-testing path
+          at all: the header wins on z-index today, but that is a guarantee this
+          layer should not be relying on. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <Image
           src={HERO_FRAMES.unlit}
           alt={HERO_FRAMES.alt}
