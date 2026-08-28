@@ -20,7 +20,6 @@ export function ReferencesSection() {
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <SectionHeading
             id="reference-naslov"
-            eyebrow="Reference"
             title="Izvedeni projekti"
             lead="Projekti s področja elektroinštalacij, razsvetljave, tehničnih sistemov in sorodnih elektro rešitev."
           />

@@ -7,11 +7,11 @@ import { CenteredHeading } from "@/components/ui/SectionHeading";
 import { whyCards } from "@/content/homepage";
 
 /**
- * Six practical reasons to choose the company. The main statistics already
+ * Five practical reasons to choose the company. The main statistics already
  * live beneath the hero, so this section focuses on customer-facing benefits.
  *
  * The heading and the cards are the shared centred heading and the shared
- * benefit-card family; `/o-podjetju` renders the same six through the same two
+ * benefit-card family; `/o-podjetju` renders the same five through the same two
  * components rather than restating them.
  */
 export function WhyZelenik() {
@@ -20,7 +20,6 @@ export function WhyZelenik() {
       <Container width="wide" className="py-20 lg:py-24">
         <CenteredHeading
           id="zakaj-naslov"
-          eyebrow="Zakaj izbrati nas"
           title="Izkušnje, strokovno svetovanje in zanesljiva izvedba"
           titleWidth="wide"
           lead="Z elektroinštalacijami se ukvarjamo od leta 2000. Strankam pomagamo pri izbiri ustrezne rešitve, dogovorjena dela izvedemo kakovostno in poskrbimo, da je pot od prvega dogovora do zaključka čim bolj jasna."

@@ -1,98 +1,110 @@
-import { Check, Info } from "lucide-react";
-
 import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/motion/RevealGroup";
+import {
+  TechnicalChips,
+  TechnicalGrid,
+} from "@/components/sections/TechnicalGrid";
 import type { ServiceSection } from "@/content/services";
 import { cn } from "@/lib/cn";
 
 /**
- * The editorial body of an inner page.
+ * The editorial body of a service page.
  *
- * This used to be one shape repeated: a small heading on the left, a paragraph
- * on the right, a hairline, and the same again. Technically clean, but a page
- * built entirely out of it has no hierarchy and no rhythm, and the seven
- * service pages all looked like the same page with different words in it.
+ * Two problems were fixed here at once.
  *
- * There are now five block layouts. Each section names the one that fits what
- * it is actually saying, so the sequence differs from service to service:
+ * The first was tonal. The body alternated ground and warm stone strictly by
+ * index, which produced the white / beige / white / beige rhythm that made
+ * every service page look like the same page with different words in it. Tone
+ * is now chosen by what a block is doing: scope grids and side-by-side columns
+ * sit on white, and the one long-form argument on the page takes the warm band.
+ * Most pages therefore have exactly one stone section rather than three, and
+ * the dark weight comes from the process band below instead.
  *
- *   feature    an opening statement with the scope of the service laid out
- *              beneath it as a grid of capability tiles
- *   list       a checked list as the main event, headed by a short intro
- *   editorial  one long-form argument, with its second paragraph pulled out
- *              against a brand rule
- *   split      two paragraphs set side by side under one heading
- *   note       a short, single-paragraph aside in a bordered panel
+ * The second was density. Every block used to open at the same distance from
+ * the one above it and close at the same distance from the one below, so four
+ * blocks of very different importance were given identical space. A scope grid
+ * and a two-column pair are now noticeably tighter than the argument block,
+ * which is the one thing on the page that is allowed to breathe.
  *
- * Surfaces alternate strictly by index rather than by layout, so no two blocks
- * of the same tone ever sit on top of one another and every layout has to work
- * on both. Every block heading sits at `text-subheading`, one clear step under
- * the `text-heading` the page-level bands use, which is what keeps the page
- * reading h1 > band > block rather than as a run of similar-sized type.
- *
- * The vocabulary is entirely the site's existing one: the same tokens, the same
- * brand rule, the same brand-tint disc, the same 12px radius. What is new is the
- * arrangement, not the language.
+ * Where two neighbouring blocks share a tone they are separated by a hairline
+ * rather than by a change of colour. That is deliberate: a border is a quieter
+ * way to say "new section" than a band, and the page needs fewer bands.
  */
 
 type Tone = "ground" | "surface";
 
-const TONES: Record<
-  Tone,
-  { section: string; panel: string; panelBorder: string }
-> = {
-  ground: {
-    section: "bg-ground",
-    panel: "bg-surface",
-    panelBorder: "border-border",
-  },
-  surface: {
-    section: "border-y border-border bg-surface",
-    panel: "bg-ground",
-    panelBorder: "border-border",
-  },
+const TONES: Record<Tone, string> = {
+  ground: "bg-ground",
+  surface: "bg-surface",
 };
+
+/**
+ * Tone by role, not by index.
+ *
+ * The first block is always white, because every service page opens on the warm
+ * stone hero and a stone block directly under it would read as one band running
+ * from the breadcrumbs to the middle of the page. After that the long-form
+ * argument takes the warm band and everything else stays white. A section may
+ * name its own surface where a page's particular sequence needs the warm band
+ * somewhere else; alarmni-sistemi is the one page that does.
+ */
+function toneFor(
+  section: ServiceSection,
+  index: number,
+  previous: Tone | null,
+): Tone {
+  if (section.surface) return section.surface;
+  if (index === 0) return "ground";
+  if ((section.layout ?? "feature") === "editorial" && previous !== "surface") {
+    return "surface";
+  }
+  return "ground";
+}
+
+/**
+ * Resolves every block's tone in one pass, because each one depends on the one
+ * before it. Kept outside the component so nothing is mutated during render.
+ */
+function resolveTones(sections: readonly ServiceSection[]) {
+  return sections.reduce<
+    { section: ServiceSection; tone: Tone; repeatsTone: boolean }[]
+  >((accumulated, section, index) => {
+    const previous = accumulated[index - 1]?.tone ?? null;
+    const tone = toneFor(section, index, previous);
+    accumulated.push({ section, tone, repeatsTone: previous === tone });
+    return accumulated;
+  }, []);
+}
 
 export function ContentSections({
   sections,
   className,
-  /** Tone of the first block. The rest alternate from it. */
-  startTone = "ground",
 }: {
   sections: readonly ServiceSection[];
   className?: string;
-  startTone?: Tone;
 }) {
+  const resolved = resolveTones(sections);
+
   return (
     <>
-      {sections.map((section, index) => {
-        const tone: Tone =
-          (index % 2 === 0) === (startTone === "ground") ? "ground" : "surface";
-
-        return (
-          <Block
-            key={section.title}
-            section={section}
-            tone={tone}
-            className={index === 0 ? className : undefined}
-          />
-        );
-      })}
+      {resolved.map(({ section, tone, repeatsTone }, index) => (
+        <Block
+          key={section.title}
+          section={section}
+          tone={tone}
+          className={cn(
+            index === 0 ? className : undefined,
+            // A change of tone already reads as a new section. Where the tone
+            // is the same, one hairline does the same job without adding
+            // another band to the page.
+            repeatsTone && "border-t border-border",
+            // The body always closes against whatever follows it.
+            index === resolved.length - 1 && "border-b border-border",
+          )}
+        />
+      ))}
     </>
   );
-}
-
-/**
- * The tone the body ends on, so whatever follows can take the other one and
- * two identical bands never stack.
- */
-export function bodyEndTone(
-  sections: readonly { title: string }[],
-  startTone: Tone = "ground",
-): Tone {
-  const last = sections.length - 1;
-  if (last < 0) return startTone;
-  return (last % 2 === 0) === (startTone === "ground") ? "ground" : "surface";
 }
 
 function Block({
@@ -105,217 +117,170 @@ function Block({
   className?: string;
 }) {
   const layout = section.layout ?? "feature";
-  const styles = TONES[tone];
+  // The argument block is the one allowed the full band, and only when it
+  // actually carries the pulled-out line that earns it. An editorial block
+  // that is a heading and one paragraph gets the tighter band like everything
+  // else, otherwise it reads as a section with a hole in the bottom of it.
+  const roomy = layout === "editorial" && Boolean(section.body2);
 
   return (
-    <section className={cn(styles.section, className)}>
-      <Container width="wide" className="py-18 lg:py-24">
+    <section className={cn(TONES[tone], className)}>
+      <Container
+        width="wide"
+        className={roomy ? "py-20 lg:py-28" : "py-16 lg:py-20"}
+      >
         <RevealGroup>
-          {layout === "feature" ? (
-            <Feature section={section} styles={styles} />
-          ) : null}
-          {layout === "list" ? (
-            <ChecklistBlock section={section} styles={styles} />
-          ) : null}
+          {layout === "feature" ? <Scope section={section} /> : null}
+          {layout === "list" ? <Scope section={section} stacked /> : null}
           {layout === "editorial" ? <Editorial section={section} /> : null}
-          {layout === "split" ? (
-            <Split section={section} styles={styles} />
-          ) : null}
-          {layout === "note" ? (
-            <Note section={section} styles={styles} />
-          ) : null}
+          {layout === "split" ? <Split section={section} /> : null}
+          {layout === "note" ? <Note section={section} /> : null}
         </RevealGroup>
       </Container>
     </section>
   );
 }
 
-type Styles = (typeof TONES)[Tone];
-
 /* -------------------------------------------------------------------------
- * feature
+ * feature / list - what the service covers
  * ---------------------------------------------------------------------- */
 
 /**
- * The opening block. The heading holds the left third and stays put while the
- * argument scrolls past it; the scope of the service then lands underneath as
- * tiles, which is the shape someone scanning for "do they do the thing I need"
- * can actually read.
+ * The scope block: what the service covers, as a technical grid, under a head
+ * that comes in two shapes.
+ *
+ * `feature` sets the heading on the left and the short explanation on the
+ * right, on one baseline. That is the shape a page-opening statement wants: two
+ * columns of unequal weight, rather than a heading stacked above a paragraph
+ * that then runs the full width of the page, which is the shape a document has.
+ *
+ * `stacked` is the quieter one, for a block that qualifies something already
+ * argued above it rather than opening the page. It carries the brand rule and
+ * holds both heading and explanation to a narrow measure.
  */
-function Feature({ section, styles }: { section: ServiceSection; styles: Styles }) {
+function Scope({
+  section,
+  stacked = false,
+}: {
+  section: ServiceSection;
+  stacked?: boolean;
+}) {
+  // Four short items read better as a square than as a row of three with one
+  // cell stretched across the gap. Every other count takes three columns.
+  const columns = section.bullets?.length === 4 ? 2 : 3;
+
   return (
     <>
-      <div
-        data-reveal
-        className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:gap-16"
-      >
-        <h2 className="text-subheading text-ink lg:sticky lg:top-28 lg:self-start">
+      {stacked ? (
+        <div data-reveal className="max-w-[52rem]">
           <span aria-hidden className="mb-6 block h-px w-10 bg-brand" />
-          {section.title}
-        </h2>
-
-        <div>
+          <h2 className="text-subheading text-ink">{section.title}</h2>
           {section.body ? (
-            <p className="max-w-prose text-lead text-ink-muted">
+            <p className="mt-6 max-w-[58ch] text-lead text-ink-muted">
               {section.body}
             </p>
           ) : null}
-          {section.body2 ? (
-            <p className="mt-5 max-w-prose text-lead text-ink-muted">
-              {section.body2}
+        </div>
+      ) : (
+        <div
+          data-reveal
+          className="grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:items-end lg:gap-16"
+        >
+          <h2 className="max-w-[16ch] text-subheading text-ink">
+            {section.title}
+          </h2>
+
+          {section.body ? (
+            <p className="max-w-[58ch] text-lead text-ink-muted">
+              {section.body}
             </p>
           ) : null}
         </div>
-      </div>
+      )}
 
       {section.bullets ? (
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:mt-16 xl:grid-cols-3">
-          {section.bullets.map((bullet) => (
-            <li
-              key={bullet}
-              data-reveal
-              className={cn(
-                "flex items-center gap-4 rounded-lg border px-5 py-4.5",
-                styles.panel,
-                styles.panelBorder,
-              )}
-            >
-              <span
-                aria-hidden
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-tint"
-              >
-                <Check className="size-5 text-brand-strong" strokeWidth={2.1} />
-              </span>
-              <span className="text-base font-medium text-ink">{bullet}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </>
-  );
-}
-
-/* -------------------------------------------------------------------------
- * list
- * ---------------------------------------------------------------------- */
-
-/** The list is the point of the block, so it gets the width and the intro sits
- *  above it rather than beside it. */
-function ChecklistBlock({
-  section,
-  styles,
-}: {
-  section: ServiceSection;
-  styles: Styles;
-}) {
-  return (
-    <>
-      <div data-reveal className="max-w-[52rem]">
-        <span aria-hidden className="mb-6 block h-px w-10 bg-brand" />
-        <h2 className="text-subheading text-ink">{section.title}</h2>
-        {section.body ? (
-          <p className="mt-6 max-w-prose text-lead text-ink-muted">
-            {section.body}
-          </p>
-        ) : null}
-        {section.body2 ? (
-          <p className="mt-5 max-w-prose text-lead text-ink-muted">
-            {section.body2}
-          </p>
-        ) : null}
-      </div>
-
-      {section.bullets ? (
-        <ul
-          data-reveal
-          className={cn(
-            "mt-10 grid overflow-hidden rounded-lg border sm:grid-cols-2 lg:mt-12",
-            styles.panel,
-            styles.panelBorder,
-          )}
-        >
-          {section.bullets.map((bullet, index, all) => (
-            <li
-              key={bullet}
-              className={cn(
-                "flex min-h-[4.5rem] items-center gap-4 px-5 py-4 sm:px-7",
-                // Hairlines between rows only, never a border on every side.
-                index > 0 && "border-t border-border",
-                index === 1 && "sm:border-t-0",
-                index % 2 === 1 && "sm:border-l sm:border-l-border",
-                // An odd last item runs the full width, so the rule above it
-                // reaches both edges of the panel instead of stopping halfway
-                // across at an empty cell.
-                index === all.length - 1 &&
-                  all.length % 2 === 1 &&
-                  "sm:col-span-2",
-              )}
-            >
-              <span
-                aria-hidden
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-tint"
-              >
-                <Check className="size-5 text-brand-strong" strokeWidth={2.1} />
-              </span>
-              <span className="text-base font-medium text-ink">{bullet}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </>
-  );
-}
-
-/* -------------------------------------------------------------------------
- * editorial
- * ---------------------------------------------------------------------- */
-
-/**
- * One argument, given room. The heading runs at section scale, the first
- * paragraph carries it and the second is pulled out against the brand rule,
- * which is where the block earns its weight without a card or a box.
- */
-function Editorial({ section }: { section: ServiceSection }) {
-  return (
-    <div data-reveal className="max-w-[54rem]">
-      <span aria-hidden className="mb-6 block h-px w-10 bg-brand" />
-      <h2 className="max-w-[18ch] text-subheading text-ink">{section.title}</h2>
-
-      {section.body ? (
-        <p className="mt-7 max-w-prose text-lead text-ink-muted">
-          {section.body}
-        </p>
+        <div data-reveal>
+          <TechnicalGrid
+            items={section.bullets}
+            columns={columns}
+            className="mt-10 lg:mt-12"
+          />
+        </div>
       ) : null}
 
       {section.body2 ? (
-        <p className="mt-9 max-w-[46rem] border-l-2 border-brand pl-6 text-xl text-ink sm:pl-8">
+        <p
+          data-reveal
+          className="mt-10 max-w-[58ch] text-base text-ink-muted lg:mt-12"
+        >
           {section.body2}
         </p>
       ) : null}
+    </>
+  );
+}
 
-      {section.bullets ? (
-        <ul className="mt-9 flex flex-wrap gap-x-3 gap-y-3">
-          {section.bullets.map((bullet) => (
-            <li
-              key={bullet}
-              className="inline-flex items-center gap-2.5 rounded-control border border-border-strong px-4 py-2.5 text-base text-ink"
-            >
-              <span aria-hidden className="size-1.5 rounded-full bg-brand" />
-              {bullet}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+/* -------------------------------------------------------------------------
+ * editorial - one argument, and the line it turns on
+ * ---------------------------------------------------------------------- */
+
+/**
+ * The page's long-form block. The heading holds a narrow left column and stays
+ * put while the argument scrolls past it; the first paragraph carries the
+ * argument and the second is the line it turns on, pulled out at larger type
+ * against a brand rule.
+ *
+ * No card. The whole point of the block is that a statement can be given weight
+ * by type, measure and one rule, which is a great deal quieter than putting a
+ * paragraph inside a rounded rectangle and calling that emphasis.
+ */
+function Editorial({ section }: { section: ServiceSection }) {
+  return (
+    <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,1fr)]">
+      <div data-reveal>
+        <span aria-hidden className="mb-6 block h-px w-10 bg-brand" />
+        <h2 className="max-w-[15ch] text-subheading text-ink lg:sticky lg:top-32">
+          {section.title}
+        </h2>
+      </div>
+
+      <div data-reveal>
+        {section.body ? (
+          <p className="max-w-[62ch] text-lead text-ink-muted">
+            {section.body}
+          </p>
+        ) : null}
+
+        {section.body2 ? (
+          <p className="mt-9 max-w-[52ch] border-l-2 border-brand pl-6 text-xl leading-[1.45] text-ink sm:pl-8">
+            {section.body2}
+          </p>
+        ) : null}
+
+        {section.bullets ? (
+          <TechnicalChips items={section.bullets} className="mt-9" />
+        ) : null}
+      </div>
     </div>
   );
 }
 
 /* -------------------------------------------------------------------------
- * split
+ * split - two positions of equal weight
  * ---------------------------------------------------------------------- */
 
-/** Two paragraphs of equal weight, read side by side rather than in sequence. */
-function Split({ section, styles }: { section: ServiceSection; styles: Styles }) {
+/**
+ * Two paragraphs read side by side, divided by one vertical rule.
+ *
+ * Where the two positions are named things rather than two halves of one
+ * thought, each column carries its own number and title. That numbering is the
+ * only ornament in the block: no cards, no panels, no tinted background. A rule
+ * between two columns is enough to say they are a pair, and it is the cheapest
+ * possible way to say it.
+ */
+function Split({ section }: { section: ServiceSection }) {
+  const columns = section.columns;
+
   return (
     <>
       <div data-reveal className="max-w-[46rem]">
@@ -325,82 +290,90 @@ function Split({ section, styles }: { section: ServiceSection; styles: Styles })
 
       <div
         data-reveal
-        className="mt-9 grid gap-x-16 gap-y-6 border-t border-border pt-9 md:grid-cols-2 lg:mt-11 lg:pt-11"
+        className="mt-10 grid border-t border-border pt-10 md:grid-cols-2 lg:mt-12 lg:pt-12"
       >
-        {section.body ? (
-          <p className="max-w-prose text-lead text-ink-muted">{section.body}</p>
-        ) : null}
-        {section.body2 ? (
-          <p className="max-w-prose text-lead text-ink-muted">
-            {section.body2}
-          </p>
-        ) : null}
+        {columns
+          ? columns.map((column, index) => (
+              <div
+                key={column.title}
+                className={cn(
+                  index === 0 && "md:pr-10 lg:pr-16",
+                  index > 0 &&
+                    "max-md:mt-9 max-md:border-t max-md:border-border max-md:pt-9 md:border-l md:border-border md:pl-10 lg:pl-16",
+                )}
+              >
+                <p className="font-display text-lg font-semibold tabular-nums text-brand-strong">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 text-xl font-semibold tracking-[-0.018em] text-ink">
+                  {column.title}
+                </h3>
+                <p className="mt-4 max-w-[46ch] text-lead text-ink-muted">
+                  {column.body}
+                </p>
+              </div>
+            ))
+          : (
+              <>
+                {section.body ? (
+                  <p className="max-w-[46ch] text-lead text-ink-muted md:pr-10 lg:pr-16">
+                    {section.body}
+                  </p>
+                ) : null}
+                {section.body2 ? (
+                  <p className="max-w-[46ch] text-lead text-ink-muted max-md:mt-9 max-md:border-t max-md:border-border max-md:pt-9 md:border-l md:border-border md:pl-10 lg:pl-16">
+                    {section.body2}
+                  </p>
+                ) : null}
+              </>
+            )}
       </div>
 
       {section.bullets ? (
-        <ul
-          data-reveal
-          className={cn(
-            "mt-10 grid gap-4 rounded-lg border p-5 sm:grid-cols-2 sm:p-7 xl:grid-cols-3",
-            styles.panel,
-            styles.panelBorder,
-          )}
-        >
-          {section.bullets.map((bullet) => (
-            <li key={bullet} className="flex items-start gap-3 text-base text-ink">
-              <span
-                aria-hidden
-                className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-tint"
-              >
-                <Check className="size-3.5 text-brand-strong" strokeWidth={2.2} />
-              </span>
-              {bullet}
-            </li>
-          ))}
-        </ul>
+        <div data-reveal>
+          <TechnicalGrid
+            items={section.bullets}
+            columns={section.bullets.length === 4 ? 2 : 3}
+            className="mt-12"
+          />
+        </div>
       ) : null}
     </>
   );
 }
 
 /* -------------------------------------------------------------------------
- * note
+ * note - a short aside
  * ---------------------------------------------------------------------- */
 
-/** A short aside. One paragraph does not deserve a full band, so it is given a
- *  panel and a mark instead and the section around it stays shallow. */
-function Note({ section, styles }: { section: ServiceSection; styles: Styles }) {
+/**
+ * One short paragraph that has to be said but does not carry the page.
+ *
+ * It used to be a wide bordered panel with a 56px tinted disc and a 26px icon
+ * in it, which gave the least important block on the page the loudest object on
+ * it. It is now a heading and a paragraph held to a narrow measure against a
+ * brand rule, in a shallow section, so it reads as an aside because it is laid
+ * out like one.
+ */
+function Note({ section }: { section: ServiceSection }) {
   return (
     <div
       data-reveal
-      className={cn(
-        "mx-auto flex max-w-[56rem] flex-col gap-5 rounded-lg border px-6 py-7 sm:flex-row sm:gap-7 sm:px-9 sm:py-9",
-        styles.panel,
-        styles.panelBorder,
-      )}
+      className="max-w-[46rem] border-l-2 border-brand pl-6 sm:pl-8"
     >
-      <span
-        aria-hidden
-        className="flex size-13 shrink-0 items-center justify-center rounded-full bg-brand-tint sm:size-14"
-      >
-        <Info className="size-6 text-brand-strong sm:size-[26px]" strokeWidth={1.6} />
-      </span>
-
-      <div>
-        <h2 className="text-xl font-semibold tracking-[-0.018em] text-ink">
-          {section.title}
-        </h2>
-        {section.body ? (
-          <p className="mt-3 max-w-prose text-base text-ink-muted">
-            {section.body}
-          </p>
-        ) : null}
-        {section.body2 ? (
-          <p className="mt-4 max-w-prose text-base text-ink-muted">
-            {section.body2}
-          </p>
-        ) : null}
-      </div>
+      <h2 className="text-xl font-semibold tracking-[-0.018em] text-ink">
+        {section.title}
+      </h2>
+      {section.body ? (
+        <p className="mt-3 max-w-prose text-base text-ink-muted">
+          {section.body}
+        </p>
+      ) : null}
+      {section.body2 ? (
+        <p className="mt-4 max-w-prose text-base text-ink-muted">
+          {section.body2}
+        </p>
+      ) : null}
     </div>
   );
 }

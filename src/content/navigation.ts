@@ -30,9 +30,33 @@ export const primaryNav: readonly NavItem[] = [
   { label: "Kontakt", href: "/kontakt" },
 ];
 
+/**
+ * The two labels the same destination is asked for under.
+ *
+ * `headerCta` is the standing invitation in the navigation and at the foot of
+ * the mobile sheet: it names the thing the visitor sends.
+ *
+ * `quoteCta` is what a page asks for once it has described a piece of work: it
+ * names the thing the visitor gets back. Page heroes and the closing calls to
+ * action use it.
+ *
+ * Two labels, deliberately, and each one is used in exactly one role. Which
+ * label appears where is never decided per page.
+ */
 export const headerCta = {
   label: "Pošlji povpraševanje",
   href: "/povprasevanje",
+} as const;
+
+export const quoteCta = {
+  label: "Pridobite ponudbo",
+  href: "/povprasevanje",
+} as const;
+
+/** The secondary, direct path, on any marketing section. */
+export const callCta = {
+  label: "Pokličite nas",
+  href: company.phone.href,
 } as const;
 
 export const headerPhone = {

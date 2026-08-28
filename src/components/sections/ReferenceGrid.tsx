@@ -42,6 +42,7 @@ export function ReferenceGrid({
           className="lg:col-span-2"
           aspect="aspect-[16/10] lg:aspect-[21/9]"
           sizes="(min-width: 1024px) 76vw, 100vw"
+          radius="rounded-frame"
           lead
         />
       ) : null}
@@ -65,6 +66,8 @@ export function ReferenceCard({
   sizes,
   className,
   lead,
+  /** Larger photography takes the larger of the three radii. */
+  radius = "rounded-lg",
   ...rest
 }: {
   item: ReferenceProject;
@@ -72,11 +75,12 @@ export function ReferenceCard({
   sizes: string;
   className?: string;
   lead?: boolean;
+  radius?: string;
 } & React.HTMLAttributes<HTMLElement>) {
   return (
     <figure className={className} {...rest}>
       <div
-        className={`group relative overflow-hidden rounded-lg bg-surface-sunk ${aspect}`}
+        className={`group relative overflow-hidden bg-surface-sunk ${radius} ${aspect}`}
       >
         <Image
           src={item.cover.src}
@@ -88,11 +92,11 @@ export function ReferenceCard({
       </div>
 
       <figcaption className="mt-5">
-        <span className="text-eyebrow font-semibold uppercase text-brand-strong">
+        <span className="text-eyebrow font-semibold uppercase text-ink-muted">
           {item.category}
         </span>
         <span
-          className={`mt-2 block font-semibold tracking-[-0.015em] text-ink ${
+          className={`mt-2 block font-semibold tracking-[-0.018em] text-ink ${
             lead ? "text-2xl" : "text-xl"
           }`}
         >

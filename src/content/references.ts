@@ -27,6 +27,10 @@
  * TODO_CLIENT: no location, year, scope or client name is documented for any
  * project other than the dental centre. Supply them and the captions can say
  * more than the category.
+ *
+ * The agricultural building ("Gospodarski objekt") was removed at the client's
+ * request. Its photograph is still in `public/images/reference/`; nothing links
+ * to it and nothing should until the client asks for it back.
  */
 
 /**
@@ -77,8 +81,6 @@ const HOUSE_WINTER_ALT =
   "Sodobna dvonivojska stanovanjska hiša na pobočju pozimi, z dovozom in garažo.";
 const DENTAL_WAITING_ALT =
   "Čakalnica zobozdravstvenega centra z linijsko stropno razsvetljavo in osvetlitvijo pod klopjo.";
-const BARN_ALT =
-  "Notranjost hleva z nameščeno rdečo razsvetljavo po celotni dolžini objekta.";
 
 export const references: readonly ReferenceProject[] = [
   /* ---------------------------------------------------------------------- */
@@ -197,34 +199,15 @@ export const references: readonly ReferenceProject[] = [
     ],
   },
 
-  /* ---------------------------------------------------------------------- */
-  {
-    slug: "kmetijski-objekt",
-    category: "Kmetijski objekt",
-    title: "Gospodarski objekt",
-    cover: {
-      src: "/images/reference/kmetijski-objekt-razsvetljava.webp",
-      alt: BARN_ALT,
-    },
-    rows: [
-      {
-        aspect: "9/4",
-        images: [
-          {
-            // Centred rather than hard left: a lone portrait pushed to one edge
-            // of a twelve-column grid reads as a layout that lost its second
-            // cell.
-            span: 4,
-            start: 5,
-            src: "/images/reference/kmetijski-objekt-razsvetljava.webp",
-            alt: BARN_ALT,
-            mobileAspect: "3/4",
-          },
-        ],
-      },
-    ],
-  },
 ];
 
-/** The three shown as single cards on the homepage and on O podjetju. */
-export const homeReferences = references.slice(0, 3);
+/**
+ * The three shown as single cards on the homepage and on O podjetju.
+ *
+ * With the agricultural building removed at the client's request there are
+ * exactly three projects left, so this is the whole list rather than a slice of
+ * it. It stays a named export because the two card surfaces are about "the
+ * selected projects", not "everything we have", and that distinction should
+ * survive the next project being added.
+ */
+export const homeReferences = references;

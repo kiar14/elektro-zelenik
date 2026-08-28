@@ -1,15 +1,18 @@
 import { Container } from "@/components/layout/Container";
-import { ServiceGrid, toServiceCards } from "@/components/sections/ServiceGrid";
+import {
+  ServiceShowcase,
+  toServiceCards,
+} from "@/components/sections/ServiceGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { services } from "@/content/services";
 
 /**
- * Seven services: two full rows of three and a centred final card.
+ * The seven services: Elektroinštalacije as the featured panel, the other six
+ * at equal weight in two rows of three beneath it.
  *
- * Both the card design and the 3 + 3 + 1 arrangement now live in
- * `sections/ServiceGrid`, which `/storitve` and every related-services block
- * also render through. This file supplies the section's own heading and
- * nothing else.
+ * Both the card design and that arrangement live in `sections/ServiceGrid`,
+ * which `/storitve` also renders through. This file supplies the section's own
+ * heading and nothing else.
  */
 export function ServicesSection() {
   return (
@@ -22,10 +25,9 @@ export function ServicesSection() {
           lead="Pokrivamo elektroinštalacije, servis in povezane tehnične sisteme na objektu."
         />
 
-        <ServiceGrid
+        <ServiceShowcase
           items={toServiceCards(services)}
-          layout="feature"
-          className="mt-14 lg:mt-20"
+          className="mt-12 lg:mt-16"
         />
       </Container>
     </section>

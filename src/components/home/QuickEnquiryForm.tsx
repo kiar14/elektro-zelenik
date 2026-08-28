@@ -125,7 +125,7 @@ export function QuickEnquiryForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="btn-solid inline-flex min-h-[52px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70"
+          className="btn-solid inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-control px-7 font-sans text-base font-semibold tracking-[-0.005em] transition-[background-color,box-shadow,transform] duration-200 ease-smooth hover:-translate-y-px active:translate-y-0 disabled:opacity-70 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           Pošlji povpraševanje
           <ArrowRight aria-hidden className="size-[18px]" />

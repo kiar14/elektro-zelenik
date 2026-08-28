@@ -25,7 +25,7 @@ export function RelatedServices({
     <section aria-labelledby={id} className="bg-ground">
       <Container width="wide" className="py-20 lg:py-24">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-          <SectionHeading id={id} eyebrow="Storitve" title={title} />
+          <SectionHeading id={id} title={title} />
           <ActionLink
             href={allServicesLink.href}
             variant="outline"

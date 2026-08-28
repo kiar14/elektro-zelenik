@@ -6,20 +6,22 @@ import { cn } from "@/lib/cn";
 /**
  * The one multi-step treatment used anywhere on the site.
  *
- * This is the approved homepage "Kako poteka sodelovanje" component, lifted out
- * unchanged and given content props. The homepage renders through it, and so
- * does every service page and the enquiry page, which is what guarantees there
- * is exactly one process aesthetic rather than nine similar ones.
- *
  * Wide: even columns, one horizontal rule running behind the markers,
  * everything centred under them. Narrow: the same sequence turned on its side
  * into a vertical timeline, where left-aligned copy simply reads better.
  *
  * Structure comes from whitespace, the rule and the markers. No cards, no
- * borders around steps, no boxes. Only the content and the number of steps
- * change from page to page.
+ * borders around steps, no boxes. Only the content, the number of steps and the
+ * surface change from page to page.
+ *
+ * `graphite` is the default, and it is what makes this component the structural
+ * anchor of the page it sits on. A service page is otherwise white and warm
+ * stone from the hero to the footer, and one dark band in the middle of it is
+ * worth more than any amount of additional decoration in the light sections. It
+ * also happens to be the section that most deserves the weight: the process is
+ * the answer to the question a visitor actually arrived with.
  */
-const MARKER_SIZE = 68;
+const MARKER_SIZE = 64;
 const MARKER_CENTRE = MARKER_SIZE / 2;
 
 export interface ProcessStepItem {
@@ -30,28 +32,43 @@ export interface ProcessStepItem {
 /**
  * The marker's ring punches a hole in the connecting rule, so it has to be
  * painted in the section's own background colour. Getting this wrong is the one
- * way the component can look broken on a different surface, so the two values
- * are declared together rather than being passed in separately.
+ * way the component can look broken on a different surface, so every value a
+ * surface implies is declared together rather than being passed in separately.
  */
 const SURFACES = {
+  graphite: {
+    section: "bg-graphite",
+    ring: "ring-graphite",
+    line: "bg-graphite-line-strong",
+    title: "text-on-photo",
+    body: "text-on-photo-muted",
+    tone: "dark",
+  },
   surface: {
     section: "border-y border-border bg-surface",
     ring: "ring-surface",
+    line: "bg-border-strong",
+    title: "text-ink",
+    body: "text-ink-muted",
+    tone: "light",
   },
   ground: {
     section: "bg-ground",
     ring: "ring-ground",
+    line: "bg-border-strong",
+    title: "text-ink",
+    body: "text-ink-muted",
+    tone: "light",
   },
 } as const;
 
 /**
  * Where the timeline turns from vertical to horizontal.
  *
- * Three or four steps have room to lay out side by side from `lg`, which is the
- * homepage's own behaviour and is left exactly as it was. Five would divide the
- * same row into 160px columns there, which turns a two-word title into two lines
- * and a sentence into six, so the denser case stays in the vertical timeline for
- * one breakpoint longer and turns at `xl` instead.
+ * Three or four steps have room to lay out side by side from `lg`. Five would
+ * divide the same row into 160px columns there, which turns a two-word title
+ * into two lines and a sentence into six, so the denser case stays in the
+ * vertical timeline for one breakpoint longer and turns at `xl` instead.
  *
  * That is not a second layout. It is the same two states the component already
  * has, with the switch placed where the copy can actually live in the column.
@@ -79,7 +96,7 @@ export function ProcessSteps({
   title,
   steps,
   id = "postopek-naslov",
-  surface = "surface",
+  surface = "graphite",
   className,
 }: {
   eyebrow?: string;
@@ -95,19 +112,21 @@ export function ProcessSteps({
 
   return (
     <section aria-labelledby={id} className={cn(tone.section, className)}>
-      <Container width="wide" className="py-20 lg:py-30">
-        <CenteredHeading id={id} eyebrow={eyebrow} title={title} />
+      <Container width="wide" className="py-20 lg:py-28">
+        <CenteredHeading
+          id={id}
+          eyebrow={eyebrow}
+          title={title}
+          tone={tone.tone}
+        />
 
-        <ProcessMotion className="relative mt-16 lg:mt-24">
+        <ProcessMotion className="relative mt-16 lg:mt-22">
           {/* The rule the markers sit on. Wide viewports only. Below that the
               connectors inside each step carry the sequence instead. */}
           <span
             aria-hidden
             data-process-line
-            className={cn(
-              "absolute right-0 left-0 h-px bg-border-strong",
-              bp.line,
-            )}
+            className={cn("absolute right-0 left-0 h-px", tone.line, bp.line)}
             style={{ top: `${MARKER_CENTRE}px` }}
           />
 
@@ -132,7 +151,11 @@ export function ProcessSteps({
                 {index < steps.length - 1 ? (
                   <span
                     aria-hidden
-                    className={cn("absolute -bottom-10 w-px bg-border-strong", bp.connector)}
+                    className={cn(
+                      "absolute -bottom-10 w-px",
+                      tone.line,
+                      bp.connector,
+                    )}
                     style={{
                       left: `${MARKER_CENTRE}px`,
                       top: `${MARKER_SIZE}px`,
@@ -144,7 +167,7 @@ export function ProcessSteps({
                   aria-hidden
                   data-process-marker
                   className={cn(
-                    "relative z-10 flex shrink-0 items-center justify-center rounded-[14px] bg-brand-strong font-display text-xl font-semibold tabular-nums text-white ring-6",
+                    "relative z-10 flex shrink-0 items-center justify-center rounded-lg bg-brand-strong font-display text-xl font-semibold tabular-nums text-white ring-6",
                     tone.ring,
                   )}
                   style={{ width: MARKER_SIZE, height: MARKER_SIZE }}
@@ -153,10 +176,17 @@ export function ProcessSteps({
                 </span>
 
                 <div className={cn("pb-2", bp.copy)}>
-                  <h3 className="text-lg font-semibold tracking-[-0.014em] text-ink">
+                  <h3
+                    className={cn(
+                      "text-lg font-semibold tracking-[-0.014em]",
+                      tone.title,
+                    )}
+                  >
                     {step.title}
                   </h3>
-                  <p className="mt-2.5 text-base text-ink-muted">{step.body}</p>
+                  <p className={cn("mt-2.5 text-base", tone.body)}>
+                    {step.body}
+                  </p>
                 </div>
               </li>
             ))}

@@ -164,26 +164,12 @@ export function HeroReveal({ children }: { children: ReactNode }) {
       }
     };
 
-    const context = gsap.context(() => {
-      /**
-       * Leaving. The copy lifts and dissolves as the hero scrolls past, so the
-       * photograph is handed to the trust strip cleanly instead of the type
-       * sliding up over the roofline. Scrubbed straight off scroll position —
-       * Lenis is already smoothing that value, and a second smoothing pass here
-       * would only add latency to it.
-       */
-      gsap.to(root, {
-        yPercent: -12,
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.closest("section") ?? root,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }, root);
+    // The context exists to own the split and the entrance timeline, both of
+    // which are added to it below once the fonts have resolved. There is no
+    // scroll-linked motion on the hero: the copy simply scrolls away with the
+    // photograph, which is the correct behaviour and one less thing running
+    // per frame.
+    const context = gsap.context(() => {}, root);
 
     /**
      * `context.add` rather than a bare call. Everything here runs a tick or

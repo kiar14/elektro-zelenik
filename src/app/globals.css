@@ -16,6 +16,26 @@
   --color-border: #ddd8d0;
   --color-border-strong: #c4bdb2;
 
+  /* --- Dark anchor -------------------------------------------------------
+     The graphite family. Used for the three structural anchors on the site:
+     the trust strip under the hero, the process band, and the closing call to
+     action.
+
+     It is deliberately several steps lighter than --color-ink, which is the
+     footer. At the first value tried the two were close enough that the
+     homepage's closing call to action and the footer beneath it read as one
+     seven-hundred-pixel block of dark, and the section boundary disappeared.
+     A dark band has to be recognisably not the footer.
+
+     `graphite-raised` is the only surface allowed to sit *inside* a graphite
+     band; `graphite-line` is the only divider. Two values, so a dark section
+     cannot invent its own contrast.
+     ---------------------------------------------------------------------- */
+  --color-graphite: #232a2e;
+  --color-graphite-raised: #2f373c;
+  --color-graphite-line: rgb(255 255 255 / 0.11);
+  --color-graphite-line-strong: rgb(255 255 255 / 0.2);
+
   /* --- Brand -------------------------------------------------------------
      Sampled from the genuine 2023 Zelenik d.o.o. identity files
      (public/brand/zelenik-logo-horizontal.png and zelenik-symbol.png).
@@ -89,18 +109,30 @@
   --text-eyebrow--line-height: 1.2;
   --text-eyebrow--letter-spacing: 0.13em;
 
-  /* --- Radii — restrained. 12px is the ceiling for ordinary UI. ---------- */
+  /* --- Radii -------------------------------------------------------------
+     Deliberately three registers rather than one value applied everywhere,
+     because a page where the technical cell, the service card and the hero
+     photograph share a corner reads as one component stretched to three sizes.
+
+       cell    6px   technical/scope cells, small data rows
+       lg     12px   cards, panels, form surfaces
+       frame  18px   large photography and the hero image slots
+
+     `md` and below remain for chrome that has to stay quiet.
+     ---------------------------------------------------------------------- */
   --radius-xs: 2px;
   --radius-sm: 4px;
+  --radius-cell: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --radius-frame: 18px;
 
   /* Every real control on the site: buttons, submits, inputs, selects, the
      chips in the quick enquiry and the icon buttons in the header. Softer than
      the 4px the site started on and a long way short of a pill, which is the
      shape a service business wants. Declared once so the corner of every
      control moves together. */
-  --radius-control: 8px;
+  --radius-control: 10px;
 
   /* --- Elevation ---------------------------------------------------------
      Elevation comes from borders, tonal surfaces and whitespace. This is the
@@ -109,6 +141,27 @@
      ---------------------------------------------------------------------- */
   --shadow-raised:
     0 1px 1px rgb(20 24 26 / 0.04), 0 14px 30px -18px rgb(20 24 26 / 0.3);
+
+  /* The floating navigation, at rest and once the page has moved under it.
+     Both are one soft, low-opacity cast: the bar has to separate from the page
+     without appearing to hover above it by a centimetre. */
+  --shadow-nav:
+    0 1px 1px rgb(20 24 26 / 0.03), 0 10px 26px -18px rgb(20 24 26 / 0.34);
+  --shadow-nav-scrolled:
+    0 1px 2px rgb(20 24 26 / 0.05), 0 16px 36px -20px rgb(20 24 26 / 0.34);
+
+  /* Elevated interactive surfaces: the enquiry form panel and the light
+     closing call to action. Nothing else. */
+  --shadow-panel:
+    0 1px 2px rgb(20 24 26 / 0.03), 0 24px 48px -34px rgb(20 24 26 / 0.34);
+
+  /* The primary control. The cast is tinted with the brand rather than neutral,
+     which is what stops a green button on a warm ground from looking like it
+     was pasted on. */
+  --shadow-action: 0 1px 1px rgb(20 24 26 / 0.05),
+    0 8px 18px -12px rgb(10 133 36 / 0.6);
+  --shadow-action-hover: 0 1px 2px rgb(20 24 26 / 0.06),
+    0 12px 24px -12px rgb(10 133 36 / 0.62);
 
   /* --- Layout ------------------------------------------------------------ */
   --container-content: 1200px;
@@ -278,24 +331,65 @@
   .btn-solid {
     background-color: var(--color-brand-strong);
     color: #fff;
+    /* Three casts, one object: a hairline of light along the top edge so the
+       control reads as a physical face rather than a filled rectangle, a
+       contact shadow, and one brand-tinted lift. */
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      var(--shadow-action);
   }
 
   .btn-solid:hover {
     background-color: color-mix(
       in oklab,
-      var(--color-brand-strong) 84%,
+      var(--color-brand-strong) 88%,
       var(--color-ink)
     );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      var(--shadow-action-hover);
+  }
+
+  /* Pressed: the lift is withdrawn and the face is pushed in. The transform is
+     handled by the utility on the element, so all that is left here is the
+     light. */
+  .btn-solid:active {
+    box-shadow: inset 0 1px 3px rgb(6 40 14 / 0.34);
   }
 
   .btn-outline {
     border: 1px solid var(--color-border-strong);
+    background-color: #fff;
     color: var(--color-ink);
+    box-shadow: 0 1px 1px rgb(20 24 26 / 0.035);
   }
 
   .btn-outline:hover {
     border-color: var(--color-ink-muted);
-    background-color: var(--color-surface);
+    background-color: var(--color-ground);
+    box-shadow: 0 1px 2px rgb(20 24 26 / 0.06);
+  }
+
+  .btn-outline:active {
+    box-shadow: none;
+  }
+
+  /* The secondary action inside a graphite band. Same geometry as
+     `.btn-outline`, inverted, so the pair keeps its relationship on either
+     surface instead of a dark section growing a button family of its own. */
+  .btn-on-dark {
+    border: 1px solid rgb(255 255 255 / 0.24);
+    background-color: rgb(255 255 255 / 0.07);
+    color: #fff;
+  }
+
+  .btn-on-dark:hover {
+    border-color: rgb(255 255 255 / 0.45);
+    background-color: rgb(255 255 255 / 0.13);
+  }
+
+  .btn-on-dark:active {
+    background-color: rgb(255 255 255 / 0.09);
   }
 
   /* --- Selectable chip ---------------------------------------------------
@@ -379,8 +473,17 @@
      From desktop upward, the first screen is calculated as one composition:
      header + hero + the existing trust strip = 100svh.
 
-     64rem–79.99rem: 65px header + 102px trust strip = 167px.
-     80rem and wider: 69px header + 114px trust strip = 183px. */
+     The header is lifted out of the flow on the homepage from 40rem up (see
+     `.site-header[data-homepage]` below), so the photograph runs to the very
+     top of the document and the navigation floats over it. That leaves only the
+     trust strip to subtract:
+
+     64rem–79.99rem: the 100px strip.
+     80rem and wider: the 112px strip.
+
+     The strip's two hairlines are gone with its warm-stone surface: a light
+     border along the top edge of a graphite band, against the dark photograph
+     above it, would draw a line the design never had. */
   .home-hero-height {
     min-height: clamp(38rem, 86svh, 44rem);
   }
@@ -396,13 +499,13 @@
 
   @media (min-width: 64rem) {
     .home-hero-height {
-      min-height: calc(100svh - 10.4375rem);
+      min-height: calc(100svh - 6.25rem);
     }
   }
 
   @media (min-width: 80rem) {
     .home-hero-height {
-      min-height: calc(100svh - 11.4375rem);
+      min-height: calc(100svh - 7rem);
     }
   }
 
@@ -566,6 +669,29 @@
     animation: backdrop-wash 320ms var(--ease-standard);
   }
 
+  /* --- Header ------------------------------------------------------------
+     Two treatments, one component.
+
+     Below 40rem the header is the plain bar it has always been: a solid ground
+     surface with a hairline that appears on scroll. A phone has no room for a
+     bar inset from both edges, and the homepage's transparent-over-photograph
+     state depends on this shape.
+
+     From 40rem the header itself becomes an empty, FULLY TRANSPARENT rail of
+     fixed height, and the navigation is a translucent bar floating inside it.
+     The rail's height never changes, so the sticky element's contribution to
+     the document is constant and the page cannot shift by a few pixels at the
+     scroll threshold. What changes on scroll is only the bar's own paint and
+     its inner height.
+
+     The rail itself carries no paint at all: no surface, no hairline, no
+     shadow. That has to be stated for the scrolled state as well as the
+     resting one. `.site-header[data-scrolled]` above is more specific than
+     `.site-header`, so without listing it in the reset below it went on
+     reapplying the phone bar's bottom border and shadow at every width, and
+     the result was a full-width translucent band sitting behind the floating
+     navigation on every page. From here up, only the bar is ever visible.
+     ---------------------------------------------------------------------- */
   .site-header {
     background-color: var(--color-ground);
     border-bottom: 1px solid transparent;
@@ -577,6 +703,121 @@
   .site-header[data-scrolled] {
     border-bottom-color: var(--color-border);
     box-shadow: var(--shadow-raised);
+  }
+
+  @media (min-width: 40rem) {
+    .site-header,
+    .site-header[data-scrolled] {
+      display: flex;
+      align-items: center;
+      /* Fixed. See the note above: this is what keeps the scrolled state from
+         costing the document six pixels of height. */
+      height: 5.75rem;
+      background-color: transparent;
+      border-bottom-color: transparent;
+      box-shadow: none;
+    }
+
+    .site-header > * {
+      width: 100%;
+    }
+
+    /* The homepage opens as one uninterrupted photograph, exactly as it
+       already does on a phone. Cancelling the rail's contribution to the flow
+       puts the hero behind it without changing the rail's geometry, so there
+       is no strip of page above the photograph and the first screen is
+       measured against the trust strip alone. */
+    .site-header[data-homepage] {
+      margin-bottom: -5.75rem;
+    }
+
+    .header-shell {
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid var(--color-border);
+      background-color: color-mix(
+        in srgb,
+        var(--color-ground) 76%,
+        transparent
+      );
+      -webkit-backdrop-filter: saturate(170%) blur(16px);
+      backdrop-filter: saturate(170%) blur(16px);
+      box-shadow: var(--shadow-nav);
+      transition:
+        background-color 260ms var(--ease-standard),
+        border-color 260ms var(--ease-standard),
+        box-shadow 260ms var(--ease-standard);
+    }
+
+    /* The inner highlight. A single hairline of light along the top edge,
+       drawn on a pseudo-element so it cannot interfere with the bar's own
+       shadow or with the panel that drops out of it. */
+    .header-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.72);
+    }
+
+    .site-header[data-scrolled] .header-shell {
+      background-color: color-mix(
+        in srgb,
+        var(--color-ground) 93%,
+        transparent
+      );
+      border-color: var(--color-border-strong);
+      box-shadow: var(--shadow-nav-scrolled);
+    }
+
+    /* Higher specificity than the `h-16` utility the row carries for phones,
+       so the desktop heights below win without `!important`. */
+    .site-header .header-row {
+      height: 64px;
+      transition: height 260ms var(--ease-smooth);
+    }
+
+    .site-header[data-scrolled] .header-row {
+      height: 58px;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .site-header,
+    .site-header[data-scrolled] {
+      height: 6rem;
+    }
+
+    .site-header[data-homepage] {
+      margin-bottom: -6rem;
+    }
+
+    .site-header .header-row {
+      height: 68px;
+    }
+
+    .site-header[data-scrolled] .header-row {
+      height: 62px;
+    }
+  }
+
+  /* Without backdrop-filter the translucent fill would put page content
+     straight through the navigation. Fall back to an opaque surface. */
+  @supports not ((backdrop-filter: blur(1px)) or
+    (-webkit-backdrop-filter: blur(1px))) {
+    @media (min-width: 40rem) {
+      .header-shell,
+      .site-header[data-scrolled] .header-shell {
+        background-color: var(--color-ground);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header .header-row {
+      transition: none;
+    }
   }
 
   /* The phone homepage opens as one uninterrupted photograph. Keeping the

@@ -32,22 +32,22 @@ export function SiteFooter() {
 
   return (
     <footer className="bg-ink">
-      <Container width="wide" className="py-14 lg:py-20">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,0.9fr)] lg:gap-16">
+      <Container width="wide" className="py-16 lg:py-20">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1.2fr)_minmax(0,0.9fr)] lg:gap-16 xl:gap-20">
           <div>
             {/* The logo is green on transparent, so it sits correctly on the
                 inverse surface without a second asset. */}
             <BrandLogo className="-ml-0.5" />
 
-            <p className="mt-5 max-w-[34ch] text-sm text-on-photo-muted">
+            <p className="mt-6 max-w-[34ch] text-sm leading-[1.55] text-on-photo-muted">
               {company.legalName}
             </p>
 
-            <ul className="mt-6 space-y-2 text-sm">
-              <li className="flex gap-3 py-2 text-on-photo-muted">
+            <ul className="mt-7 space-y-1 text-sm">
+              <li className="flex gap-3 py-2 leading-[1.6] text-on-photo-muted">
                 <MapPin
                   aria-hidden
-                  className="mt-0.5 size-[18px] shrink-0 text-brand"
+                  className="mt-1 size-[18px] shrink-0 text-brand"
                 />
                 <span>
                   {company.address.street}
@@ -59,7 +59,7 @@ export function SiteFooter() {
                 <a
                   href={company.phone.href}
                   aria-label={headerPhone.accessibleLabel}
-                  className="inline-flex min-h-11 items-center gap-3 text-base font-semibold text-on-photo transition-colors duration-150 ease-standard hover:text-brand"
+                  className="inline-flex min-h-11 items-center gap-3 text-lg font-semibold tracking-[-0.015em] text-on-photo transition-colors duration-150 ease-standard hover:text-brand"
                 >
                   <Phone aria-hidden className="size-[18px] text-brand" />
                   {company.phone.display}
@@ -83,7 +83,7 @@ export function SiteFooter() {
           <FooterNav title="Storitve">
             {/* Two sub-columns from sm to lg, where a single stack of eight
                 would push the next column an entire screen down. */}
-            <ul className="mt-3 grid sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1">
+            <ul className="mt-4 grid sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-1">
               {services.map((service) => (
                 <FooterLink key={service.href} href={service.href}>
                   {service.title}
@@ -96,7 +96,7 @@ export function SiteFooter() {
           </FooterNav>
 
           <FooterNav title="Podjetje">
-            <ul className="mt-3">
+            <ul className="mt-4">
               {COMPANY_LINKS.map((link) => (
                 <FooterLink key={link.href} href={link.href}>
                   {link.label}
@@ -106,7 +106,7 @@ export function SiteFooter() {
           </FooterNav>
         </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/12 pt-6 text-sm text-on-photo-muted lg:mt-16 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-graphite-line pt-7 text-sm text-on-photo-muted lg:mt-18 lg:flex-row lg:items-center lg:justify-between">
           <p>
             © {year} {company.legalName}
           </p>
@@ -131,7 +131,7 @@ function FooterNav({
 }) {
   return (
     <nav aria-label={title}>
-      <h2 className="text-eyebrow font-semibold uppercase text-on-photo-muted">
+      <h2 className="text-eyebrow font-semibold uppercase text-on-photo">
         {title}
       </h2>
       {children}
@@ -153,9 +153,7 @@ function FooterLink({
       <Link
         href={href}
         className={`flex min-h-11 items-center text-sm transition-colors duration-150 ease-standard hover:text-on-photo ${
-          emphasis
-            ? "font-semibold text-brand"
-            : "text-on-photo-muted"
+          emphasis ? "font-semibold text-brand" : "text-on-photo-muted"
         }`}
       >
         {children}

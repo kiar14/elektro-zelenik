@@ -32,6 +32,10 @@ const HERO_FRAMES = {
 
 export function HomeHero() {
   return (
+    // The header is lifted out of the flow on this route, so this section is
+    // the first thing in the document at every width and the photograph runs to
+    // the very top of the page with the navigation floating over it. See
+    // `.site-header[data-homepage]` in globals.css.
     <section aria-labelledby="hero-title" className="relative bg-ink">
       {/* The photograph is the hero. It fills the section edge to edge; the copy
           sits over it, never beside it. */}
@@ -53,9 +57,19 @@ export function HomeHero() {
         <div aria-hidden className="hero-scrim absolute inset-0" />
       </div>
 
+      {/* From `lg` the copy is optically centred in the frame rather than
+          anchored to its foot, so the header no longer being in the flow would
+          otherwise lift it by half the rail's height. The top padding carries
+          that height so the copy lands on exactly the pixel it did before:
+
+            lg   65px header + the approved 80px  = 145px = 9.0625rem
+            xl   69px header + the approved 128px = 197px = 12.3125rem
+
+          The bottom padding is untouched, because the foot of the hero is
+          still the top of the trust strip. */}
       <Container
         width="wide"
-        className="home-hero-height relative flex items-end pb-[4.5rem] sm:pb-16 lg:items-center lg:pt-20 lg:pb-12 xl:pt-32 xl:pb-20"
+        className="home-hero-height relative flex items-end pb-[4.5rem] sm:pb-16 lg:items-center lg:pt-[9.0625rem] lg:pb-12 xl:pt-[12.3125rem] xl:pb-20"
       >
         <HeroReveal>
           <p
@@ -102,19 +116,21 @@ export function HomeHero() {
               data-hero-action
               className="w-full @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
             >
-              Pošlji povpraševanje
+              Pridobite ponudbo
             </ActionLink>
 
+            {/* The number itself is one tap away in the header and is spelled
+                out on Kontakt; here the action is the instruction. */}
             <ActionLink
               href={headerPhone.href}
               variant="outline"
               size="lg"
               aria-label={headerPhone.accessibleLabel}
               data-hero-action
-              className="w-full border-white/50 bg-white/10 text-on-photo hover:border-white hover:bg-white/20 @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
+              className="w-full border-white/45 bg-white/10 text-on-photo shadow-none hover:border-white/80 hover:bg-white/18 @min-[28.5rem]:w-auto @min-[28.5rem]:whitespace-nowrap"
             >
               <Phone aria-hidden className="size-[18px] text-brand" />
-              {headerPhone.label}
+              Pokličite nas
             </ActionLink>
           </div>
         </HeroReveal>

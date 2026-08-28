@@ -5,7 +5,7 @@ import { Breadcrumbs, type Crumb } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/motion/RevealGroup";
 import { ActionLink } from "@/components/ui/ActionLink";
-import { headerCta, headerPhone } from "@/content/navigation";
+import { headerPhone, quoteCta } from "@/content/navigation";
 
 /**
  * The opening band of every page that is not the homepage.
@@ -15,9 +15,16 @@ import { headerCta, headerPhone } from "@/content/navigation";
  * than over a photograph, with no scrim and no lighting sequence. The signature
  * entrance belongs to the homepage and nothing in here competes with it.
  *
- * Where a page has a representative photograph it sits beside the copy in the
- * same rounded, bordered frame the service cards use, so the image treatment is
- * shared rather than invented per page.
+ * Where a page has a representative photograph it sits beside the copy at
+ * roughly 45% of the composition, in the larger of the site's three radii. That
+ * is the one place `--radius-frame` is used on an inner page, and it is what
+ * gives the image enough presence to be the second half of the hero rather than
+ * an illustration parked next to the type.
+ *
+ * The primary action here is "Pridobite ponudbo", not the header's "Pošlji
+ * povpraševanje". Both go to the same page: the header asks for the message,
+ * and a page that has just described a piece of work asks for the thing the
+ * visitor actually wants out of it.
  */
 export function PageHero({
   eyebrow,
@@ -44,7 +51,7 @@ export function PageHero({
       aria-labelledby="stran-naslov"
       className="border-b border-border bg-surface"
     >
-      <Container width="wide" className="pt-6 pb-16 lg:pt-8 lg:pb-24">
+      <Container width="wide" className="pt-5 pb-16 lg:pt-7 lg:pb-20">
         <Breadcrumbs items={crumbs} />
 
         {/* `immediate`: this group is the top of the page and is on screen when
@@ -54,8 +61,8 @@ export function PageHero({
           immediate
           className={
             image
-              ? "mt-10 grid items-center gap-10 lg:mt-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-16"
-              : "mt-10 lg:mt-12"
+              ? "mt-8 grid items-center gap-10 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] lg:gap-14 xl:gap-18"
+              : "mt-8 lg:mt-10"
           }
         >
           <div data-reveal className={image ? undefined : "max-w-[52rem]"}>
@@ -64,25 +71,28 @@ export function PageHero({
               {eyebrow}
             </p>
 
-            <h1 id="stran-naslov" className="mt-5 text-display text-ink">
+            <h1
+              id="stran-naslov"
+              className="mt-5 max-w-[19ch] text-display text-ink"
+            >
               {title}
             </h1>
 
             {lead ? (
-              <p className="mt-6 max-w-prose text-lead text-ink-muted">
+              <p className="mt-6 max-w-[52ch] text-lead text-ink-muted">
                 {lead}
               </p>
             ) : null}
 
             {actions ? (
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <ActionLink
-                  href={headerCta.href}
+                  href={quoteCta.href}
                   variant="solid"
                   size="lg"
                   className="w-full sm:w-auto sm:whitespace-nowrap"
                 >
-                  {headerCta.label}
+                  {quoteCta.label}
                 </ActionLink>
 
                 <ActionLink
@@ -96,7 +106,7 @@ export function PageHero({
                     aria-hidden
                     className="size-[18px] text-brand-strong"
                   />
-                  {headerPhone.label}
+                  Pokličite nas
                 </ActionLink>
               </div>
             ) : null}
@@ -107,14 +117,14 @@ export function PageHero({
           {image ? (
             <div
               data-reveal
-              className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-surface-sunk lg:aspect-[5/4]"
+              className="relative aspect-[16/10] overflow-hidden rounded-frame border border-border bg-surface-sunk sm:aspect-[2/1] lg:aspect-[6/5]"
             >
               <Image
                 src={image}
                 alt={imageAlt ?? ""}
                 fill
                 priority
-                sizes="(min-width: 1024px) 42vw, 100vw"
+                sizes="(min-width: 1024px) 45vw, 100vw"
                 className="object-cover"
               />
             </div>

@@ -243,12 +243,16 @@ export function EnquiryForm({
         .
       </Consent>
 
+      {/* The label names what is actually being sent. Kontakt is a message,
+          /povprasevanje is a brief, and calling both of them the same thing
+          would tell the visitor on Kontakt that they are committing to more
+          than they are. */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold tracking-[-0.005em] transition-colors duration-150 ease-standard disabled:opacity-70 sm:justify-self-start"
+        className="btn-solid inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-control px-7 font-sans text-base font-semibold tracking-[-0.005em] transition-[background-color,box-shadow,transform] duration-200 ease-smooth hover:-translate-y-px active:translate-y-0 disabled:opacity-70 motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:justify-self-start"
       >
-        Pošlji povpraševanje
+        {detailed ? "Pošlji povpraševanje" : "Pošlji sporočilo"}
         <ArrowRight aria-hidden className="size-[18px]" />
       </button>
     </form>
@@ -319,14 +323,14 @@ function PendingDelivery({
       <div className="flex flex-col gap-3 sm:flex-row">
         <a
           href={mailto}
-          className="btn-solid inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+          className="btn-solid inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-control px-7 font-sans text-base font-semibold transition-[background-color,box-shadow,transform] duration-200 ease-smooth hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           <Mail aria-hidden className="size-[18px]" />
           Pošlji po e-pošti
         </a>
         <a
           href={company.phone.href}
-          className="btn-outline inline-flex min-h-[54px] items-center justify-center gap-2.5 rounded-control px-6 font-sans text-base font-semibold transition-colors duration-150 ease-standard"
+          className="btn-outline inline-flex min-h-[50px] items-center justify-center gap-2.5 rounded-control px-7 font-sans text-base font-semibold transition-[background-color,border-color,box-shadow,transform] duration-200 ease-smooth hover:-translate-y-px active:translate-y-0 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           <Phone aria-hidden className="size-[18px] text-brand-strong" />
           {company.phone.display}

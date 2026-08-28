@@ -19,9 +19,9 @@ import type { LucideIcon } from "lucide-react";
  * only way the seven stay identical in all six places.
  *
  * Scope discipline: nothing in this file is inferred. Every claim traces to the
- * company's own current material. Battery storage, EV charging and electrical
- * measurements are registered activities that appear nowhere in that material,
- * so they have no entry here and therefore no route, no card and no link.
+ * company's own current material. Battery storage, photovoltaics, EV charging
+ * and electrical measurements appear nowhere in that material, so they have no
+ * entry here and therefore no route, no card and no link.
  *
  * No em dashes in any user-facing string.
  */
@@ -32,6 +32,15 @@ import type { LucideIcon } from "lucide-react";
  * Chosen per section, by what the section is actually saying, which is what
  * gives the seven service pages seven different rhythms instead of one shape
  * repeated down every page.
+ *
+ *   feature    the scope of the service, under a page-opening head: heading
+ *              left, short explanation right, on one baseline
+ *   list       the same technical grid under a quieter stacked head, for a
+ *              block that qualifies something already argued above it
+ *   editorial  the page's one long-form argument, closed by the line it turns
+ *              on, pulled out against a brand rule
+ *   split      two positions of equal weight, side by side across one rule
+ *   note       a short aside that has to be said but does not carry the page
  */
 export type SectionLayout =
   | "feature"
@@ -40,15 +49,33 @@ export type SectionLayout =
   | "split"
   | "note";
 
+/** One half of a `split` block, where the two halves are named things. */
+export interface SectionColumn {
+  title: string;
+  body: string;
+}
+
 export interface ServiceSection {
   /** Rendered as the section h2. */
   title: string;
   body?: string;
-  /** Optional second paragraph, kept separate so the type stays readable. */
+  /**
+   * The second paragraph. In an `editorial` block this is the pulled-out line,
+   * so it is written as one sentence that can carry that weight, not as a
+   * continuation of the paragraph above it.
+   */
   body2?: string;
-  /** Rendered as a checked list. */
+  /** Rendered as the technical grid, or as compact chips inside `editorial`. */
   bullets?: readonly string[];
+  /** A `split` block whose two halves are named. */
+  columns?: readonly [SectionColumn, SectionColumn];
   layout?: SectionLayout;
+  /**
+   * Overrides the automatic surface. See `toneFor` in ContentSections: tone is
+   * normally decided by role, and this exists for the one page whose sequence
+   * would otherwise carry no warm band at all.
+   */
+  surface?: "ground" | "surface";
 }
 
 export interface FaqItem {
@@ -68,9 +95,9 @@ export interface Service {
   title: string;
   /** Page h1. May be longer and more descriptive than `title`. */
   h1: string;
-  /** One line under the h1. */
+  /** One line under the h1. Also the featured card's body on the two grids. */
   lead: string;
-  /** The homepage / overview card body. Unchanged from the approved homepage. */
+  /** The ordinary service card body. */
   cardBody: string;
   icon: LucideIcon;
   image: string;
@@ -114,21 +141,28 @@ export const services: readonly Service[] = [
         ],
       },
       {
-        // Two paragraphs of similar weight, read side by side.
+        // Two named positions of equal weight, read across one rule.
         title: "Novogradnje in obstoječi objekti",
         layout: "split",
-        body: "Pri novogradnji je največ odločitev smiselno sprejeti še pred zapiranjem sten. Takrat se določijo položaji vtičnic, stikal, razsvetljave, priključkov za naprave in druge instalacije.",
-        body2:
-          "Pri obstoječih objektih najprej preverimo trenutno stanje in skupaj določimo, kaj je smiselno ohraniti, zamenjati ali nadgraditi.",
+        columns: [
+          {
+            title: "Novogradnje",
+            body: "Pri novogradnji je največ odločitev smiselno sprejeti še pred zapiranjem sten. Takrat se določijo položaji vtičnic, stikal, razsvetljave, priključkov za naprave in druge inštalacije.",
+          },
+          {
+            title: "Obstoječi objekti",
+            body: "Pri obstoječem objektu najprej preverimo trenutno stanje in skupaj določimo, kaj je smiselno ohraniti, zamenjati ali nadgraditi.",
+          },
+        ],
       },
       {
         // A long argument closed by one short line, which is exactly what the
         // editorial block's pull-out is for.
         title: "Dobro načrtovanje prihrani poznejše spremembe",
         layout: "editorial",
-        body: "Pred izvedbo je pomembno razmisliti, kje bodo naprave, delovna mesta, svetila in drugi porabniki. Tako lahko instalacijo pripravimo glede na dejansko uporabo prostorov in zmanjšamo potrebo po poznejših posegih.",
+        body: "Pred izvedbo je pomembno razmisliti, kje bodo naprave, delovna mesta, svetila in drugi porabniki. Tako lahko inštalacijo pripravimo glede na dejansko uporabo prostorov in zmanjšamo potrebo po poznejših posegih.",
         body2:
-          "Če niste prepričani, kaj potrebujete, vam pri odločitvah svetujemo pred začetkom del.",
+          "Če še niste prepričani, kaj potrebujete, vam pri odločitvah svetujemo pred začetkom del.",
       },
     ],
     process: {
@@ -137,23 +171,23 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Pošljete osnovne informacije o objektu in tem, kaj potrebujete.",
+          body: "Povejte nam, za kakšen objekt gre in kaj potrebujete.",
         },
         {
-          title: "Ogled in dogovor",
-          body: "Po potrebi si objekt ogledamo ter uskladimo obseg in način izvedbe.",
+          title: "Ogled objekta",
+          body: "Po potrebi si objekt ogledamo in uskladimo obseg del.",
         },
         {
-          title: "Priprava",
-          body: "Določimo pomembne podrobnosti in pripravimo vse potrebno za izvedbo.",
+          title: "Dogovor",
+          body: "Dogovorimo se o rešitvi, terminu in pripravi na izvedbo.",
         },
         {
           title: "Izvedba",
-          body: "Dogovorjena elektro dela izvedemo in uredimo potrebne priklope.",
+          body: "Izvedemo dogovorjena elektro dela in priklope.",
         },
         {
-          title: "Zaključek del",
-          body: "Izvedbo preverimo in ostanemo dosegljivi za nadaljnja vprašanja.",
+          title: "Zaključek",
+          body: "Preverimo izvedbo ter vam predamo potrebne informacije.",
         },
       ],
     },
@@ -196,7 +230,7 @@ export const services: readonly Service[] = [
     sections: [
       {
         title: "Kaj zajema servisiranje",
-        layout: "list",
+        layout: "feature",
         body: "Poleg izvedbe elektroinštalacij prevzemamo tudi posamezna servisna dela na napravah in strojih, ki so na objektu že nameščeni.",
         bullets: [
           "Priklop električnih naprav",
@@ -208,9 +242,9 @@ export const services: readonly Service[] = [
       {
         title: "Kdaj se storitev uporablja",
         layout: "editorial",
-        body: "Najpogosteje takrat, ko je naprava kupljena, objekt pa še nima ustreznega priklopa, ali ko naprava, ki je bila do zdaj v redu, začne delovati drugače kot prej.",
+        body: "Storitev je primerna, ko je treba napravo pravilno priklopiti, odpraviti napako, urediti popravilo ali namestiti oziroma servisirati klimatsko napravo.",
         body2:
-          "Pogosta je tudi kombinacija: ob elektroinštalacijah se hkrati uredi še namestitev klimatske naprave, da se dela na objektu ne podvajajo.",
+          "Pogosto se servisiranje povezuje tudi z elektroinštalacijami, zato lahko več del na objektu uskladimo v enem obisku.",
       },
     ],
     process: {
@@ -219,19 +253,19 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Opis težave",
-          body: "Poveste, za katero napravo gre in kaj ste opazili.",
+          body: "Povejte, za katero napravo gre in kaj ste opazili.",
         },
         {
           title: "Dogovor za termin",
-          body: "Uskladimo termin obiska glede na obseg dela in razpoložljivost.",
+          body: "Uskladimo termin glede na vrsto posega in vašo lokacijo.",
         },
         {
           title: "Pregled na objektu",
-          body: "Napravo pregledamo na mestu in opredelimo, kaj je treba narediti.",
+          body: "Napravo pregledamo in določimo, kaj je treba urediti.",
         },
         {
           title: "Izvedba in preizkus",
-          body: "Dogovorjeno delo izvedemo in delovanje naprave preverimo pred odhodom.",
+          body: "Izvedemo dogovorjeno delo in preverimo pravilno delovanje.",
         },
       ],
     },
@@ -283,18 +317,14 @@ export const services: readonly Service[] = [
         title: "Kje se uporablja",
         layout: "editorial",
         body: "Mrežna napeljava je smiselna povsod, kjer se pričakuje več stalnih naprav na eni lokaciji ali kjer brezžična povezava zaradi razporeditve prostorov ni zanesljiva.",
-        bullets: [
-          "Poslovni objekti",
-          "Trgovski objekti",
-          "Zasebni objekti",
-        ],
+        bullets: ["Poslovni objekti", "Trgovski objekti", "Zasebni objekti"],
       },
       {
         title: "Načrtovanje",
         layout: "split",
-        body: "Mrežno napeljavo je najceneje izvesti hkrati z elektroinštalacijami. Takrat se določi, kje bodo priključna mesta, koliko jih bo in kje bo stala omrežna omara.",
+        body: "Mrežno napeljavo je najbolje izvesti skupaj z elektroinštalacijami. Takrat se določijo lokacije priključnih mest, trase kablov in mesto omrežne omare.",
         body2:
-          "Pri načrtovanju je smiselno računati tudi na to, kar bo prišlo pozneje. Nekaj rezervnih priključnih mest je ob izvedbi majhna postavka, po zaprtju sten pa ne več.",
+          "Pri načrtovanju upoštevamo tudi prihodnje potrebe. Nekaj rezervnih priključnih mest je praviloma lažje pripraviti med izvedbo kot po zaključku sten.",
       },
     ],
     process: {
@@ -303,19 +333,19 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Poveste, za kakšen objekt gre in kaj v njem načrtujete.",
+          body: "Povejte, za kakšen objekt gre in koliko priključnih mest potrebujete.",
         },
         {
           title: "Ogled in razporeditev",
-          body: "Uskladimo število in mesta priključnih točk ter lokacijo omrežne omare.",
+          body: "Uskladimo lokacije priključkov, trase kablov in omrežne omare.",
         },
         {
-          title: "Napeljava",
-          body: "Izvedemo mrežno napeljavo, po možnosti hkrati z elektroinštalacijami.",
+          title: "Napeljave",
+          body: "Izvedemo mrežno napeljavo in pripravimo priključna mesta.",
         },
         {
-          title: "Priklop in zaključek del",
-          body: "Priključna mesta priklopimo, omrežno omaro uredimo in izvedbo skupaj pregledamo.",
+          title: "Priklop in preverjanje",
+          body: "Zaključimo priklope, uredimo omaro in preverimo povezave.",
         },
       ],
     },
@@ -338,13 +368,16 @@ export const services: readonly Service[] = [
       {
         title: "Namen alarmnega sistema",
         layout: "editorial",
-        body: "Alarmni sistem javi, da se je v objektu nekaj zgodilo takrat, ko v njem ni nikogar. Njegova vrednost je odvisna predvsem od tega, kako je razporejen po objektu, in ne od števila nameščenih elementov.",
+        body: "Alarmnega sistema ne načrtujemo samo glede na število senzorjev, ampak glede na sam objekt. Pri postavitvi upoštevamo vhode, dostopne točke, način uporabe in prostore, ki jih želite zaščititi.",
         body2:
-          "Zato se pri montaži najprej pogovorimo o tem, kje so dejanske vstopne točke in kateri prostori so za vas občutljivi.",
+          "Smiselna postavitev se določi pred montažo, saj sistem najbolje deluje takrat, ko je prilagojen dejanskemu objektu.",
       },
       {
+        // The one page whose sequence has no long-form block after the opening
+        // one, so the warm band is named here rather than left to the rule.
         title: "Vrste objektov",
         layout: "list",
+        surface: "surface",
         body: "Razporeditev je pri vsaki vrsti objekta drugačna, ker so drugačne poti, po katerih se v objekt vstopa.",
         bullets: [
           "Stanovanjski objekti",
@@ -355,9 +388,9 @@ export const services: readonly Service[] = [
       {
         title: "Načrtovanje in izvedba",
         layout: "split",
-        body: "Če je objekt v gradnji ali prenovi, je pripravo za alarmni sistem najbolje izvesti hkrati z elektroinštalacijami. Napeljava je takrat še dostopna, kar pozneje ni.",
+        body: "Če je objekt v gradnji ali prenovi, je pripravo za alarmni sistem najbolje predvideti skupaj z elektroinštalacijami. Napeljava je takrat preprostejša in bolj urejena.",
         body2:
-          "V objektih, kjer so dela že zaključena, izvedbo prilagodimo obstoječemu stanju. Kaj je izvedljivo, opredelimo po ogledu.",
+          "Pri že zaključenem objektu izvedbo prilagodimo obstoječemu stanju in možnosti postavitve določimo po ogledu.",
       },
       {
         title: "Sodelovanje s poslovnimi partnerji",
@@ -371,19 +404,19 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Poveste, za kakšen objekt gre in kaj želite zavarovati.",
+          body: "Povejte, za kakšen objekt gre in kaj želite zaščititi.",
         },
         {
           title: "Ogled objekta",
-          body: "Pregledamo vstopne točke in prostore ter uskladimo razporeditev.",
+          body: "Pregledamo dostopne točke, prostore in možnosti namestitve.",
         },
         {
           title: "Montaža",
           body: "Sistem namestimo, po potrebi skupaj s poslovnim partnerjem.",
         },
         {
-          title: "Zaključek del in navodila",
-          body: "Delovanje preverimo in vam pokažemo, kako se sistem uporablja.",
+          title: "Predaja sistema",
+          body: "Preverimo delovanje in razložimo osnovno uporabo.",
         },
       ],
     },
@@ -395,8 +428,8 @@ export const services: readonly Service[] = [
     slug: "video-nadzor",
     href: "/storitve/video-nadzor",
     title: "Video nadzor",
-    h1: "Video nadzor, načrtovanje, montaža in vzdrževanje",
-    lead: "Vzpostavitev video-nadzornih sistemov za poslovne, industrijske in zasebne objekte.",
+    h1: "Video nadzor za poslovne, industrijske in zasebne objekte",
+    lead: "Načrtovanje postavitve, montaža in vzdrževanje video-nadzornih sistemov.",
     cardBody: "Načrtovanje, montaža in vzdrževanje video-nadzornih sistemov.",
     icon: Cctv,
     image: "/images/storitve/video-nadzor.webp",
@@ -416,9 +449,9 @@ export const services: readonly Service[] = [
       {
         title: "Načrtovanje postavitve",
         layout: "editorial",
-        body: "Postavitev odloči, ali bo sistem uporaben. Pomembno je, kaj naj bi bilo dejansko vidno, s katere strani prihaja svetloba čez dan in kje je napeljavo sploh mogoče speljati.",
+        body: "Postavitev kamer določimo glede na to, kaj je treba dejansko pokriti, s katere strani prihaja svetloba in kako je mogoče urediti napeljavo.",
         body2:
-          "Te odločitve sprejmemo skupaj ob ogledu, ker jih po montaži ni več mogoče popraviti brez ponovnega posega v objekt.",
+          "Te odločitve sprejmemo pred montažo, saj lahko pravilna postavitev prepreči nepotrebne posege in izboljša pregled nad objektom.",
       },
       {
         title: "Vrste objektov",
@@ -437,19 +470,19 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Poveste, kakšen objekt je in kaj želite pokriti.",
+          body: "Povejte, kateri objekt želite pokriti in kaj želite nadzorovati.",
         },
         {
-          title: "Ogled in postavitev",
-          body: "Na objektu določimo mesta in preverimo, kod je mogoče speljati napeljavo.",
+          title: "Ogled in načrt",
+          body: "Določimo smiselna mesta kamer ter možnosti napeljave.",
         },
         {
-          title: "Montaža in vzpostavitev",
-          body: "Izvedemo napeljavo, namestimo opremo in sistem vzpostavimo.",
+          title: "Montaža sistema",
+          body: "Izvedemo napeljavo, montažo kamer in vzpostavitev sistema.",
         },
         {
-          title: "Zaključek del in vzdrževanje",
-          body: "Pokažemo, kako se sistem uporablja, po dogovoru pa poskrbimo tudi za vzdrževanje.",
+          title: "Predaja in vzdrževanje",
+          body: "Preverimo delovanje, pokažemo uporabo in se po potrebi dogovorimo za vzdrževanje.",
         },
       ],
     },
@@ -461,7 +494,7 @@ export const services: readonly Service[] = [
     slug: "toplotne-crpalke",
     href: "/storitve/toplotne-crpalke",
     title: "Toplotne črpalke",
-    h1: "Toplotne črpalke Panasonic, dobava in montaža",
+    h1: "Toplotne črpalke Panasonic z montažo in zagonom",
     lead: "Dobava toplotnih črpalk Panasonic, montaža, električni priklop in zagon.",
     cardBody: "Dobava toplotnih črpalk Panasonic, montaža, priklop in zagon.",
     icon: ThermometerSun,
@@ -482,21 +515,21 @@ export const services: readonly Service[] = [
       {
         title: "Izbira in izvedba",
         layout: "split",
-        body: "Pri izbiri je pomembno, kje bo zunanja enota stala, kako je do nje mogoče speljati napeljavo in kako je objekt ogrevan zdaj.",
+        body: "Pri izbiri je pomembno, kje bo zunanja enota stala, kako je do nje mogoče urediti napeljavo in kako je objekt ogrevan.",
         body2:
-          "Kaj je za vaš objekt primerno, se opredeli po ogledu. Brez tega bi šlo za ugibanje, zato številk in modelov vnaprej ne navajamo.",
+          "Primerno rešitev določimo glede na objekt in pogoje na lokaciji. Brez ogleda ne ugibamo o izvedbi ali zahtevnosti montaže.",
       },
       {
         title: "Električni priklop",
         layout: "editorial",
-        body: "Toplotna črpalka je tudi elektro naprava, kar je razlog, da je ta storitev pri nas povezana z elektroinštalacijami.",
+        body: "Toplotna črpalka je tudi električna naprava, zato je pri nas njen priklop povezan z elektroinštalacijami.",
         body2:
-          "Če se objekt gradi ali prenavlja, je priprava za toplotno črpalko del elektroinštalacij in se izvede takrat, ko je to najenostavneje.",
+          "Če se objekt gradi ali prenavlja, lahko pripravo za toplotno črpalko uskladimo skupaj z drugimi elektro deli.",
       },
       {
         title: "Panasonic",
         layout: "note",
-        body: "Dobavljamo in montiramo toplotne črpalke Panasonic. To je edini proizvajalec, ki ga navajamo, ker je edini, ki ga dejansko dobavljamo.",
+        body: "Pri toplotnih črpalkah delamo s Panasonicom. Poskrbimo za dobavo, montažo, električni priklop in zagon sistema, zato posameznih faz ni treba usklajevati z več izvajalci.",
       },
     ],
     process: {
@@ -505,23 +538,23 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Poveste, kakšen objekt je in kako je ogrevan zdaj.",
+          body: "Povejte, za kakšen objekt gre in kaj pričakujete od sistema.",
         },
         {
           title: "Ogled",
-          body: "Pregledamo objekt, možna mesta postavitve in obstoječo napeljavo.",
+          body: "Po potrebi preverimo prostor, obstoječe stanje in možnosti postavitve.",
         },
         {
-          title: "Dobava in montaža",
-          body: "Dobavimo toplotno črpalko in izvedemo montažo.",
+          title: "Dogovor in dobava",
+          body: "Uskladimo rešitev in poskrbimo za dobavo dogovorjene opreme.",
         },
         {
-          title: "Priklop in zagon",
-          body: "Izvedemo električni priklop in zagon sistema.",
+          title: "Montaža in priklop",
+          body: "Namestimo opremo ter izvedemo električni priklop.",
         },
         {
-          title: "Zaključek del",
-          body: "Delovanje preverimo in vam pokažemo, kako sistem upravljate.",
+          title: "Zagon in predaja",
+          body: "Sistem zaženemo, preverimo delovanje in zaključimo dogovorjena dela.",
         },
       ],
     },
@@ -555,8 +588,8 @@ export const services: readonly Service[] = [
     slug: "svetovanje",
     href: "/storitve/svetovanje",
     title: "Svetovanje",
-    h1: "Svetovanje pri električnih inštalacijah",
-    lead: "Strokovno svetovanje pred izvedbo in med njo, da so odločitve sprejete v pravem trenutku.",
+    h1: "Svetovanje pred izvedbo elektroinštalacij",
+    lead: "Strokovno svetovanje pred izvedbo in med njo, da so pomembne odločitve sprejete pravočasno.",
     cardBody:
       "Nudimo vam strokovno svetovanje na področju električnih inštalacij.",
     icon: Handshake,
@@ -565,7 +598,7 @@ export const services: readonly Service[] = [
     sections: [
       {
         title: "Kdaj je svetovanje koristno",
-        layout: "list",
+        layout: "feature",
         body: "Takrat, ko je odločitev še odprta. Ko je napeljava enkrat izvedena in so stene zaprte, se možnosti zožijo, spremembe pa postanejo posegi.",
         bullets: [
           "Pred začetkom gradnje ali prenove",
@@ -578,16 +611,16 @@ export const services: readonly Service[] = [
       {
         title: "Kaj se je smiselno odločiti pred izvedbo",
         layout: "editorial",
-        body: "Nekaj odločitev je pozneje nesorazmerno dragih. Razporeditev vtičnic in stikal, mesta svetil, priprava za naprave, ki bodo prišle pozneje, in prostor v elektro omarici sodijo mednje.",
+        body: "Nekatere odločitve je pozneje nesorazmerno drago spreminjati. Razporeditev vtičnic in stikal, mesta svetil, priprava za naprave in položaj elektro omarice je zato smiselno določiti pred začetkom izvedbe.",
         body2:
-          "Cilj pogovora je, da so te odločitve sprejete zavestno in glede na to, kako boste objekt uporabljali, ne pa po tem, kar je bilo na gradbišču najhitreje.",
+          "Cilj svetovanja je, da so odločitve sprejete zavestno in glede na to, kako boste objekt uporabljali, ne šele takrat, ko bi spremembe zahtevale dodatne posege.",
       },
       {
         title: "Kako svetovanje preide v izvedbo",
         layout: "split",
-        body: "Svetovanje ni ločena storitev, ki bi se končala s poročilom. Najpogosteje je prvi del pogovora, iz katerega nastane obseg del.",
+        body: "Svetovanje ni ločena storitev, ki bi se morala končati samo s priporočilom. Najpogosteje je prvi del pogovora, iz katerega nastane jasnejši obseg del.",
         body2:
-          "Če se za izvedbo odločite pri nas, se dogovorjeno prenese neposredno v delo na objektu. Če se odločite drugače, ostane pri pogovoru in vam to ne zapre nobene poti.",
+          "Če se za izvedbo odločite pri nas, dogovorjene odločitve prenesemo neposredno v delo na objektu. Če se odločite drugače, ostane pri pogovoru in dogovorjenem obsegu svetovanja.",
       },
     ],
     process: {
@@ -596,19 +629,19 @@ export const services: readonly Service[] = [
       steps: [
         {
           title: "Povpraševanje",
-          body: "Poveste, v kateri fazi je objekt in kaj je odprto.",
+          body: "Povejte, kaj načrtujete in v kateri fazi je objekt.",
         },
         {
           title: "Pogovor",
-          body: "Pregledamo, kaj načrtujete, in opredelimo, katere odločitve so nujne zdaj.",
+          body: "Pregledamo ključne odločitve in kaj je smiselno razjasniti pred izvedbo.",
         },
         {
           title: "Ogled po potrebi",
-          body: "Če je za smiselno oceno potreben ogled objekta, se dogovorimo zanj.",
+          body: "Če je za dober nasvet potreben ogled, se dogovorimo za termin.",
         },
         {
-          title: "Obseg del",
-          body: "Iz dogovorjenega nastane obseg del, ki je podlaga za izvedbo.",
+          title: "Naslednji korak",
+          body: "Na koncu določimo, kaj je treba pripraviti in ali svetovanje preide v izvedbo.",
         },
       ],
     },

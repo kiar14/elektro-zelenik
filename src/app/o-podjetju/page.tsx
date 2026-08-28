@@ -26,11 +26,15 @@ export const metadata: Metadata = pageSeo({
 /**
  * O podjetju.
  *
- * The page used to be four blocks of prose in the same left-heading /
- * right-paragraph shape with hairlines between them, which read as a document
- * rather than as a page. Every block now has a job and a shape of its own: an
- * opening argument carrying the three verified dates and places, the team band,
- * the shared why-us cards, the reference strip and a short service-area note.
+ * Every block has a job and a shape of its own: the opening argument, the
+ * graphite fact strip, the team band, the shared why-us cards, the reference
+ * strip and the map.
+ *
+ * The fact strip is graphite for the same reason the homepage trust strip is.
+ * This page has no process band, so without it the whole route would run from
+ * the warm stone hero to the footer without a single dark anchor, which is
+ * exactly the flat, evenly-weighted rhythm the rest of this pass is undoing.
+ * The two dark strips are deliberately the same object in two places.
  *
  * Nothing here is invented. The dates, the legal name and the service area all
  * come from `content/company.ts`, and the two facts the register does not
@@ -40,14 +44,13 @@ export const metadata: Metadata = pageSeo({
 /**
  * The proof strip.
  *
- * The middle entry used to be the year the d.o.o. was incorporated, beside a
- * paragraph explaining the move from s.p. That is legal history: it tells a
- * customer nothing about whether the work will be any good, and it invited the
- * question of what the company was before. What remains is the experience, the
+ * No numeric project count and no incorporation history: the first is not
+ * verifiable and the second is legal trivia that tells a customer nothing about
+ * whether the work will be any good. What remains is the experience, the
  * breadth and the evidence, all of which the rest of the site backs up.
  */
 const FACTS = [
-  { value: `Od leta ${company.foundedYear}`, label: "Izkušnje na objektih" },
+  { value: `Z vami že ${company.sinceLabel}`, label: "Izkušnje na objektih" },
   { value: "Več povezanih storitev", label: "Pri enem izvajalcu" },
   { value: "Izvedeni projekti", label: "Na različnih vrstah objektov" },
 ];
@@ -57,14 +60,13 @@ export default function Page() {
     <>
       <PageHero
         eyebrow={TITLE}
-        title={company.tradingName}
-        lead="Smo podjetje z dolgoletnimi izkušnjami na področju elektrotehnike in elektroinštalacij. Strankam nudimo strokovno svetovanje, kakovostno izvedbo ter več povezanih storitev pri enem izvajalcu."
+        title="Elektro Zelenik. Z vami že od leta 2000."
+        lead="Izvajamo elektroinštalacije in povezane tehnične storitve za stanovanjske in poslovne objekte. Pri delu nam največ pomenijo kakovostna izvedba, jasen dogovor in rešitve, prilagojene dejanskim potrebam objekta."
         crumbs={[{ label: TITLE }]}
       />
 
       {/* ------------------------------------------------------------------
-          Who we are, and the three things a public register actually
-          documents. The heading holds the left third and stays put while the
+          Who we are. The heading holds the left third and stays put while the
           argument scrolls past it.
           ------------------------------------------------------------------ */}
       <section aria-labelledby="kdo-smo-naslov" className="bg-ground">
@@ -72,49 +74,61 @@ export default function Page() {
           <RevealGroup>
             <div
               data-reveal
-              className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1fr)] lg:gap-16"
+              className="grid gap-8 lg:grid-cols-[minmax(0,0.62fr)_minmax(0,1fr)] lg:gap-16"
             >
               <h2
                 id="kdo-smo-naslov"
-                className="text-heading text-ink lg:sticky lg:top-28 lg:self-start"
+                className="text-heading text-ink lg:sticky lg:top-32 lg:self-start"
               >
                 <span aria-hidden className="mb-6 block h-px w-10 bg-brand" />
                 Kdo smo
               </h2>
 
               <div>
-                <p className="max-w-prose text-lead text-ink-muted">
-                  {company.tradingName} že {company.sinceLabel} izvajamo dela na
-                  področju elektrotehnike in elektroinštalacij. Izkušnje iz
-                  različnih vrst objektov nam pomagajo pri načrtovanju rešitev,
-                  izvedbi in reševanju praktičnih situacij na objektu.
+                <p className="max-w-[62ch] text-lead text-ink-muted">
+                  Elektro Zelenik je podjetje z dolgoletnimi izkušnjami na
+                  področju elektrotehnike in elektroinštalacij. Na enem mestu
+                  povezujemo elektroinštalacije, servisiranje, računalniške
+                  mreže, alarmne sisteme, video nadzor, toplotne črpalke in
+                  svetovanje.
                 </p>
-                <p className="mt-5 max-w-prose text-lead text-ink-muted">
-                  Strankam želimo ponuditi jasen dogovor, strokovno svetovanje
-                  in kakovostno izvedbo. Poleg elektroinštalacij izvajamo tudi
-                  servis, računalniške mreže, alarmne sisteme, video nadzor,
-                  toplotne črpalke in svetovanje.
+                <p className="mt-6 max-w-[62ch] text-lead text-ink-muted">
+                  Pri delu poudarjamo kakovost izvedbe, jasen dogovor in
+                  rešitve, ki so prilagojene dejanskim potrebam posameznega
+                  objekta.
                 </p>
               </div>
             </div>
+          </RevealGroup>
+        </Container>
+      </section>
 
-            <div
-              data-reveal
-              className="mt-12 grid gap-y-8 border-t border-border pt-10 sm:grid-cols-3 sm:gap-x-8 lg:mt-16 lg:pt-12"
-            >
-              {FACTS.map((fact) => (
-                <div key={fact.label}>
-                  <span aria-hidden className="block h-px w-9 bg-brand" />
-                  <p className="mt-4 font-display text-xl font-semibold tracking-[-0.018em] text-ink">
+      {/* The page's dark anchor. Same object as the homepage trust strip. */}
+      <section aria-label="Podjetje v številkah" className="bg-graphite">
+        <Container width="wide">
+          <RevealGroup stagger={0.06}>
+            <ul className="grid sm:grid-cols-3">
+              {FACTS.map((fact, index) => (
+                <li
+                  key={fact.label}
+                  data-reveal
+                  className={[
+                    "flex min-h-[7rem] flex-col justify-center py-7 pr-5",
+                    "border-graphite-line",
+                    index > 0
+                      ? "border-t sm:border-t-0 sm:border-l sm:pl-7 xl:pl-10"
+                      : "",
+                  ].join(" ")}
+                >
+                  <p className="font-display text-xl font-semibold tracking-[-0.018em] text-on-photo">
                     {fact.value}
                   </p>
-                  <p className="mt-1.5 text-base text-ink-muted">
+                  <p className="mt-2 text-eyebrow font-semibold uppercase text-on-photo-muted">
                     {fact.label}
                   </p>
-                </div>
+                </li>
               ))}
-            </div>
-
+            </ul>
           </RevealGroup>
         </Container>
       </section>
@@ -122,10 +136,10 @@ export default function Page() {
       {/* ------------------------------------------------------------------
           Team.
 
-          TODO_CLIENT: replace with genuine Zelenik team photograph. The slot
-          below occupies exactly the frame the photograph will, in the same
-          aspect ratio, radius and border the service cards use, so dropping in
-          the real asset is a one-element change and requires no layout work.
+          TODO_CLIENT: replace with the genuine Zelenik team photograph. The
+          slot below occupies exactly the frame the photograph will, in the same
+          aspect ratio, radius and border the page hero image uses, so dropping
+          in the real asset is a one-element change and requires no layout work.
           No generated or stock people, ever.
           ------------------------------------------------------------------ */}
       <section
@@ -133,40 +147,36 @@ export default function Page() {
         className="border-y border-border bg-surface"
       >
         <Container width="wide" className="py-20 lg:py-24">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-            <RevealGroup>
-              <div
-                data-reveal
-                className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-border bg-surface-sunk"
-              >
-                <div className="flex flex-col items-center gap-3 px-6 text-center">
-                  <span
-                    aria-hidden
-                    className="flex size-14 items-center justify-center rounded-full bg-brand-tint"
-                  >
-                    <ImageIcon
-                      className="size-[26px] text-brand-strong"
-                      strokeWidth={1.6}
-                    />
-                  </span>
-                  <p className="text-sm font-semibold text-ink-muted">
-                    Fotografija ekipe
-                  </p>
-                </div>
+          <RevealGroup className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:gap-16">
+            <div
+              data-reveal
+              className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-frame border border-border bg-surface-sunk"
+            >
+              <div className="flex flex-col items-center gap-3 px-6 text-center">
+                <span
+                  aria-hidden
+                  className="flex size-14 items-center justify-center rounded-full bg-brand-tint"
+                >
+                  <ImageIcon
+                    className="size-[26px] text-brand-strong"
+                    strokeWidth={1.6}
+                  />
+                </span>
+                <p className="text-sm font-semibold text-ink-muted">
+                  Fotografija ekipe
+                </p>
               </div>
-            </RevealGroup>
+            </div>
 
-            <RevealGroup>
-              <div data-reveal>
-                <SectionHeading
-                  id="ekipa-naslov"
-                  eyebrow="Ekipa"
-                  title={`Ekipa ${company.tradingName}`}
-                  lead="Za izvedbo projektov skrbi ekipa, ki povezuje dogovor, pripravo in izvedbo del ter ostaja dosegljiva tudi po zaključku."
-                />
-              </div>
-            </RevealGroup>
-          </div>
+            <div data-reveal>
+              <SectionHeading
+                id="ekipa-naslov"
+                eyebrow="Ekipa"
+                title="Ekipa Elektro Zelenik"
+                lead="Za izvedbo projektov skrbi ekipa, ki povezuje dogovor, pripravo in izvedbo del."
+              />
+            </div>
+          </RevealGroup>
         </Container>
       </section>
 
@@ -174,10 +184,9 @@ export default function Page() {
         <Container width="wide" className="py-20 lg:py-24">
           <CenteredHeading
             id="zakaj-nas-naslov"
-            eyebrow="Zakaj izbrati nas"
             title="Izkušnje, strokovno svetovanje in zanesljiva izvedba"
             titleWidth="wide"
-            lead="Šest stvari, na katere se pri sodelovanju z nami lahko zanesete."
+            lead="Pet stvari, na katere se pri sodelovanju z nami lahko zanesete."
           />
 
           <BenefitGrid cards={whyCards} className="mt-12 lg:mt-14" />
@@ -192,7 +201,6 @@ export default function Page() {
           <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
             <SectionHeading
               id="izbrana-dela-naslov"
-              eyebrow="Reference"
               title="Izbrana dela"
               lead="Objekti, na katerih smo izvajali elektroinštalacijska dela in razsvetljavo."
             />
@@ -228,8 +236,7 @@ export default function Page() {
       />
 
       {/* Last band before the footer, and the only place the address needs to
-          be shown at size. Nothing from Google loads until the visitor asks
-          for it: see the note in LocationMap. */}
+          be shown at size. See the note in LocationMap. */}
       <LocationMap />
     </>
   );

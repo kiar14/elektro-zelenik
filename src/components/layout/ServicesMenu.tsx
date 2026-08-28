@@ -163,9 +163,11 @@ export function ServicesMenu({
         ref={panelRef}
         inert={!open}
         aria-hidden={!open}
-        // The pseudo-element bridges the gap between the trigger and the panel,
-        // so a pointer travelling down never crosses dead space.
-        className={`absolute top-full left-0 z-10 mt-3 w-[19.5rem] origin-top rounded-lg border border-border bg-ground p-2 shadow-raised transition-[opacity,transform] duration-200 ease-smooth before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-[''] motion-reduce:transition-none ${
+        // The offset clears the floating bar's own bottom edge, so the panel
+        // reads as dropping out from under it rather than growing out of its
+        // corner. The pseudo-element bridges that gap for the pointer, so
+        // travelling down into the panel never crosses dead space.
+        className={`absolute top-full left-0 z-10 mt-[1.375rem] w-[19.5rem] origin-top rounded-lg border border-border bg-ground p-2 shadow-raised transition-[opacity,transform] duration-200 ease-smooth before:absolute before:inset-x-0 before:-top-[1.375rem] before:h-[1.375rem] before:content-[''] motion-reduce:transition-none ${
           open
             ? "translate-y-0 opacity-100"
             : "pointer-events-none -translate-y-1 opacity-0"

@@ -4,7 +4,10 @@ import { Container } from "@/components/layout/Container";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { PageHero } from "@/components/sections/PageHero";
 import { ServiceClusters } from "@/components/sections/ServiceClusters";
-import { ServiceGrid, toServiceCards } from "@/components/sections/ServiceGrid";
+import {
+  ServiceShowcase,
+  toServiceCards,
+} from "@/components/sections/ServiceGrid";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { services } from "@/content/services";
 import { pageSeo } from "@/lib/seo";
@@ -34,8 +37,8 @@ export default function Page() {
     <>
       <PageHero
         eyebrow="Storitve"
-        title="Elektro storitve za različne vrste objektov"
-        lead="Od elektroinštalacij v novogradnji do servisa posamezne naprave. Delo prevzamemo v obsegu, ki ga uskladimo vnaprej."
+        title="Elektroinštalacije, servis in tehnični sistemi"
+        lead="Za stanovanjske in poslovne objekte izvajamo elektroinštalacije, servis naprav, računalniške mreže, alarmne sisteme, video nadzor, toplotne črpalke in svetovanje."
         crumbs={[{ label: "Storitve" }]}
       />
 
@@ -45,13 +48,12 @@ export default function Page() {
             id="pregled-naslov"
             eyebrow="Pregled"
             title="Kaj izvajamo"
-            lead="Sedem storitev, ki se na objektu pogosto srečajo. Vsaka ima svojo stran z opisom obsega in poteka izvedbe."
+            lead="Od osnovne elektro napeljave do tehničnih sistemov in servisa. Izberite storitev, ki jo potrebujete."
           />
 
-          <ServiceGrid
+          <ServiceShowcase
             items={toServiceCards(services)}
-            layout="feature"
-            className="mt-14 lg:mt-20"
+            className="mt-12 lg:mt-16"
           />
         </Container>
       </section>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { RevealGroup } from "@/components/motion/RevealGroup";
 import { ActionLink } from "@/components/ui/ActionLink";
-import { headerCta } from "@/content/navigation";
+import { quoteCta } from "@/content/navigation";
 import { findService } from "@/content/services";
 
 /**
@@ -35,7 +35,7 @@ const CLUSTERS: readonly Cluster[] = [
   },
   {
     label: "Tehnični sistemi",
-    note: "Napeljavo je najceneje izvesti hkrati z elektroinštalacijami, dokler je še dostopna.",
+    note: "Napeljavo je najlažje izvesti skupaj z elektroinštalacijami, dokler je še dostopna.",
     slugs: ["racunalniske-mreze", "alarmni-sistemi", "video-nadzor"],
   },
   {
@@ -64,24 +64,19 @@ export function ServiceClusters({ id = "povezano-naslov" }: { id?: string }) {
             </h2>
 
             <p className="mt-6 max-w-prose text-lead text-ink-muted">
-              Elektroinštalacije, tehnični sistemi in naprave se na objektu
-              srečajo. Ko jih prevzame en izvajalec, se dela ne podvajajo in ni
-              treba usklajevati več ekip med seboj.
-            </p>
-
-            <p className="mt-5 max-w-prose text-base text-ink-muted">
-              V praksi to najbolj šteje pri pripravi. Marsikaj, kar je med
-              gradnjo majhna postavka, po zaključku del ni več izvedljivo brez
-              ponovnega posega, zato je smiselno o vsem povedati že na začetku.
+              Kadar se na objektu sreča več sistemov, jih je lažje uskladiti, če
+              jih obravnava ena ekipa. Tako se lahko elektroinštalacije,
+              omrežja, varnostni sistemi, naprave in servis načrtujejo kot
+              celota.
             </p>
 
             <ActionLink
-              href={headerCta.href}
+              href={quoteCta.href}
               variant="solid"
               size="lg"
               className="mt-9 w-full sm:w-auto"
             >
-              {headerCta.label}
+              {quoteCta.label}
             </ActionLink>
           </div>
 
@@ -90,7 +85,7 @@ export function ServiceClusters({ id = "povezano-naslov" }: { id?: string }) {
               <li
                 key={cluster.label}
                 data-reveal
-                className="rounded-lg border border-border bg-ground px-5 py-6 sm:px-7 sm:py-7"
+                className="rounded-lg border border-border bg-ground px-5 py-6 sm:px-8 sm:py-7"
               >
                 <p className="flex items-center gap-3 text-eyebrow font-semibold uppercase text-ink">
                   <span aria-hidden className="h-px w-6 shrink-0 bg-brand" />
@@ -110,7 +105,7 @@ export function ServiceClusters({ id = "povezano-naslov" }: { id?: string }) {
                       <Link
                         key={service.href}
                         href={service.href}
-                        className="group inline-flex min-h-11 items-center gap-2.5 rounded-control border border-border-strong bg-surface px-4 text-sm font-medium text-ink transition-colors duration-150 ease-standard hover:border-brand-strong hover:bg-brand-tint"
+                        className="group inline-flex min-h-11 items-center gap-2.5 rounded-cell border border-border bg-surface px-4 text-sm font-medium text-ink transition-colors duration-150 ease-standard hover:border-brand-strong hover:bg-brand-tint"
                       >
                         <service.icon
                           aria-hidden

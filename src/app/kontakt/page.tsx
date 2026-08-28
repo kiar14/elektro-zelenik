@@ -48,24 +48,25 @@ export default function Page() {
 
       <section aria-labelledby="podatki-naslov" className="bg-ground">
         <Container className="py-20 lg:py-24">
-          <RevealGroup className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:gap-16">
+          <RevealGroup className="grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-16 xl:gap-20">
             <div data-reveal>
               <SectionHeading
                 id="podatki-naslov"
-                eyebrow="Kontaktni podatki"
                 title="Kje nas najdete"
               />
 
+              {/* The number is the page. It is set at display scale, above the
+                  rest of the details rather than in a list with them. */}
               <a
                 href={company.phone.href}
                 aria-label={headerPhone.accessibleLabel}
-                className="mt-8 inline-flex min-h-14 items-center gap-3 text-2xl font-semibold tracking-[-0.02em] text-ink transition-colors duration-150 ease-standard hover:text-brand-strong"
+                className="mt-8 inline-flex min-h-14 items-center gap-3.5 font-display text-[2rem] leading-none font-semibold tracking-[-0.025em] text-ink transition-colors duration-150 ease-standard hover:text-brand-strong"
               >
-                <Phone aria-hidden className="size-6 text-brand-strong" />
+                <Phone aria-hidden className="size-7 text-brand-strong" />
                 {company.phone.display}
               </a>
 
-              <ul className="mt-6 grid gap-1">
+              <ul className="mt-7 grid gap-1 border-t border-border pt-6">
                 <li>
                   <a
                     href={`mailto:${company.email.primary}`}
@@ -108,7 +109,10 @@ export default function Page() {
 
               {/* Directions without a map script. The link opens the visitor's
                   own maps application, which is where they want to be anyway. */}
-              <div className="mt-8 rounded-lg border border-border bg-surface px-5 py-6">
+              {/* No panel: a heading, a line and an action on the page
+                  surface say the same thing without adding another box to a
+                  column that is already a list of details. */}
+              <div className="mt-8 border-t border-border pt-7">
                 <h3 className="text-lg font-semibold tracking-[-0.014em] text-ink">
                   Kako do nas
                 </h3>
@@ -131,7 +135,7 @@ export default function Page() {
 
             <div
               data-reveal
-              className="rounded-lg border border-border bg-surface p-6 sm:p-9"
+              className="rounded-frame border border-border bg-surface p-6 shadow-panel sm:p-9 lg:p-10"
             >
               <h2 className="text-2xl font-semibold tracking-[-0.018em] text-ink">
                 Pišite nam
@@ -151,6 +155,7 @@ export default function Page() {
       <CtaSection
         title="Potrebujete podrobnejšo ponudbo?"
         body="Za obsežnejša dela izpolnite daljše povpraševanje. Več podatkov pomeni natančnejšo pripravo pred ogledom."
+        primary="enquiry"
       />
     </>
   );

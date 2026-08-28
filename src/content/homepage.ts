@@ -3,7 +3,6 @@ import {
   CalendarCheck,
   ClipboardCheck,
   History,
-  Timer,
   Workflow,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -108,6 +107,10 @@ export const homeServices: readonly HomeService[] = services.map((service) => ({
 
 /* -------------------------------------------------------------------------
  * Zakaj Zelenik
+ *
+ * Five, not six. "Hitra in učinkovita izvedba" was removed: it says the same
+ * thing as "Dogovorjeni roki" from the other end, and it is the one claim in
+ * the set that the company cannot actually be held to on a building site.
  * ---------------------------------------------------------------------- */
 
 export const whyCards: ReadonlyArray<{
@@ -117,33 +120,28 @@ export const whyCards: ReadonlyArray<{
 }> = [
   {
     icon: History,
-    title: "26 let izkušenj",
-    body: "Od leta 2000 smo pridobili veliko praktičnih izkušenj na področju elektrotehnike in elektroinštalacij.",
+    title: "Z vami že od leta 2000",
+    body: "Izkušnje gradimo z delom na različnih vrstah objektov in projektov.",
   },
   {
     icon: ClipboardCheck,
     title: "Strokovno svetovanje",
-    body: "Pomagamo pri izbiri rešitve in pri odločitvah, ki jih je smiselno sprejeti še pred začetkom izvedbe.",
+    body: "Pred izvedbo skupaj pregledamo možnosti in uskladimo rešitev glede na objekt.",
   },
   {
     icon: BadgeCheck,
     title: "Kakovostna izvedba",
-    body: "Dela izvedemo skrbno in v dogovorjenem obsegu, tako da je končna rešitev urejena in zanesljiva.",
+    body: "Dela izvajamo premišljeno, urejeno in skladno z dogovorjenim obsegom.",
   },
   {
     icon: CalendarCheck,
     title: "Dogovorjeni roki",
-    body: "Termin in potek del uskladimo vnaprej ter se držimo dogovora, kolikor to dopuščajo razmere na objektu.",
-  },
-  {
-    icon: Timer,
-    title: "Hitra in učinkovita izvedba",
-    body: "Delo organiziramo tako, da izvedba teče brez nepotrebnih zastojev in da je motenj za naročnika čim manj.",
+    body: "Termin in potek del uskladimo vnaprej, da veste, kaj lahko pričakujete.",
   },
   {
     icon: Workflow,
     title: "Več storitev pri enem izvajalcu",
-    body: "Elektroinštalacije, servis, varnostni sistemi, računalniške mreže in toplotne črpalke lahko uskladite z enim izvajalcem.",
+    body: "Elektroinštalacije, mreže, varnostni sistemi, toplotne črpalke, servis in svetovanje na enem mestu.",
   },
 ];
 
@@ -154,20 +152,20 @@ export const whyCards: ReadonlyArray<{
 
 export const processSteps: ReadonlyArray<{ title: string; body: string }> = [
   {
-    title: "Pošljete povpraševanje",
-    body: "Opišete, kaj potrebujete, in dodate osnovne podatke o objektu.",
+    title: "Povpraševanje",
+    body: "Opišite, kaj potrebujete, in dodajte osnovne podatke o objektu.",
   },
   {
-    title: "Dogovorimo se za ogled",
-    body: "Po potrebi objekt pregledamo, uskladimo obseg del in pripravimo naslednji korak.",
+    title: "Dogovor in ogled",
+    body: "Uskladimo prvi pogovor in se po potrebi dogovorimo za ogled.",
   },
   {
-    title: "Izvedemo dogovorjena dela",
-    body: "Dela izvedemo natančno, v dogovorjenem obsegu in v usklajenem terminu.",
+    title: "Izvedba",
+    body: "Dela izvedemo v dogovorjenem obsegu in usklajenem terminu.",
   },
   {
-    title: "Zaključek del in nadaljnji kontakt",
-    body: "Po zaključku del preverimo izvedbo in ostanemo dosegljivi za dodatna vprašanja.",
+    title: "Zaključek",
+    body: "Preverimo dogovorjena dela in predamo potrebne informacije.",
   },
 ];
 

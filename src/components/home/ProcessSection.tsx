@@ -4,10 +4,11 @@ import { processSteps } from "@/content/homepage";
 /**
  * The homepage process band.
  *
- * The treatment itself now lives in `sections/ProcessSteps`, which every other
- * multi-step page on the site also renders through. This file supplies only the
- * homepage's own copy, so the design cannot drift between here and the service
- * pages: there is one implementation, used seven ways.
+ * The treatment itself lives in `sections/ProcessSteps`, which every other
+ * multi-step page on the site also renders through, on the same graphite
+ * surface. This file supplies only the homepage's own copy, so the design
+ * cannot drift between here and the service pages: there is one
+ * implementation, used seven ways.
  */
 export function ProcessSection() {
   return (
@@ -16,7 +17,7 @@ export function ProcessSection() {
       eyebrow="Postopek"
       title="Kako poteka sodelovanje"
       steps={processSteps}
-      surface="surface"
+      surface="graphite"
     />
   );
 }

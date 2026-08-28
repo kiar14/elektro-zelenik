@@ -35,7 +35,6 @@ export default function Page() {
 
       <FaqSection
         items={faqItems}
-        eyebrow="Vprašanja"
         title="Vprašanja, ki jih dobimo najpogosteje"
         surface="ground"
       />
