@@ -853,6 +853,35 @@
   }
 }
 
+/* Desktop-only optical refinement. These rules sit outside the component
+   layer so they can override shared type and action utilities without changing
+   those controls elsewhere. The wrapper shift leaves the measured hero
+   geometry intact while lifting the full copy group slightly. */
+@media (min-width: 64rem) {
+  .hero-copy {
+    transform: translateY(-0.75rem);
+  }
+
+  .hero-copy [data-hero-title] {
+    font-size: 3.5rem;
+  }
+
+  .hero-copy [data-hero-subtitle] {
+    font-size: 1.3125rem;
+  }
+
+  .hero-copy [data-hero-action] {
+    min-height: 3.25rem;
+    padding-inline: 1.875rem;
+    font-size: 1.03125rem;
+  }
+
+  .hero-copy [data-hero-action] svg {
+    width: 1.1875rem;
+    height: 1.1875rem;
+  }
+}
+
 /* These phone-only refinements sit outside the component layer so they can
    override shared utilities without changing controls or actions elsewhere. */
 @media (max-width: 39.999rem) {

@@ -103,6 +103,7 @@ export function HomeHero() {
 
           <p
             data-hero-item
+            data-hero-subtitle
             className="mt-6 max-w-[40ch] text-[1rem] leading-[1.42] text-on-photo-muted sm:max-w-none sm:text-lead sm:leading-[1.55]"
           >
             Elektroinštalacije, servis in tehnične rešitve, od načrtovanja do
