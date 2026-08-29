@@ -863,11 +863,17 @@
   }
 
   .hero-copy [data-hero-title] {
+    width: max-content;
     font-size: 3.5rem;
   }
 
   .hero-copy [data-hero-subtitle] {
+    margin-top: 1.25rem;
     font-size: 1.3125rem;
+  }
+
+  .hero-copy [data-hero-actions] {
+    margin-top: 2rem;
   }
 
   .hero-copy [data-hero-action] {

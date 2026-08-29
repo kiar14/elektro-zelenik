@@ -97,7 +97,12 @@ export function HomeHero() {
             className="mobile-hero-title mt-5 text-display text-on-photo"
           >
             <span className="block sm:inline">Elektroinštalacije</span>{" "}
-            <span className="block sm:inline">in energetske</span>{" "}
+            <span className="block sm:inline">
+              in
+              <br className="hidden lg:block" />{" "}
+              energetske
+            </span>
+            {" "}
             <span className="block sm:inline">rešitve</span>
           </h1>
 
@@ -115,6 +120,7 @@ export function HomeHero() {
               depends on the column, not on the viewport. */}
           <div
             data-hero-item
+            data-hero-actions
             className="mt-9 flex flex-col gap-3 @min-[28.5rem]:flex-row @min-[28.5rem]:items-center"
           >
             <ActionLink
