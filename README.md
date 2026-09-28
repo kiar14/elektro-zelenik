@@ -68,6 +68,15 @@ exactly `rgb(12, 169, 45)`. It is defined once, in `src/app/globals.css`, as
 `--color-brand` / `--color-brand-strong` / `--color-brand-tint`. No brand colour
 is hardcoded anywhere else.
 
+## Fonts
+
+Inter (400/500/600) and IBM Plex Sans (500/600) are self-hosted from
+`src/fonts/` through `next/font/local` (`src/lib/fonts.ts`), not loaded with
+`next/font/google`. The Google loader failed on Vercel when the API returned
+font URLs with their own query string. The files are the Google Fonts
+releases subset to Latin + Latin Extended (č/š/ž) with every OpenType feature
+kept.
+
 ## Metadata, icons and SEO
 
 - **Site URL** lives in `src/content/site.ts` (`https://www.elektro-zelenik.si`
