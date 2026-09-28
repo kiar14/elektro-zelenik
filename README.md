@@ -68,6 +68,31 @@ exactly `rgb(12, 169, 45)`. It is defined once, in `src/app/globals.css`, as
 `--color-brand` / `--color-brand-strong` / `--color-brand-tint`. No brand colour
 is hardcoded anywhere else.
 
+## Metadata, icons and SEO
+
+- **Site URL** lives in `src/content/site.ts` (`https://www.elektro-zelenik.si`
+  by default, override with `NEXT_PUBLIC_SITE_URL`). Canonicals, Open Graph
+  URLs, `robots.txt`, the sitemap and structured data are all built from it.
+  Confirm www vs. apex before launch.
+- **Page metadata**: inner pages use `pageMetadata({ title, path })` from
+  `src/lib/metadata.ts`, which sets the title, canonical and Open Graph fields.
+  Use it for every new page; metadata merges shallowly, so a page that sets
+  `openGraph` by hand loses the shared share image.
+- **Icons** (generated from `public/brand/zelenik-symbol.png`):
+  `src/app/favicon.ico` (16/32/48), `src/app/icon.png` (192),
+  `src/app/apple-icon.png` (180), and `public/icons/` for the web manifest
+  (192, 512, maskable 512). The 16px favicon frame has its strokes thickened
+  slightly so the mark survives at that size.
+- **Share image**: `public/og-image.png`, 1200x630, the horizontal logo on the
+  ground colour with the brand-green rule. Referenced from `shareImage` in
+  `src/lib/metadata.ts`.
+- **Routes**: `src/app/manifest.ts`, `src/app/robots.ts`, `src/app/sitemap.ts`
+  (built from the navigation data, so only linked pages are listed).
+- **Structured data**: the homepage renders `Electrician` + `WebSite` JSON-LD
+  from `src/lib/structured-data.ts`, using only verified facts from
+  `company.ts`. Opening hours, reviews and social profiles are added only
+  once the client confirms them.
+
 ## Hero photography
 
 `public/images/hero/hero-house-off.png` and `hero-house-on.png` are the supplied

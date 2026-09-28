@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { PageStub } from "@/components/layout/PageStub";
 import { services } from "@/content/navigation";
+import { pageMetadata } from "@/lib/metadata";
 
 /**
  * Phase-1 stubs for every service route the header can reach, generated from
@@ -33,7 +34,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  return { title: findService(slug)?.label ?? "Storitev" };
+  return pageMetadata({
+    title: findService(slug)?.label ?? "Storitev",
+    path: `/storitve/${slug}`,
+  });
 }
 
 export default async function ServiceStubPage({
